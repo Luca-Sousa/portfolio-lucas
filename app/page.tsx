@@ -1,5 +1,11 @@
+import { Button } from "./_components/ui/button"
+
 const Home = () => {
-  return <h1 className="mt-8 text-cyan-400">oi</h1>
+  return (
+    <Button variant="default">
+      Lucas
+    </Button>
+  )
 }
 
 export default Home
