@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id            String       @id @default(uuid())
+  title         String
+  description   String
+  imageURL      String
+  repositoryURL String
+  liveURL       String
+  technologies  Technology[] @relation("ProjectTechnologies")
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Technology {
+  id       String    @id @default(uuid())
+  name     String
+  projects Project[] @relation("ProjectTechnologies")
+}
+
+model User {
+  id       String    @id @default(uuid())
+  email    String    @unique
+  password String
+  role     Role      @default(ADMIN) // ADMIN é o único papel necessário
+  sessions Session[] // Relacionamento com as sessões
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  sessionToken String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+}
