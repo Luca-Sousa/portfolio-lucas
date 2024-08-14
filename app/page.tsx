@@ -1,12 +1,13 @@
-import { Button } from "./_components/ui/button"
+import NavigationMenuItems from "./_components/navigation-menu"
+import SideBar from "./_components/side-bar"
 
 const Home = () => {
   return (
-    <Button variant="default">
-      Lucas
-    </Button>
+    <div>
+      <SideBar />
+      <NavigationMenuItems />
+    </div>
   )
 }
 
 export default Home
-
