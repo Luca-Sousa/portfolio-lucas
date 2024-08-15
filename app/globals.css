@@ -32,42 +32,72 @@
   }
 
   .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 0 0% 95%;
-    --card: 24 9.8% 10%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 9%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 142.1 70.6% 45.3%;
-    --primary-foreground: 144.9 80.4% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 0 0% 98%;
+    /* Name: custom color palette
+       Author: Ilias Ism
+       URL: https://gradient.page */
+
+    /* CSS: .bg-gradient { background: var(--gradient) } */
+    --gradient: #55e6a5;
+
+    --background: 163 48.75% 4.96%;
+    --foreground: 163 7.5% 98.1%;
+
+    --muted: 163 24% 13.02%;
+    --muted-foreground: 163 7.5% 56.2%;
+
+    --popover: 163 26.75% 6.82%;
+    --popover-foreground: 163 7.5% 98.1%;
+
+    --card: 163 26.75% 6.82%;
+    --card-foreground: 163 7.5% 98.1%;
+
+    --border: 163 24% 13.02%;
+    --input: 163 24% 13.02%;
+
+    --primary: 163 75% 62%;
+    --primary-foreground: 163 7.5% 6.2%;
+
+    --secondary: 163 24% 13.02%;
+    --secondary-foreground: 163 7.5% 98.1%;
+
+    --accent: 163 24% 13.02%;
+    --accent-foreground: 163 7.5% 98.1%;
+
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 85.7% 97.3%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 142.4 71.8% 29.2%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --destructive-foreground: 163 7.5% 98.1%;
+
+    --ring: 163 75% 62%;
+    /* --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --radius: 0.5rem; */
   }
 }
-
 
 @layer base {
   * {
     @apply border-border antialiased;
   }
+
   html {
     @apply h-full;
   }
+
   body {
     @apply bg-background text-foreground h-full;
+  }
+
+  /* width */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    @apply bg-secondary rounded-md;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary rounded-md;
   }
 }

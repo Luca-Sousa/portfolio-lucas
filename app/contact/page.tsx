@@ -8,11 +8,11 @@ const Contact = () => {
       <SideBar />
       <NavigationMenuItems />
 
-      <Card className="m-4 rounded-3xl">
+      <Card className="m-4 rounded-2xl sm:mx-auto sm:max-w-xl">
         <CardHeader className="space-y-3">
           <div className="space-y-1">
             <CardTitle>Contato</CardTitle>
-            <div className="h-1 w-8 rounded-3xl bg-primary"></div>
+            <div className="h-1 w-8 rounded-2xl bg-primary"></div>
           </div>
         </CardHeader>
       </Card>

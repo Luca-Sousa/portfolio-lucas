@@ -14,11 +14,11 @@ const About = () => {
       <SideBar />
       <NavigationMenuItems />
 
-      <Card className="m-4 rounded-3xl">
+      <Card className="m-4 rounded-2xl sm:mx-auto sm:max-w-xl">
         <CardHeader className="space-y-3">
           <div className="space-y-1">
             <CardTitle>Sobre</CardTitle>
-            <div className="h-1 w-8 rounded-3xl bg-primary"></div>
+            <div className="h-1 w-8 rounded-2xl bg-primary"></div>
           </div>
 
           <CardDescription className="">
@@ -32,7 +32,11 @@ const About = () => {
 
           <CardDescription>
             Atualmente sou graduando de Ciências da Computação, no{" "}
-            <Link className="text-primary" href={"https://ifce.edu.br/"}>
+            <Link
+              className="text-primary"
+              target="_blank"
+              href={"https://ifce.edu.br/"}
+            >
               Instituto Federal do Ceará (IFCE)
             </Link>{" "}
             e estou me aprofundando em fundamentos de computação e programação.
