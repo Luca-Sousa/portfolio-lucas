@@ -15,10 +15,10 @@ const NavigationMenuItems = ({
   handleClick,
 }: NavigationMenuItemsProps) => {
   const MenuItems = [
-    { label: "about" },
-    { label: "resume" },
-    { label: "project" },
-    { label: "contact" },
+    { label: "sobre" },
+    { label: "resumo" },
+    { label: "projetos" },
+    { label: "contato" },
   ]
 
   return (

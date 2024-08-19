@@ -16,6 +16,8 @@ import {
 import Link from "next/link"
 import { toast } from "sonner"
 import { useEffect, useState } from "react"
+import { Skeleton } from "./ui/skeleton"
+import SkeletonSidebar from "./skeleton-sidebar"
 
 const SideBar = () => {
   const [detailsSideBar, setDetailsSideBar] = useState<boolean>(false)
@@ -44,7 +46,7 @@ const SideBar = () => {
   }
 
   return (
-    <Card className="rounded-2xl xl:h-fit xl:w-96">
+    <Card className="rounded-2xl xl:h-fit xl:w-full xl:max-w-96">
       <CardContent className="relative px-6 py-4">
         {detailsSideBar ? (
           <Button
@@ -97,7 +99,7 @@ const SideBar = () => {
           </div>
         </div>
 
-        {detailsSideBar && (
+        {detailsSideBar ? (
           <div className="mt-4 space-y-4 sm:mt-6 sm:space-y-6">
             <div className="h-px w-full bg-zinc-800"></div>
 
@@ -233,6 +235,8 @@ const SideBar = () => {
               </Button>
             </div>
           </div>
+        ) : (
+          <SkeletonSidebar />
         )}
       </CardContent>
     </Card>

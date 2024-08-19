@@ -17,6 +17,9 @@ import { GrUpdate } from "react-icons/gr"
 import Image from "next/image"
 import ProjectsData from "../ProjectsData"
 import { motion } from "framer-motion"
+import { FaGithub } from "react-icons/fa"
+import { IoLogoVercel } from "react-icons/io5"
+import Link from "next/link"
 
 const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
   const filteredProjects = ProjectsData.filter(
@@ -51,16 +54,39 @@ const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
               variant={"secondary"}
             >
               {status === "Em Dev" && (
-                <MdDeveloperBoard
-                  size={12}
-                  className="fill-primary text-primary"
-                />
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="flex items-center justify-center"
+                >
+                  <MdDeveloperBoard
+                    size={12}
+                    className="fill-primary text-primary"
+                  />
+                </motion.div>
               )}
+
               {status === "Finalizado" && (
-                <StarIcon size={12} className="fill-primary text-primary" />
+                <motion.div
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [1, 0.5, 1],
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="flex items-center justify-center"
+                >
+                  <StarIcon size={12} className="fill-primary text-primary" />
+                </motion.div>
               )}
               {status === "Em Att" && (
-                <GrUpdate size={12} className="fill-primary text-primary" />
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ repeat: Infinity, duration: 2 }}
+                  className="flex items-center justify-center"
+                >
+                  <GrUpdate size={12} className="fill-primary text-primary" />
+                </motion.div>
               )}
 
               <p className="text-xs font-semibold">{status}</p>
@@ -88,8 +114,11 @@ const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
                 </Button>
               </DialogTrigger>
 
-              <DialogContent className="z-50 flex items-center sm:max-w-5xl">
-                <AspectRatio ratio={16 / 9} className="flex-1 bg-muted">
+              <DialogContent className="mx-auto flex w-full max-w-xs flex-col gap-6 px-4 min-[450px]:max-w-sm sm:max-w-lg md:max-w-2xl lg:max-w-4xl lg:flex-row xl:max-w-6xl">
+                <AspectRatio
+                  ratio={16 / 9}
+                  className="mt-4 size-full flex-1 bg-muted lg:mt-0 lg:flex-1"
+                >
                   <Image
                     src={project.image}
                     alt={project.title}
@@ -98,25 +127,52 @@ const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
                   />
                 </AspectRatio>
 
-                <div className="flex flex-col gap-4">
-                  <DialogHeader className="max-w-64 space-y-4">
+                <div className="mt-3 flex flex-col gap-4 lg:mt-5 lg:w-64 xl:w-96">
+                  <DialogHeader className="space-y-4">
                     <DialogTitle className="text-primary">
                       {project.title}
                     </DialogTitle>
                     <DialogDescription>{project.description}</DialogDescription>
                   </DialogHeader>
 
-                  <DialogFooter className="sm:justify-start">
-                    <DialogClose asChild>
+                  <div className="flex flex-col gap-4 md:flex-row lg:h-full lg:flex-col lg:justify-between">
+                    <div className="flex w-full gap-2 lg:flex-col lg:gap-4">
                       <Button
-                        className="w-full"
-                        type="button"
-                        variant="secondary"
+                        size={"lg"}
+                        className="flex w-full gap-2 text-secondary"
+                        asChild
                       >
-                        Fechar
+                        <Link target="_blank" href={project.linkGithub}>
+                          <FaGithub size={20} />
+                          Github
+                        </Link>
                       </Button>
-                    </DialogClose>
-                  </DialogFooter>
+
+                      <Button
+                        size={"lg"}
+                        className="flex w-full gap-2 text-secondary"
+                        asChild
+                      >
+                        <Link target="_blank" href={project.linkVercel}>
+                          <IoLogoVercel size={20} />
+                          Vercel
+                        </Link>
+                      </Button>
+                    </div>
+
+                    <DialogFooter className="w-full">
+                      <DialogClose asChild>
+                        <Button
+                          size={"lg"}
+                          className="w-full"
+                          type="button"
+                          variant="destructive"
+                        >
+                          Fechar
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </div>
                 </div>
               </DialogContent>
             </Dialog>

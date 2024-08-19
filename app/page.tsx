@@ -10,14 +10,14 @@ import { useState } from "react"
 import NavigationMenuItems from "./_components/navigation-menu"
 
 const Home = () => {
-  const [active, setActive] = useState<string>("about")
+  const [active, setActive] = useState<string>("sobre")
 
   const handleClick = (page: string) => {
     setActive(page)
   }
 
   return (
-    <div className="mx-4 flex h-full flex-col gap-4 py-4 sm:mx-auto sm:max-w-xl sm:gap-8 sm:py-8 md:max-w-2xl lg:max-w-4xl xl:max-w-7xl xl:flex-row xl:gap-10">
+    <div className="mx-4 flex h-full flex-col gap-4 py-4 sm:mx-auto sm:max-w-xl sm:gap-8 sm:py-8 md:max-w-2xl lg:max-w-4xl xl:max-w-[1440px] xl:flex-row xl:gap-10">
       <SideBar />
 
       <div className="sm:hidden">
@@ -29,13 +29,13 @@ const Home = () => {
           <NavigationMenuItems active={active} handleClick={handleClick} />
         </div>
 
-        {active === "about" ? (
+        {active === "sobre" ? (
           <About />
-        ) : active === "resume" ? (
+        ) : active === "resumo" ? (
           <Resume />
-        ) : active === "project" ? (
+        ) : active === "projetos" ? (
           <Projects />
-        ) : active === "contact" ? (
+        ) : active === "contato" ? (
           <Contact />
         ) : null}
       </Card>
