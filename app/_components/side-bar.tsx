@@ -15,10 +15,25 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const SideBar = () => {
   const [detailsSideBar, setDetailsSideBar] = useState<boolean>(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1280) {
+        setDetailsSideBar(true)
+      }
+    }
+
+    handleResize()
+    window.addEventListener("resize", handleResize)
+
+    return () => {
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [])
 
   const handleCopyItemsClick = (item: string) => {
     navigator.clipboard.writeText(item)
@@ -29,12 +44,12 @@ const SideBar = () => {
   }
 
   return (
-    <Card className="m-4 rounded-2xl sm:mx-auto sm:mt-12 sm:max-w-xl md:max-w-2xl">
+    <Card className="rounded-2xl xl:h-fit xl:w-96">
       <CardContent className="relative px-6 py-4">
         {detailsSideBar ? (
           <Button
             variant="outline"
-            className="group absolute right-0 top-0 rounded-bl-3xl rounded-tr-2xl border"
+            className="group absolute right-0 top-0 rounded-bl-3xl rounded-tr-2xl border xl:hidden"
             onClick={() => setDetailsSideBar(false)}
           >
             <ChevronUp
@@ -48,7 +63,7 @@ const SideBar = () => {
         ) : (
           <Button
             variant="outline"
-            className="group absolute right-0 top-0 rounded-bl-3xl rounded-tr-2xl border"
+            className="group absolute right-0 top-0 rounded-bl-3xl rounded-tr-2xl border xl:hidden"
             onClick={() => setDetailsSideBar(true)}
           >
             <ChevronDown
@@ -61,8 +76,8 @@ const SideBar = () => {
           </Button>
         )}
 
-        <div className="flex items-center gap-4">
-          <div className="relative size-24 overflow-hidden rounded-full bg-zinc-800 ring-2 ring-primary">
+        <div className="flex items-center gap-4 sm:py-4 xl:flex-col">
+          <div className="relative size-24 overflow-hidden rounded-full bg-zinc-800 ring-2 ring-primary xl:h-72 xl:w-48">
             <Image
               alt="perfil"
               src="/perfil.png"
@@ -71,12 +86,12 @@ const SideBar = () => {
             />
           </div>
 
-          <div className="space-y-3">
-            <h2 className="text-xl font-bold">Lucas Sousa</h2>
+          <div className="space-y-3 xl:space-y-5 xl:text-center">
+            <h2 className="text-xl font-bold xl:text-2xl">Lucas Sousa</h2>
 
             <div className="rounded-xl bg-zinc-800">
-              <p className="px-2 py-0.5 text-sm text-zinc-300">
-                Desenvolvedor Front-End
+              <p className="px-2 py-0.5 text-sm text-zinc-300 xl:px-3 xl:py-1.5">
+                Desenvolvedor FrontEnd
               </p>
             </div>
           </div>
@@ -86,8 +101,8 @@ const SideBar = () => {
           <div className="mt-4 space-y-4 sm:mt-6 sm:space-y-6">
             <div className="h-px w-full bg-zinc-800"></div>
 
-            <div className="flex flex-col gap-4 sm:flex-row">
-              <div className="flex gap-4 sm:basis-1/2 sm:flex-col">
+            <div className="flex flex-col gap-4 sm:flex-row lg:items-center lg:gap-8 xl:flex-col xl:gap-4">
+              <div className="flex gap-4 sm:basis-1/2 sm:flex-col lg:flex-1 lg:basis-0 lg:flex-row">
                 <div className="flex flex-1 items-center gap-4">
                   <div className="rounded-xl border border-zinc-900 bg-zinc-800 p-2">
                     <MailIcon className="text-primary" size={20} />
@@ -103,7 +118,7 @@ const SideBar = () => {
                 </div>
 
                 <Button
-                  className="sm:ml-[52px] sm:w-1/2"
+                  className="hidden min-[450px]:block sm:ml-[52px] sm:block sm:w-1/2 lg:ml-0 lg:w-auto"
                   variant={"outline"}
                   onClick={() =>
                     handleCopyItemsClick("lucas.sousa.dev@gmail.com")
@@ -113,7 +128,7 @@ const SideBar = () => {
                 </Button>
               </div>
 
-              <div className="flex gap-4 sm:basis-1/2 sm:flex-col">
+              <div className="flex gap-4 sm:basis-1/2 sm:flex-col lg:flex-1 lg:basis-0 lg:flex-row xl:w-full">
                 <div className="flex flex-1 items-center gap-4">
                   <div className="rounded-xl border border-zinc-900 bg-zinc-800 p-2">
                     <SmartphoneIcon className="text-primary" size={20} />
@@ -127,7 +142,7 @@ const SideBar = () => {
                 </div>
 
                 <Button
-                  className="sm:ml-[52px] sm:w-1/2"
+                  className="hidden min-[450px]:block sm:ml-[52px] sm:block sm:w-1/2 lg:ml-0 lg:w-auto"
                   variant={"outline"}
                   onClick={() => handleCopyItemsClick("88994545892")}
                 >
@@ -136,8 +151,8 @@ const SideBar = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-4 sm:flex-row">
-              <div className="flex items-center gap-4 sm:basis-1/2">
+            <div className="flex flex-col gap-4 sm:flex-row lg:gap-8 xl:flex-col xl:gap-4">
+              <div className="flex items-center gap-4 sm:basis-1/2 lg:flex-1 lg:basis-0">
                 <div className="rounded-xl border border-zinc-900 bg-zinc-800 p-2">
                   <CalendarDaysIcon className="text-primary" size={20} />
                 </div>
@@ -150,7 +165,7 @@ const SideBar = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 sm:basis-1/2">
+              <div className="flex items-center gap-4 sm:basis-1/2 lg:flex-1 lg:basis-0">
                 <div className="rounded-xl border border-zinc-900 bg-zinc-800 p-2">
                   <IoLocationOutline className="text-primary" size={20} />
                 </div>
@@ -164,7 +179,7 @@ const SideBar = () => {
 
             <div className="h-px w-full bg-zinc-800"></div>
 
-            <div className="space-x-3">
+            <div className="space-x-3 xl:flex xl:justify-center">
               <Button
                 size={"icon"}
                 variant={"link"}
