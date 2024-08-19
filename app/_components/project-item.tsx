@@ -16,6 +16,7 @@ import { MdDeveloperBoard } from "react-icons/md"
 import { GrUpdate } from "react-icons/gr"
 import Image from "next/image"
 import ProjectsData from "../ProjectsData"
+import { motion } from "framer-motion"
 
 const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
   const filteredProjects = ProjectsData.filter(
@@ -30,15 +31,23 @@ const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
           className="flex max-w-52 flex-col gap-3 overflow-hidden rounded-2xl bg-secondary p-1.5"
         >
           <div className="group relative flex h-48 w-full items-center justify-center overflow-hidden rounded-t-2xl">
-            <Image
-              className="object-cover"
-              src={project.image}
-              alt={project.title}
-              fill
-            />
+            <motion.div
+              className="relative h-full w-full"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.4 }}
+            >
+              <Image
+                className="object-cover"
+                src={project.image}
+                alt={project.title}
+                fill
+              />
+
+              <div className="absolute inset-0 flex items-center justify-center bg-card/25 group-hover:bg-card/10"></div>
+            </motion.div>
 
             <Badge
-              className="absolute left-2 top-2 z-10 space-x-1"
+              className="absolute left-2 top-2 z-10 cursor-default space-x-1"
               variant={"secondary"}
             >
               {status === "Em Dev" && (
@@ -56,8 +65,6 @@ const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
 
               <p className="text-xs font-semibold">{status}</p>
             </Badge>
-
-            <div className="absolute inset-0 flex items-center justify-center bg-card/40 group-hover:bg-card/20"></div>
           </div>
 
           <div className="space-y-3">

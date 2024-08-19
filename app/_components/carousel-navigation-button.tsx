@@ -1,4 +1,5 @@
 import { ArrowLeft, ArrowRight } from "lucide-react"
+import { motion } from "framer-motion"
 import { Button } from "./ui/button"
 
 interface CarrouselNavigationButtonProps {
@@ -16,16 +17,22 @@ const CarrouselNavigationButton = ({
 
   return (
     show && (
-      <Button
-        onClick={onClick}
-        size={"icon"}
-        variant="secondary"
-        className={`absolute top-1/2 -translate-y-1/2 transform rounded-full p-2 text-white shadow-lg ring-2 ring-primary ${
+      <div
+        className={`absolute top-1/2 -translate-y-1/2 transform ${
           direction === "left" ? "-left-5" : "-right-5"
         }`}
       >
-        <Icon size={24} />
-      </Button>
+        <motion.div whileTap={{ scale: 0.9 }}>
+          <Button
+            onClick={onClick}
+            size={"icon"}
+            variant="secondary"
+            className="rounded-full p-2 text-white shadow-lg ring-2 ring-primary"
+          >
+            <Icon size={24} />
+          </Button>
+        </motion.div>
+      </div>
     )
   )
 }
