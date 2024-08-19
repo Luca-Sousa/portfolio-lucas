@@ -17,7 +17,7 @@ const Home = () => {
   }
 
   return (
-    <div className="mx-4 h-full space-y-4 py-4 sm:mx-auto sm:max-w-xl sm:space-y-8 sm:py-8 md:max-w-2xl lg:max-w-4xl xl:flex xl:max-w-7xl xl:gap-10 xl:space-y-0">
+    <div className="mx-4 flex h-full flex-col gap-4 py-4 sm:mx-auto sm:max-w-xl sm:gap-8 sm:py-8 md:max-w-2xl lg:max-w-4xl xl:max-w-7xl xl:flex-row xl:gap-10">
       <SideBar />
 
       <div className="sm:hidden">
@@ -39,6 +39,8 @@ const Home = () => {
           <Contact />
         ) : null}
       </Card>
+
+      <div className="min-h-16 w-full sm:min-h-0.5 xl:hidden"></div>
     </div>
   )
 }

@@ -111,7 +111,10 @@ const SideBar = () => {
                   <div className="space-y-1 text-sm">
                     <h3 className="uppercase text-zinc-400">email</h3>
 
-                    <Link href="mailto:lucas.sousa.dev@gmail.com">
+                    <Link
+                      className="hover:text-primary"
+                      href="mailto:lucas.sousa.dev@gmail.com"
+                    >
                       lucas.sousa.dev@gmail.com
                     </Link>
                   </div>
@@ -137,7 +140,9 @@ const SideBar = () => {
                   <div className="space-y-1 text-sm">
                     <h3 className="uppercase text-zinc-400">Telefone</h3>
 
-                    <Link href="tel:88994545892">(88) 99454-5892</Link>
+                    <Link className="hover:text-primary" href="tel:88994545892">
+                      (88) 99454-5892
+                    </Link>
                   </div>
                 </div>
 

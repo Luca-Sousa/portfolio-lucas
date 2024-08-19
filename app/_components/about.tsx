@@ -9,7 +9,8 @@ const About = () => {
           <CardTitle className="sm:text-3xl">Sobre</CardTitle>
           <div className="h-1 w-8 rounded-3xl bg-primary sm:h-2"></div>
         </div>
-        <CardDescription className="">
+
+        <CardDescription>
           Sou um desenvolvedor FrontEnd com a missão de criar experiências
           digitais agradáveis e intuitivas. Estou sempre me desafiando com novos
           projetos e buscando feedback na comunidade de programação, além de

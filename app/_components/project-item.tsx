@@ -29,7 +29,7 @@ const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
           key={project.id}
           className="flex max-w-52 flex-col gap-3 overflow-hidden rounded-2xl bg-secondary p-1.5"
         >
-          <div className="group relative flex h-72 w-full items-center justify-center overflow-hidden rounded-t-2xl sm:h-80 md:h-64 xl:h-48">
+          <div className="group relative flex h-48 w-full items-center justify-center overflow-hidden rounded-t-2xl">
             <Image
               className="object-cover"
               src={project.image}
