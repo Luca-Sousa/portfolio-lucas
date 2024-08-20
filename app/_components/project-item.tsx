@@ -102,6 +102,19 @@ const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
               <p className="line-clamp-4 min-h-14 text-left text-xs text-zinc-400">
                 {project.description}
               </p>
+
+              <div className="flex items-center gap-3 overflow-y-auto [&::-webkit-scrollbar]:hidden">
+                {project.technologies?.map((technologie, index) => (
+                  <Image
+                    key={index}
+                    alt={`Logo ${technologie.label}`}
+                    src={technologie.icon}
+                    width={24}
+                    height={24}
+                    className="hover:scale-110"
+                  />
+                ))}
+              </div>
             </div>
 
             <Dialog>
@@ -134,6 +147,20 @@ const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
                     </DialogTitle>
                     <DialogDescription>{project.description}</DialogDescription>
                   </DialogHeader>
+
+                  <div className="flex flex-wrap items-center justify-center gap-3 py-3">
+                    {project.technologies?.map((technologie, index) => (
+                      <div key={index} className="flex gap-1">
+                        <Image
+                          alt={`Logo ${technologie.label}`}
+                          src={technologie.icon}
+                          width={24}
+                          height={24}
+                        />
+                        <p className="text-sm">{technologie.label}</p>
+                      </div>
+                    ))}
+                  </div>
 
                   <div className="flex flex-col gap-4 md:flex-row lg:h-full lg:flex-col lg:justify-between">
                     <div className="flex w-full gap-2 lg:flex-col lg:gap-4">
