@@ -14,6 +14,7 @@ model Project {
   imageURL      String
   repositoryURL String
   liveURL       String
+  status        String // Novo campo de status
   technologies  Technology[] @relation("ProjectTechnologies")
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
@@ -22,6 +23,7 @@ model Project {
 model Technology {
   id       String    @id @default(uuid())
   name     String
+  iconURL  String // Campo para o ícone da tecnologia
   projects Project[] @relation("ProjectTechnologies")
 }
 

@@ -23,8 +23,6 @@ const ProjectsData = [
     title: "Ecommerce Product Page Main",
     description:
       "Projeto desenvolvido através do site Frontend Mentor. Com o objetivo de criar uma página de produto de comércio eletrônico, com implementações de Galeria lightbox, Carrinho de compra, Slide de imagens e etc.",
-    tagProj: "Frontend Mentor",
-    tagLink: "https://www.frontendmentor.io",
     status: "Finalizado",
     technologies: [
       { label: "React", icon: ReactIcon },
@@ -43,8 +41,7 @@ const ProjectsData = [
     title: "Product List With Cart Main",
     description:
       "Projeto desenvolvido através do site Frontend Mentor. Com o objetivo de criar uma lista de produtos que inclua um carrinho funcional e adicionar todos os dados de cada produto.",
-    tagProj: "Frontend Mentor",
-    tagLink: "https://www.frontendmentor.io",
+
     status: "Finalizado",
     technologies: [
       { label: "React", icon: ReactIcon },
@@ -62,8 +59,6 @@ const ProjectsData = [
     title: "Base Apparel Coming Soon Page",
     description:
       "Projeto desenvolvido através do site Frontend Mentor. Com o objetivo de Criar um layout simples, mas com detalhes para testar as habilidades em CSS, e praticar validação básica de formulários.",
-    tagProj: "Frontend Mentor",
-    tagLink: "https://www.frontendmentor.io",
     status: "Finalizado",
     technologies: [
       { label: "Tailwind", icon: TailwindIcon },
@@ -80,8 +75,6 @@ const ProjectsData = [
     title: "Sunnyside Agency Landing Page",
     description:
       "Projeto desenvolvido através do site Frontend Mentor. Com o objetivo de Criar uma landing page, com foco principalmente em HTML e CSS.",
-    tagProj: "Frontend Mentor",
-    tagLink: "https://www.frontendmentor.io",
     status: "Em Dev",
     technologies: [
       { label: "Tailwind", icon: TailwindIcon },
@@ -98,8 +91,6 @@ const ProjectsData = [
     title: "Intro Section With Dropdown Navigation",
     description:
       "Projeto desenvolvido através do site Frontend Mentor. Com o objetivo de Criar uma seção de introdução com navegação suspensa.",
-    tagProj: "Frontend Mentor",
-    tagLink: "https://www.frontendmentor.io",
     status: "Em Dev",
     technologies: [
       { label: "Tailwind", icon: TailwindIcon },
@@ -116,8 +107,6 @@ const ProjectsData = [
     title: "Intro Component With Signup Form",
     description:
       "Projeto desenvolvido através do site Frontend Mentor. Com o objetivo de Criar uma landing page, e praticar validação básica de formulários.",
-    tagProj: "Frontend Mentor",
-    tagLink: "https://www.frontendmentor.io",
     status: "Em Dev",
     technologies: [
       { label: "Tailwind", icon: TailwindIcon },
@@ -133,8 +122,6 @@ const ProjectsData = [
     title: "Article Preview Component",
     description:
       "Projeto desenvolvido através do site Frontend Mentor. Com o objetivo de praticar as habilidades de layout com a criação de um componente de pré-visualização de artigo.",
-    tagProj: "Frontend Mentor",
-    tagLink: "https://www.frontendmentor.io",
     status: "Em Att",
     technologies: [
       { label: "Tailwind", icon: TailwindIcon },
