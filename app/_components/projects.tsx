@@ -19,11 +19,6 @@ const Projects = () => {
   const [dataLoaded, setDataLoaded] = useState(false)
 
   useEffect(() => {
-    // Simular a chamada para carregar os dados dos projetos
-    setTimeout(() => {
-      setDataLoaded(true)
-    }, 500) // Ajuste o tempo conforme necessário
-
     const checkOverflow = (
       ref: React.RefObject<HTMLDivElement>,
       setShowLeftArrow: React.Dispatch<React.SetStateAction<boolean>>,
@@ -108,7 +103,7 @@ const Projects = () => {
             ref={finalizadoRef}
             className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
           >
-            <ProjectItem status={"Finalizado"} />
+            <ProjectItem status={"Finalizado"} setDataLoaded={setDataLoaded} />
           </div>
           {dataLoaded && (
             <>
@@ -148,7 +143,7 @@ const Projects = () => {
             ref={attRef}
             className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
           >
-            <ProjectItem status={"Em Att"} />
+            <ProjectItem status={"Em Att"} setDataLoaded={setDataLoaded} />
           </div>
           {dataLoaded && (
             <>
@@ -188,7 +183,7 @@ const Projects = () => {
             ref={devRef}
             className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
           >
-            <ProjectItem status={"Em Dev"} />
+            <ProjectItem status={"Em Dev"} setDataLoaded={setDataLoaded} />
           </div>
           {dataLoaded && (
             <>

@@ -41,14 +41,16 @@ interface Project {
   technologies: Technology[]
 }
 
-const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
+const ProjectItem: React.FC<{
+  status: string
+  setDataLoaded: (loaded: boolean) => void
+}> = ({ status, setDataLoaded }) => {
   const [projects, setProjects] = useState<Project[]>([])
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const fetchedProjects = await getProjects({ status })
-        // Mapeamento dos dados para o formato esperado
         const mappedProjects = fetchedProjects.map((project) => ({
           id: project.id,
           title: project.title,
@@ -57,20 +59,18 @@ const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
           repositoryURL: project.repositoryURL,
           liveURL: project.liveURL,
           status: project.status,
-          technologies: project.technologies.map((tech) => ({
-            id: tech.id,
-            name: tech.name,
-            iconURL: tech.iconURL,
-          })),
+          technologies: project.technologies,
         }))
         setProjects(mappedProjects)
       } catch (error) {
-        console.error("Erro ao buscar projetos:", error)
+        console.error("Erro ao carregar os projetos:", error)
+      } finally {
+        setDataLoaded(true) // Sinaliza que o carregamento dos projetos foi concluído
       }
     }
 
     fetchProjects()
-  }, [status])
+  }, [status, setDataLoaded])
 
   return (
     <div className="flex gap-4">
@@ -152,12 +152,13 @@ const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
               <div className="flex items-center gap-3 overflow-y-auto [&::-webkit-scrollbar]:hidden">
                 {project.technologies?.map((technology) => (
                   <Image
+                    title={technology.name}
                     key={technology.id}
                     alt={`Logo ${technology.name}`}
                     src={technology.iconURL}
                     width={24}
                     height={24}
-                    className="hover:scale-110"
+                    className="hover:scale-105"
                   />
                 ))}
               </div>
