@@ -1,4 +1,7 @@
-import { StarIcon, ViewIcon } from "lucide-react"
+"use client"
+
+import { useEffect, useState } from "react"
+import { StarIcon } from "lucide-react"
 import { Button } from "./ui/button"
 import {
   Dialog,
@@ -15,20 +18,63 @@ import { Badge } from "./ui/badge"
 import { MdDeveloperBoard } from "react-icons/md"
 import { GrUpdate } from "react-icons/gr"
 import Image from "next/image"
-import ProjectsData from "../ProjectsData"
 import { motion } from "framer-motion"
 import { FaGithub } from "react-icons/fa"
 import { IoLogoVercel } from "react-icons/io5"
 import Link from "next/link"
+import { getProjects } from "../_actions/get-projects"
+
+interface Technology {
+  id: string
+  name: string
+  iconURL: string
+}
+
+interface Project {
+  id: string
+  title: string
+  description: string
+  imageURL: string
+  repositoryURL: string
+  liveURL: string
+  status: string
+  technologies: Technology[]
+}
 
 const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
-  const filteredProjects = ProjectsData.filter(
-    (project) => project.status === status,
-  )
+  const [projects, setProjects] = useState<Project[]>([])
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const fetchedProjects = await getProjects({ status })
+        // Mapeamento dos dados para o formato esperado
+        const mappedProjects = fetchedProjects.map((project) => ({
+          id: project.id,
+          title: project.title,
+          description: project.description,
+          imageURL: project.imageURL,
+          repositoryURL: project.repositoryURL,
+          liveURL: project.liveURL,
+          status: project.status,
+          technologies: project.technologies.map((tech) => ({
+            id: tech.id,
+            name: tech.name,
+            iconURL: tech.iconURL,
+          })),
+        }))
+        setProjects(mappedProjects)
+      } catch (error) {
+        console.error("Erro ao buscar projetos:", error)
+      }
+    }
+
+    fetchProjects()
+  }, [status])
 
   return (
     <div className="flex gap-4">
-      {filteredProjects.map((project) => (
+      {projects.map((project) => (
         <div
           key={project.id}
           className="flex max-w-52 flex-col gap-3 overflow-hidden rounded-2xl bg-secondary p-1.5"
@@ -41,7 +87,7 @@ const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
             >
               <Image
                 className="object-cover"
-                src={project.image}
+                src={project.imageURL}
                 alt={project.title}
                 fill
               />
@@ -104,11 +150,11 @@ const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
               </p>
 
               <div className="flex items-center gap-3 overflow-y-auto [&::-webkit-scrollbar]:hidden">
-                {project.technologies?.map((technologie, index) => (
+                {project.technologies?.map((technology) => (
                   <Image
-                    key={index}
-                    alt={`Logo ${technologie.label}`}
-                    src={technologie.icon}
+                    key={technology.id}
+                    alt={`Logo ${technology.name}`}
+                    src={technology.iconURL}
                     width={24}
                     height={24}
                     className="hover:scale-110"
@@ -133,7 +179,7 @@ const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
                   className="mt-4 size-full flex-1 bg-muted lg:mt-0 lg:flex-1"
                 >
                   <Image
-                    src={project.image}
+                    src={project.imageURL}
                     alt={project.title}
                     fill
                     className="rounded-md object-cover"
@@ -149,15 +195,15 @@ const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
                   </DialogHeader>
 
                   <div className="flex flex-wrap items-center justify-center gap-3 py-3">
-                    {project.technologies?.map((technologie, index) => (
-                      <div key={index} className="flex gap-1">
+                    {project.technologies?.map((technology) => (
+                      <div key={technology.id} className="flex gap-1">
                         <Image
-                          alt={`Logo ${technologie.label}`}
-                          src={technologie.icon}
+                          alt={`Logo ${technology.name}`}
+                          src={technology.iconURL}
                           width={24}
                           height={24}
                         />
-                        <p className="text-sm">{technologie.label}</p>
+                        <p className="text-sm">{technology.name}</p>
                       </div>
                     ))}
                   </div>
@@ -169,7 +215,7 @@ const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
                         className="flex w-full gap-2 text-secondary"
                         asChild
                       >
-                        <Link target="_blank" href={project.linkGithub}>
+                        <Link target="_blank" href={project.repositoryURL}>
                           <FaGithub size={20} />
                           Github
                         </Link>
@@ -180,7 +226,7 @@ const ProjectItem: React.FC<{ status: string }> = ({ status }) => {
                         className="flex w-full gap-2 text-secondary"
                         asChild
                       >
-                        <Link target="_blank" href={project.linkVercel}>
+                        <Link target="_blank" href={project.liveURL}>
                           <IoLogoVercel size={20} />
                           Vercel
                         </Link>

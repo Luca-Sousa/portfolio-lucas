@@ -20,7 +20,7 @@ const CarrouselNavigationButton = ({
       <div
         className={`absolute top-1/2 -translate-y-1/2 transform ${
           direction === "left" ? "-left-5" : "-right-5"
-        }`}
+        } z-10`}
       >
         <motion.div whileTap={{ scale: 0.9 }}>
           <Button

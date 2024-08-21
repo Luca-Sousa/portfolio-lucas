@@ -16,8 +16,14 @@ const Projects = () => {
   const [showRightArrowAtt, setShowRightArrowAtt] = useState(false)
   const [showLeftArrowDev, setShowLeftArrowDev] = useState(false)
   const [showRightArrowDev, setShowRightArrowDev] = useState(false)
+  const [dataLoaded, setDataLoaded] = useState(false)
 
   useEffect(() => {
+    // Simular a chamada para carregar os dados dos projetos
+    setTimeout(() => {
+      setDataLoaded(true)
+    }, 500) // Ajuste o tempo conforme necessário
+
     const checkOverflow = (
       ref: React.RefObject<HTMLDivElement>,
       setShowLeftArrow: React.Dispatch<React.SetStateAction<boolean>>,
@@ -31,18 +37,20 @@ const Projects = () => {
     }
 
     const updateArrows = () => {
-      if (finalizadoRef.current) {
-        checkOverflow(
-          finalizadoRef,
-          setShowLeftArrowFinalizado,
-          setShowRightArrowFinalizado,
-        )
-      }
-      if (attRef.current) {
-        checkOverflow(attRef, setShowLeftArrowAtt, setShowRightArrowAtt)
-      }
-      if (devRef.current) {
-        checkOverflow(devRef, setShowLeftArrowDev, setShowRightArrowDev)
+      if (dataLoaded) {
+        if (finalizadoRef.current) {
+          checkOverflow(
+            finalizadoRef,
+            setShowLeftArrowFinalizado,
+            setShowRightArrowFinalizado,
+          )
+        }
+        if (attRef.current) {
+          checkOverflow(attRef, setShowLeftArrowAtt, setShowRightArrowAtt)
+        }
+        if (devRef.current) {
+          checkOverflow(devRef, setShowLeftArrowDev, setShowRightArrowDev)
+        }
       }
     }
 
@@ -56,7 +64,7 @@ const Projects = () => {
     return () => {
       window.removeEventListener("resize", handleResize)
     }
-  }, [])
+  }, [dataLoaded]) // Dependência em dataLoaded para atualizar quando os dados forem carregados
 
   const scroll = (
     ref: React.RefObject<HTMLDivElement>,
@@ -102,30 +110,34 @@ const Projects = () => {
           >
             <ProjectItem status={"Finalizado"} />
           </div>
-          <CarouselNavigationButton
-            direction="left"
-            onClick={() =>
-              scroll(
-                finalizadoRef,
-                "left",
-                setShowLeftArrowFinalizado,
-                setShowRightArrowFinalizado,
-              )
-            }
-            show={showLeftArrowFinalizado}
-          />
-          <CarouselNavigationButton
-            direction="right"
-            onClick={() =>
-              scroll(
-                finalizadoRef,
-                "right",
-                setShowLeftArrowFinalizado,
-                setShowRightArrowFinalizado,
-              )
-            }
-            show={showRightArrowFinalizado}
-          />
+          {dataLoaded && (
+            <>
+              <CarouselNavigationButton
+                direction="left"
+                onClick={() =>
+                  scroll(
+                    finalizadoRef,
+                    "left",
+                    setShowLeftArrowFinalizado,
+                    setShowRightArrowFinalizado,
+                  )
+                }
+                show={showLeftArrowFinalizado}
+              />
+              <CarouselNavigationButton
+                direction="right"
+                onClick={() =>
+                  scroll(
+                    finalizadoRef,
+                    "right",
+                    setShowLeftArrowFinalizado,
+                    setShowRightArrowFinalizado,
+                  )
+                }
+                show={showRightArrowFinalizado}
+              />
+            </>
+          )}
         </div>
 
         <div className="relative space-y-3">
@@ -138,20 +150,34 @@ const Projects = () => {
           >
             <ProjectItem status={"Em Att"} />
           </div>
-          <CarouselNavigationButton
-            direction="left"
-            onClick={() =>
-              scroll(attRef, "left", setShowLeftArrowAtt, setShowRightArrowAtt)
-            }
-            show={showLeftArrowAtt}
-          />
-          <CarouselNavigationButton
-            direction="right"
-            onClick={() =>
-              scroll(attRef, "right", setShowLeftArrowAtt, setShowRightArrowAtt)
-            }
-            show={showRightArrowAtt}
-          />
+          {dataLoaded && (
+            <>
+              <CarouselNavigationButton
+                direction="left"
+                onClick={() =>
+                  scroll(
+                    attRef,
+                    "left",
+                    setShowLeftArrowAtt,
+                    setShowRightArrowAtt,
+                  )
+                }
+                show={showLeftArrowAtt}
+              />
+              <CarouselNavigationButton
+                direction="right"
+                onClick={() =>
+                  scroll(
+                    attRef,
+                    "right",
+                    setShowLeftArrowAtt,
+                    setShowRightArrowAtt,
+                  )
+                }
+                show={showRightArrowAtt}
+              />
+            </>
+          )}
         </div>
 
         <div className="relative space-y-3">
@@ -164,20 +190,34 @@ const Projects = () => {
           >
             <ProjectItem status={"Em Dev"} />
           </div>
-          <CarouselNavigationButton
-            direction="left"
-            onClick={() =>
-              scroll(devRef, "left", setShowLeftArrowDev, setShowRightArrowDev)
-            }
-            show={showLeftArrowDev}
-          />
-          <CarouselNavigationButton
-            direction="right"
-            onClick={() =>
-              scroll(devRef, "right", setShowLeftArrowDev, setShowRightArrowDev)
-            }
-            show={showRightArrowDev}
-          />
+          {dataLoaded && (
+            <>
+              <CarouselNavigationButton
+                direction="left"
+                onClick={() =>
+                  scroll(
+                    devRef,
+                    "left",
+                    setShowLeftArrowDev,
+                    setShowRightArrowDev,
+                  )
+                }
+                show={showLeftArrowDev}
+              />
+              <CarouselNavigationButton
+                direction="right"
+                onClick={() =>
+                  scroll(
+                    devRef,
+                    "right",
+                    setShowLeftArrowDev,
+                    setShowRightArrowDev,
+                  )
+                }
+                show={showRightArrowDev}
+              />
+            </>
+          )}
         </div>
       </CardContent>
     </>
