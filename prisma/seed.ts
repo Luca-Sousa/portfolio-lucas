@@ -101,7 +101,7 @@ async function seedDatabase() {
       ),
       createTechnology(
         "NextJS",
-        "https://utfs.io/f/954bcc64-53e9-46c3-a050-53a1a609b406-jd0hsj.svg",
+        "https://utfs.io/f/8316900b-9ee5-4978-9071-8c2e03e6b835-jd0hsj.svg",
       ),
       createTechnology(
         "ShadcnUI",

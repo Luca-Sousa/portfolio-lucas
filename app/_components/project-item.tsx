@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { StarIcon } from "lucide-react"
+import { ArrowRight, StarIcon } from "lucide-react"
 import { Button } from "./ui/button"
 import {
   Dialog,
@@ -210,19 +210,54 @@ const ProjectItem: React.FC<{
                   </div>
 
                   <div className="flex flex-col gap-4 md:flex-row lg:h-full lg:flex-col lg:justify-between">
-                    <div className="flex w-full gap-2 lg:flex-col lg:gap-4">
-                      <Button
-                        size={"lg"}
-                        className="flex w-full gap-2 text-secondary"
-                        asChild
+                    <div className="flex w-full gap-4 lg:flex-col">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.8 }}
+                        className="w-full"
                       >
-                        <Link target="_blank" href={project.repositoryURL}>
-                          <FaGithub size={20} />
-                          Github
-                        </Link>
-                      </Button>
+                        <Button
+                          size={"lg"}
+                          className="w-full overflow-hidden bg-cyan-600 px-0 hover:bg-cyan-600 xl:w-[90%]"
+                          asChild
+                        >
+                          <Link target="_blank" href={project.repositoryURL}>
+                            <div className="flex flex-1 items-center justify-center gap-2 uppercase">
+                              <FaGithub size={20} />
+                              Github
+                            </div>
 
-                      <Button
+                            <div className="hidden h-full w-10 items-center justify-center bg-orange-400 sm:flex lg:w-14">
+                              <ArrowRight />
+                            </div>
+                          </Link>
+                        </Button>
+                      </motion.button>
+
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.8 }}
+                        className="w-full"
+                      >
+                        <Button
+                          size={"lg"}
+                          className="w-full overflow-hidden bg-cyan-600 px-0 hover:bg-cyan-600 xl:w-[90%]"
+                          asChild
+                        >
+                          <Link target="_blank" href={project.repositoryURL}>
+                            <div className="flex flex-1 items-center justify-center gap-2 uppercase">
+                              <IoLogoVercel size={20} />
+                              Vercel
+                            </div>
+
+                            <div className="hidden h-full w-10 items-center justify-center bg-orange-400 sm:flex lg:w-14">
+                              <ArrowRight />
+                            </div>
+                          </Link>
+                        </Button>
+                      </motion.button>
+
+                      {/* <Button
                         size={"lg"}
                         className="flex w-full gap-2 text-secondary"
                         asChild
@@ -231,7 +266,7 @@ const ProjectItem: React.FC<{
                           <IoLogoVercel size={20} />
                           Vercel
                         </Link>
-                      </Button>
+                      </Button> */}
                     </div>
 
                     <DialogFooter className="w-full">

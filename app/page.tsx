@@ -8,6 +8,7 @@ import Resume from "./_components/resume"
 import Contact from "./_components/contact"
 import { useState } from "react"
 import NavigationMenuItems from "./_components/navigation-menu"
+import { Sheet, SheetTrigger } from "./_components/ui/sheet"
 
 const Home = () => {
   const [active, setActive] = useState<string>("sobre")
@@ -36,7 +37,11 @@ const Home = () => {
         ) : active === "projetos" ? (
           <Projects />
         ) : active === "contato" ? (
-          <Contact />
+          <Sheet>
+            <SheetTrigger asChild>
+              <Contact />
+            </SheetTrigger>
+          </Sheet>
         ) : null}
       </Card>
 
