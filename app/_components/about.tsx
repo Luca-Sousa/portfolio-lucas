@@ -67,13 +67,13 @@ const About = () => {
         <CardContent className="space-y-4 px-0">
           <h3 className="text-lg font-semibold">Desenvolvendo: </h3>
 
-          <Card className="rounded-2xl text-center">
+          <Card className="rounded-2xl text-center lg:max-w-[50%]">
             <CardHeader className="flex items-center justify-center">
               <Image
                 alt="Logo Web Development"
                 src="./web-development-icon.svg"
-                width={40}
-                height={40}
+                width={50}
+                height={50}
               />
 
               <CardTitle className="text-base">Web Development</CardTitle>
@@ -84,14 +84,14 @@ const About = () => {
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="flex justify-end">
+            {/* <CardContent className="flex justify-end">
               <Button
                 variant={"secondary"}
                 className="ring-primary hover:ring-2"
               >
                 Ver Projetos
               </Button>
-            </CardContent>
+            </CardContent> */}
           </Card>
         </CardContent>
       </CardHeader>

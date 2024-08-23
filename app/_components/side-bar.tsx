@@ -16,7 +16,6 @@ import {
 import Link from "next/link"
 import { toast } from "sonner"
 import { useEffect, useState } from "react"
-import { Skeleton } from "./ui/skeleton"
 import SkeletonSidebar from "./skeleton-sidebar"
 
 const SideBar = () => {

@@ -36,12 +36,6 @@ const Home = () => {
           <Resume />
         ) : active === "projetos" ? (
           <Projects />
-        ) : active === "contato" ? (
-          <Sheet>
-            <SheetTrigger asChild>
-              <Contact />
-            </SheetTrigger>
-          </Sheet>
         ) : null}
       </Card>
 
