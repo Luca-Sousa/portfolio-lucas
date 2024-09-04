@@ -18,15 +18,6 @@ import { toast } from "sonner"
 import { useEffect, useState } from "react"
 import SkeletonSidebar from "./skeleton-sidebar"
 import { MdOutlineDashboardCustomize } from "react-icons/md"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog"
-import SignIn from "./sign-in"
 
 const SideBar = () => {
   const [detailsSideBar, setDetailsSideBar] = useState<boolean>(false)
