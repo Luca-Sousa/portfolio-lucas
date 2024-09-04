@@ -107,7 +107,7 @@ const ProjectItem: React.FC<{
           {Array.from({ length: skeletonCount }).map((_, index) => (
             <Skeleton
               key={index}
-              className="h-72 w-full rounded-2xl bg-secondary"
+              className="h-[400px] w-full rounded-2xl bg-secondary"
             >
               <span className="flex h-full animate-pulse items-center justify-center gap-3 bg-secondary/50 text-sm text-secondary-foreground">
                 <AiOutlineLoading3Quarters size={18} className="animate-spin" />

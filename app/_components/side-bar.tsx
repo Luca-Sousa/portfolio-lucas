@@ -17,6 +17,16 @@ import Link from "next/link"
 import { toast } from "sonner"
 import { useEffect, useState } from "react"
 import SkeletonSidebar from "./skeleton-sidebar"
+import { MdOutlineDashboardCustomize } from "react-icons/md"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog"
+import SignIn from "./sign-in"
 
 const SideBar = () => {
   const [detailsSideBar, setDetailsSideBar] = useState<boolean>(false)
@@ -87,7 +97,7 @@ const SideBar = () => {
             />
           </div>
 
-          <div className="space-y-3 xl:space-y-5 xl:text-center">
+          <div className="flex flex-col gap-3 xl:items-center xl:gap-5">
             <h2 className="text-xl font-bold xl:text-2xl">Lucas Sousa</h2>
 
             <div className="rounded-xl bg-zinc-800">
@@ -95,6 +105,16 @@ const SideBar = () => {
                 Desenvolvedor FrontEnd
               </p>
             </div>
+
+            <Button
+              className="hidden gap-1.5 font-semibold text-secondary xl:flex"
+              asChild
+            >
+              <Link href={"/login"}>
+                <MdOutlineDashboardCustomize size={18} />
+                Dashboard
+              </Link>
+            </Button>
           </div>
         </div>
 
