@@ -5,10 +5,8 @@ import { Card } from "./_components/ui/card"
 import About from "./_components/about"
 import Projects from "./_components/projects"
 import Resume from "./_components/resume"
-import Contact from "./_components/contact"
 import { useState } from "react"
 import NavigationMenuItems from "./_components/navigation-menu"
-import { Sheet, SheetTrigger } from "./_components/ui/sheet"
 
 const Home = () => {
   const [active, setActive] = useState<string>("sobre")
