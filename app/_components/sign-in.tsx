@@ -5,13 +5,20 @@ import { useForm } from "react-hook-form"
 import { Input } from "@/app/_components/ui/input"
 import { Button } from "@/app/_components/ui/button"
 import { toast } from "sonner"
+import {
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog"
+import { Label } from "./ui/label"
 
 type FormData = {
   email: string
   password: string
 }
 
-export default function Login() {
+const SignIn = () => {
   const {
     handleSubmit,
     register,
@@ -35,42 +42,54 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
+    <DialogContent className="w-fit">
+      <DialogHeader className="w-96 space-y-3">
+        <DialogTitle className="text-center">Login Administrador</DialogTitle>
+
+        <DialogDescription>
+          Dashboard Admistrativa do Portfólio!
+        </DialogDescription>
+      </DialogHeader>
+
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-sm space-y-4"
+        className="w-full max-w-sm space-y-5"
       >
-        <div>
-          <label
+        <div className="space-y-3">
+          <Label
             htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-secondary-foreground"
           >
             Email
-          </label>
+          </Label>
+
           <Input
             id="email"
             type="email"
             placeholder="Email..."
-            {...register("email", { required: "Email is required" })}
+            {...register("email", { required: "Email Obrigatório" })}
           />
+
           {errors.email && (
             <p className="text-xs text-red-500">{errors.email.message}</p>
           )}
         </div>
 
-        <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-700"
+        <div className="space-y-3">
+          <Label
+            htmlFor="email"
+            className="block text-sm font-medium text-secondary-foreground"
           >
             Senha
-          </label>
+          </Label>
+
           <Input
             id="password"
             type="password"
             placeholder="Senha..."
-            {...register("password", { required: "Password is required" })}
+            {...register("password", { required: "Senha Obrigatória" })}
           />
+
           {errors.password && (
             <p className="text-xs text-red-500">{errors.password.message}</p>
           )}
@@ -83,6 +102,8 @@ export default function Login() {
           Login
         </Button>
       </form>
-    </div>
+    </DialogContent>
   )
 }
+
+export default SignIn

@@ -19,6 +19,8 @@ import { useEffect, useState } from "react"
 import SkeletonSidebar from "./skeleton-sidebar"
 import { MdOutlineDashboardCustomize } from "react-icons/md"
 import { signOut, useSession } from "next-auth/react"
+import { Dialog, DialogTrigger } from "./ui/dialog"
+import SignIn from "./sign-in"
 
 const SideBar = () => {
   const [detailsSideBar, setDetailsSideBar] = useState<boolean>(false)
@@ -105,15 +107,16 @@ const SideBar = () => {
             </div>
 
             {!session ? (
-              <Button
-                className="hidden gap-1.5 font-semibold text-secondary xl:flex"
-                asChild
-              >
-                <Link href={"/api/auth/login"}>
-                  <MdOutlineDashboardCustomize size={18} />
-                  Dashboard
-                </Link>
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="hidden gap-1.5 font-semibold text-secondary xl:flex">
+                    <MdOutlineDashboardCustomize size={18} />
+                    Dashboard
+                  </Button>
+                </DialogTrigger>
+
+                <SignIn />
+              </Dialog>
             ) : (
               <form
                 onSubmit={async (e) => {

@@ -3,13 +3,13 @@
 import { db } from "../_lib/prisma"
 
 interface GetProjectsProps {
-  status: string
+  status?: string
 }
 
 export const getProjects = async ({ status }: GetProjectsProps) => {
   // Primeiro, busque todos os projetos com as tecnologias incluídas
   const projects = await db.project.findMany({
-    where: { status },
+    where: status ? { status } : {},
     include: {
       technologies: true,
     },
