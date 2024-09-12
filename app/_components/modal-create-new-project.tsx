@@ -20,13 +20,22 @@ import {
 } from "./ui/form"
 import { Input } from "./ui/input"
 import { useForm } from "react-hook-form"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import { Textarea } from "./ui/textarea"
+import { Label } from "./ui/label"
+import { getTechnologies } from "../_actions/get-technologies"
+import { Checkbox } from "./ui/checkbox"
+import ModalCreateNewTechnology from "./modal-create-new-technology"
+import { Technology } from "@prisma/client"
 
 const ModalCreateNewProjetc = () => {
   const form = useForm()
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [technologies, setTechnologies] = useState<
+    { id: string; name: string; iconURL: string }[]
+  >([])
+  const [selectedTechnologies, setSelectedTechnologies] = useState<string[]>([])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -44,6 +53,28 @@ const ModalCreateNewProjetc = () => {
     textarea.style.height = `${textarea.scrollHeight}px` // Define a altura com base no scrollHeight
   }
 
+  const handleTechnologyChange = (techId: string) => {
+    setSelectedTechnologies(
+      (prev) =>
+        prev.includes(techId)
+          ? prev.filter((id) => id !== techId) // Remover se já estiver selecionado
+          : [...prev, techId], // Adicionar se ainda não estiver selecionado
+    )
+  }
+
+  const handleTechnologyCreated = (newTechnology: Technology) => {
+    setTechnologies((prevTechnologies) => [...prevTechnologies, newTechnology])
+  }
+
+  useEffect(() => {
+    const fetchTechnologies = async () => {
+      const techs = await getTechnologies()
+      setTechnologies(techs)
+    }
+
+    fetchTechnologies()
+  }, [])
+
   return (
     <TableRow>
       <TableCell colSpan={6} />
@@ -59,84 +90,136 @@ const ModalCreateNewProjetc = () => {
             </Button>
           </DialogTrigger>
 
-          <DialogContent>
+          <DialogContent className="w-full max-w-5xl">
             <DialogHeader>
               <DialogTitle>Novo Projeto</DialogTitle>
             </DialogHeader>
 
             <Form {...form}>
-              <FormField
-                control={form.control}
-                name="image"
-                render={({ field }) => (
-                  <FormItem className="size-fit">
-                    <FormLabel>Imagem do Projeto</FormLabel>
-                    <FormControl>
-                      {!imagePreview ? (
-                        <Input
-                          className="h-52 w-80"
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => {
-                            handleImageChange(e) // para pré-visualizar a imagem
-                            field.onChange(e.target.files?.[0]) // para capturar o arquivo no form
-                          }}
-                        />
-                      ) : (
-                        <div
-                          className="relative my-4 h-52 w-80 cursor-pointer"
-                          onClick={() => {
-                            // Ao clicar na imagem, resetar a pré-visualização e permitir nova seleção
-                            setImagePreview(null)
-                            field.onChange(null) // Reseta o valor do form
-                          }}
-                        >
-                          <Image
-                            src={imagePreview}
-                            alt="Pré-visualização da imagem"
-                            fill
-                            className="object-cover"
+              <div className="flex gap-3">
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="image"
+                    render={({ field }) => (
+                      <FormItem className="size-fit">
+                        <FormLabel>Imagem do Projeto</FormLabel>
+                        <FormControl>
+                          {!imagePreview ? (
+                            <Input
+                              className="h-52 w-80"
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => {
+                                handleImageChange(e) // para pré-visualizar a imagem
+                                field.onChange(e.target.files?.[0]) // para capturar o arquivo no form
+                              }}
+                            />
+                          ) : (
+                            <div
+                              className="relative my-4 h-52 w-80 cursor-pointer"
+                              onClick={() => {
+                                // Ao clicar na imagem, resetar a pré-visualização e permitir nova seleção
+                                setImagePreview(null)
+                                field.onChange(null) // Reseta o valor do form
+                              }}
+                            >
+                              <Image
+                                src={imagePreview}
+                                alt="Pré-visualização da imagem"
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                          )}
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Título do Projeto</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Meu Projeto" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Descrição</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            {...field}
+                            placeholder="Descrição do Projeto..."
+                            className="min-h-32 resize-none [&::-webkit-scrollbar]:hidden"
+                            onInput={handleTextareaResize}
                           />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="space-y-5">
+                  <FormField
+                    control={form.control}
+                    name="technologies"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Tecnologias</FormLabel>
+                        <div className="grid grid-cols-4 gap-2">
+                          {technologies.map((tech) => (
+                            <div
+                              key={tech.id}
+                              className="flex items-center gap-2"
+                            >
+                              <Checkbox
+                                checked={selectedTechnologies.includes(tech.id)}
+                                onCheckedChange={() =>
+                                  handleTechnologyChange(tech.id)
+                                }
+                                id={tech.id.toString()}
+                                {...field}
+                              />
+                              <Label
+                                htmlFor={tech.id.toString()}
+                                className="flex items-center gap-2"
+                              >
+                                <Image
+                                  alt={tech.name}
+                                  src={tech.iconURL}
+                                  width={18}
+                                  height={18}
+                                />
+                                {tech.name}
+                              </Label>
+                            </div>
+                          ))}
                         </div>
-                      )}
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Título do Projeto</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Meu Projeto" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Descrição</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="Descrição do Projeto..."
-                        className="min-h-32 resize-none [&::-webkit-scrollbar]:hidden"
-                        onInput={handleTextareaResize}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                  <div className="flex w-full items-center justify-center">
+                    <ModalCreateNewTechnology
+                      onTechnologyCreated={handleTechnologyCreated}
+                    />
+                  </div>
+                </div>
+              </div>
             </Form>
           </DialogContent>
         </Dialog>

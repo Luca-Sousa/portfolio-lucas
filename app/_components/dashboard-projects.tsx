@@ -24,12 +24,8 @@ import {
 import { Settings2 } from "lucide-react"
 import ModalCreateNewProjetc from "./modal-create-new-project"
 
-interface DashboardProjectsProps {
-  status: string
-}
-
-const DashboardProjects = async ({ status }: DashboardProjectsProps) => {
-  const projects = await getProjects({ status })
+const DashboardProjects = async () => {
+  const projects = await getProjects({})
 
   return (
     <Table>
