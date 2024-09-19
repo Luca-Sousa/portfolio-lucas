@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from "./ui/card"
 import Image from "next/image"
-import { Button } from "./ui/button"
 
 const About = () => {
   return (
@@ -71,7 +70,7 @@ const About = () => {
             <CardHeader className="flex items-center justify-center">
               <Image
                 alt="Logo Web Development"
-                src="./web-development-icon.svg"
+                src="/web-development-icon.svg"
                 width={50}
                 height={50}
               />

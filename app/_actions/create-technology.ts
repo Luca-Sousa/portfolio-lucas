@@ -1,3 +1,5 @@
+"use server"
+
 import { db } from "../_lib/prisma"
 
 interface CreateTechnologyParams {
@@ -5,12 +7,8 @@ interface CreateTechnologyParams {
   iconURL: string
 }
 
-export const createTechnology = async ({
-  ...params
-}: CreateTechnologyParams) => {
-  const newTechnology = await db.technology.create({
+export const createTechnology = async (params: CreateTechnologyParams) => {
+  await db.technology.create({
     data: { ...params },
   })
-
-  return newTechnology
 }

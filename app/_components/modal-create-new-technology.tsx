@@ -1,6 +1,5 @@
 "use client"
 
-import { Form, useForm } from "react-hook-form"
 import {
   Dialog,
   DialogContent,
@@ -9,42 +8,36 @@ import {
   DialogTrigger,
 } from "./ui/dialog"
 import { Button } from "./ui/button"
-import { CirclePlusIcon, SaveIcon } from "lucide-react"
+import { CirclePlusIcon, ImageUp, SaveIcon } from "lucide-react"
+import { Input } from "./ui/input"
+import { createTechnology } from "../_actions/create-technology"
 import {
+  Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from "./ui/form"
-import { Input } from "./ui/input"
+import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { createTechnology } from "../_actions/create-technology"
-import { Technology } from "@prisma/client"
+import Image from "next/image"
+import { UploadButton } from "../utils/uploadthing"
+import { useState } from "react"
 
-interface ModalCreateNewTechnologyProps {
-  onTechnologyCreated: (newTechnology: Technology) => void
-}
+const ModalCreateNewTechnology = () => {
+  const form = useForm()
+  const [iconURL, setIconURL] = useState<string>("")
 
-const ModalCreateNewTechnology = ({
-  onTechnologyCreated,
-}: ModalCreateNewTechnologyProps) => {
-  const form = useForm({ defaultValues: { name: "", iconURL: "" } })
-  const { handleSubmit, reset } = form
+  const handleCreateTechnology = async (data: any) => {
+    await createTechnology({
+      name: data.name,
+      iconURL: data.iconURL,
+    })
 
-  const handleCreateTechnology = async () => {
-    try {
-      const newTechnology = await createTechnology({
-        name: form.getValues().name,
-        iconURL: form.getValues().iconURL,
-      })
-
-      onTechnologyCreated(newTechnology) // Atualize a lista de tecnologias
-      reset() // Limpa o formulário
-      toast.success("Tecnologia criada com sucesso") // Adiciona uma notificação de sucesso
-    } catch (error) {
-      toast.error("Erro ao criar a tecnologia") // Adiciona uma notificação de erro
-    }
+    form.reset()
+    setIconURL("")
+    toast.success("Tecnologia criada com sucesso!")
   }
 
   return (
@@ -60,40 +53,77 @@ const ModalCreateNewTechnology = ({
         </Button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="w-96">
         <DialogHeader>
           <DialogTitle>Criar Nova Tecnologia</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={handleSubmit(handleCreateTechnology)}>
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nome</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Nome da tecnologia..." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <form
+            onSubmit={form.handleSubmit(handleCreateTechnology)}
+            className="space-y-4"
+          >
+            <div className="flex items-center gap-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem className="w-[90%]">
+                    <FormLabel>Nome</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Nome da tecnologia..." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="iconURL"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>URL do Ícone</FormLabel>
-                  <FormControl>
-                    <Input placeholder="URL do Ícone..." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="iconURL"
+                render={() => (
+                  <FormItem className="w-[10%]">
+                    <FormLabel>Ícone</FormLabel>
+                    <FormControl>
+                      {iconURL ? (
+                        <div className="w-10">
+                          <Image
+                            src={iconURL}
+                            alt="Pré-visualização"
+                            width={30}
+                            height={30}
+                          />
+                        </div>
+                      ) : (
+                        <UploadButton
+                          content={{
+                            button({ ready }) {
+                              if (ready) return <ImageUp size={28} />
+                            },
+                          }}
+                          appearance={{
+                            button: "w-full bg-accent hover:bg-muted",
+                            container: "w-10",
+                            allowedContent: "hidden",
+                          }}
+                          endpoint="imageUploader"
+                          onClientUploadComplete={(res) => {
+                            const uploadedURL = res[0].url
+                            setIconURL(uploadedURL)
+                            form.setValue("iconURL", uploadedURL)
+                            toast.success("Upload Completed")
+                          }}
+                          onUploadError={(error: Error) => {
+                            toast.error(error.message)
+                          }}
+                        />
+                      )}
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <div className="flex w-full items-center justify-center">
               <Button

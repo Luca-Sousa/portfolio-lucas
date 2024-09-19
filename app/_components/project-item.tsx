@@ -25,11 +25,16 @@ import Link from "next/link"
 import { getProjects } from "../_actions/get-projects"
 import { Skeleton } from "./ui/skeleton"
 import { AiOutlineLoading3Quarters } from "react-icons/ai"
+import { ProjectStatus, Technology } from "@prisma/client"
+import { getTechnologiesByProject } from "../_actions/get-technologies-by-project"
 
-interface Technology {
-  id: string
-  name: string
-  iconURL: string
+interface ProjectItemProps {
+  status: ProjectStatus
+  setDataLoaded: (loaded: boolean) => void
+}
+
+interface ProjectTechnologies {
+  [projectId: string]: Technology[]
 }
 
 interface Project {
@@ -39,42 +44,55 @@ interface Project {
   imageURL: string
   repositoryURL: string
   liveURL: string
-  status: string
-  technologies: Technology[]
+  status: ProjectStatus
+  createdAt: Date
+  updatedAt: Date
+  technologies: Technology[] // Certifique-se de que isso está incluído
 }
 
-const ProjectItem: React.FC<{
-  status: string
-  setDataLoaded: (loaded: boolean) => void
-}> = ({ status, setDataLoaded }) => {
+const ProjectItem = ({ status, setDataLoaded }: ProjectItemProps) => {
   const [projects, setProjects] = useState<Project[]>([])
-  const [isLoading, setIsLoading] = useState(true) // Adicione esse estado
+  const [technologies, setTechnologies] = useState<ProjectTechnologies>({})
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchTechnologies = async () => {
+      const projects = await getProjects({})
+
+      const fetchedTechnologies: ProjectTechnologies = {}
+
+      for (const project of projects) {
+        const techs = await getTechnologiesByProject([project.id])
+        fetchedTechnologies[project.id] = Array.isArray(techs) ? techs : []
+      }
+
+      // Usa o setTechnologies para salvar as tecnologias no estado
+      setTechnologies(fetchedTechnologies)
+    }
+
+    fetchTechnologies()
+  }, [])
 
   useEffect(() => {
     const fetchProjects = async () => {
-      try {
-        const fetchedProjects = await getProjects({ status })
-        const mappedProjects = fetchedProjects.map((project) => ({
-          id: project.id,
-          title: project.title,
-          description: project.description,
-          imageURL: project.imageURL,
-          repositoryURL: project.repositoryURL,
-          liveURL: project.liveURL,
-          status: project.status,
-          technologies: project.technologies,
-        }))
-        setProjects(mappedProjects)
-      } catch (error) {
-        console.error("Erro ao carregar os projetos:", error)
-      } finally {
-        setIsLoading(false)
-        setDataLoaded(true)
+      if (Object.keys(technologies).length === 0) {
+        return // Evita tentar buscar projetos se as tecnologias ainda não foram carregadas
       }
+
+      const fetchedProjects = await getProjects({})
+
+      const mappedProjects = fetchedProjects.map((project) => ({
+        ...project,
+        technologies: technologies[project.id] || [],
+      }))
+
+      setProjects(mappedProjects)
+      setIsLoading(false)
+      setDataLoaded(true)
     }
 
     fetchProjects()
-  }, [status, setDataLoaded])
+  }, [technologies, status, setDataLoaded])
 
   const useWindowSize = () => {
     const [windowSize, setWindowSize] = useState({
@@ -96,6 +114,7 @@ const ProjectItem: React.FC<{
 
     return windowSize
   }
+
   const { width } = useWindowSize()
   const skeletonCount =
     width < 540 ? 1 : width < 768 ? 2 : width < 1024 ? 3 : width < 1300 ? 4 : 5
@@ -142,7 +161,7 @@ const ProjectItem: React.FC<{
                 className="absolute left-2 top-2 z-10 cursor-default space-x-1"
                 variant={"secondary"}
               >
-                {status === "Em Dev" && (
+                {project.status === ProjectStatus.Em_Dev && (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -156,7 +175,7 @@ const ProjectItem: React.FC<{
                   </motion.div>
                 )}
 
-                {status === "Finalizado" && (
+                {project.status === ProjectStatus.Finalizado && (
                   <motion.div
                     animate={{
                       scale: [1, 1.2, 1],
@@ -168,7 +187,8 @@ const ProjectItem: React.FC<{
                     <StarIcon size={12} className="fill-primary text-primary" />
                   </motion.div>
                 )}
-                {status === "Em Att" && (
+
+                {project.status === ProjectStatus.Em_Att && (
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ repeat: Infinity, duration: 2 }}
@@ -193,7 +213,7 @@ const ProjectItem: React.FC<{
                 </p>
 
                 <div className="flex items-center gap-3 overflow-y-auto [&::-webkit-scrollbar]:hidden">
-                  {project.technologies?.map((technology) => (
+                  {project.technologies.map((technology) => (
                     <Image
                       title={technology.name}
                       key={technology.id}

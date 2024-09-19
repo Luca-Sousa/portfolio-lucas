@@ -4,9 +4,7 @@ import { Avatar, AvatarImage } from "./ui/avatar"
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -22,24 +20,35 @@ import {
   DialogTrigger,
 } from "./ui/dialog"
 import { Settings2 } from "lucide-react"
-import ModalCreateNewProjetc from "./modal-create-new-project"
+import { IoLogoVercel } from "react-icons/io5"
+import { FaGithub } from "react-icons/fa"
+import { Badge } from "./ui/badge"
+import { getTechnologiesByProject } from "../_actions/get-technologies-by-project"
+
+const fetchData = async () => {
+  const projects = await getProjects({})
+  const projectIds = projects.map((project) => project.id)
+  const technologiesByProject = await getTechnologiesByProject(projectIds)
+
+  return { projects, technologiesByProject }
+}
 
 const DashboardProjects = async () => {
-  const projects = await getProjects({})
+  const { projects, technologiesByProject } = await fetchData()
 
   return (
     <Table>
-      <TableCaption>Lista de Projetos</TableCaption>
+      {/* <TableCaption>Lista de Projetos</TableCaption> */}
       <TableHeader>
         <TableRow>
           <TableHead></TableHead>
           <TableHead>Projeto</TableHead>
           <TableHead>Descrição</TableHead>
-          <TableHead>Status</TableHead>
+          <TableHead className="text-center">Status</TableHead>
           <TableHead>Tecnologies</TableHead>
-          <TableHead>Link Vercel</TableHead>
-          <TableHead>Link GitHub</TableHead>
-          <TableHead className="text-right">Actions</TableHead>
+          <TableHead>Vercel</TableHead>
+          <TableHead>GitHub</TableHead>
+          <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
 
@@ -47,24 +56,26 @@ const DashboardProjects = async () => {
         {projects.map((project) => (
           <TableRow key={project.id}>
             <TableCell>
-              <Avatar>
+              <Avatar className="h-14 w-16 rounded-xl">
                 <AvatarImage src={project.imageURL} />
               </Avatar>
             </TableCell>
 
-            <TableCell className="w-full max-w-48 truncate font-medium">
+            <TableCell className="w-fit truncate font-medium">
               {project.title}
             </TableCell>
 
-            <TableCell className="w-full max-w-32 truncate font-medium">
+            <TableCell className="max-w-72 truncate font-medium">
               {project.description}
             </TableCell>
 
-            <TableCell>{project.status}</TableCell>
+            <TableCell className="text-center">
+              <Badge className="text-secondary">{project.status}</Badge>
+            </TableCell>
 
             <TableCell>
-              <div className="flex w-32 items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-                {project.technologies.map((tech) => (
+              <div className="flex items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+                {technologiesByProject[project.id].map((tech) => (
                   <Image
                     key={tech.id}
                     alt={tech.name}
@@ -76,24 +87,20 @@ const DashboardProjects = async () => {
               </div>
             </TableCell>
 
-            <TableCell className="w-full max-w-24 truncate text-xs">
-              <Link
-                target="_blank"
-                href={project.liveURL}
-                className="hover:underline"
-              >
-                {project.liveURL}
-              </Link>
+            <TableCell>
+              <Button variant={"ghost"} asChild>
+                <Link target="_blank" href={project.liveURL}>
+                  <IoLogoVercel size={20} />
+                </Link>
+              </Button>
             </TableCell>
 
-            <TableCell className="w-full max-w-24 truncate text-xs">
-              <Link
-                target="_blank"
-                href={project.repositoryURL}
-                className="hover:underline"
-              >
-                {project.repositoryURL}
-              </Link>
+            <TableCell className="">
+              <Button variant={"ghost"} asChild>
+                <Link target="_blank" href={project.repositoryURL}>
+                  <FaGithub size={20} />
+                </Link>
+              </Button>
             </TableCell>
 
             <TableCell className="text-right">
@@ -137,9 +144,9 @@ const DashboardProjects = async () => {
         ))}
       </TableBody>
 
-      <TableFooter>
+      {/* <TableFooter>
         <ModalCreateNewProjetc />
-      </TableFooter>
+      </TableFooter> */}
     </Table>
   )
 }

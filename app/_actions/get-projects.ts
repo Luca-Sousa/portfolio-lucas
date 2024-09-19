@@ -1,9 +1,10 @@
 "use server"
 
+import { ProjectStatus } from "@prisma/client"
 import { db } from "../_lib/prisma"
 
 interface GetProjectsProps {
-  status?: string
+  status?: ProjectStatus
 }
 
 export const getProjects = async ({ status }: GetProjectsProps) => {

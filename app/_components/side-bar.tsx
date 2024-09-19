@@ -18,13 +18,11 @@ import { toast } from "sonner"
 import { useEffect, useState } from "react"
 import SkeletonSidebar from "./skeleton-sidebar"
 import { MdOutlineDashboardCustomize } from "react-icons/md"
-import { signOut, useSession } from "next-auth/react"
 import { Dialog, DialogTrigger } from "./ui/dialog"
 import SignIn from "./sign-in"
 
 const SideBar = () => {
   const [detailsSideBar, setDetailsSideBar] = useState<boolean>(false)
-  const { data: session } = useSession()
 
   useEffect(() => {
     const handleResize = () => {
@@ -47,11 +45,6 @@ const SideBar = () => {
       toast.success("Email copiado com sucesso!")
 
     if (item === "88994545892") toast.success("Telefone copiado com sucesso!")
-  }
-
-  const handleSignOut = async () => {
-    await signOut({ redirect: false })
-    window.location.href = "/"
   }
 
   return (
@@ -106,29 +99,16 @@ const SideBar = () => {
               </p>
             </div>
 
-            {!session ? (
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="hidden gap-1.5 font-semibold text-secondary xl:flex">
-                    <MdOutlineDashboardCustomize size={18} />
-                    Dashboard
-                  </Button>
-                </DialogTrigger>
-
-                <SignIn />
-              </Dialog>
-            ) : (
-              <form
-                onSubmit={async (e) => {
-                  e.preventDefault()
-                  await handleSignOut()
-                }}
-              >
-                <Button type="submit" variant="destructive">
-                  Sign Out
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="hidden gap-1.5 font-semibold text-secondary xl:flex">
+                  <MdOutlineDashboardCustomize size={18} />
+                  Dashboard
                 </Button>
-              </form>
-            )}
+              </DialogTrigger>
+
+              <SignIn />
+            </Dialog>
           </div>
         </div>
 

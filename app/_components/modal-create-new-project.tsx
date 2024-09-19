@@ -9,7 +9,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog"
-import { TableCell, TableRow } from "./ui/table"
 import {
   Form,
   FormControl,
@@ -26,24 +25,46 @@ import { Textarea } from "./ui/textarea"
 import { Label } from "./ui/label"
 import { getTechnologies } from "../_actions/get-technologies"
 import { Checkbox } from "./ui/checkbox"
-import ModalCreateNewTechnology from "./modal-create-new-technology"
 import { Technology } from "@prisma/client"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select"
+import { createProject } from "../_actions/create-project"
+import { UploadButton } from "../utils/uploadthing"
+import { toast } from "sonner"
+
+export enum ProjectStatus {
+  Finalizado = "Finalizado",
+  Em_Att = "Em Att",
+  Em_Dev = "Em Dev",
+}
 
 const ModalCreateNewProjetc = () => {
   const form = useForm()
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [technologies, setTechnologies] = useState<
-    { id: string; name: string; iconURL: string }[]
-  >([])
+  const [technologies, setTechnologies] = useState<Technology[]>([])
   const [selectedTechnologies, setSelectedTechnologies] = useState<string[]>([])
+  const [imageUrl, setImageUrl] = useState<string | null>(null)
+  const [status, setStatus] = useState<string[]>([])
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const previewUrl = URL.createObjectURL(file)
-      setImagePreview(previewUrl)
+  useEffect(() => {
+    const fetchTechnologies = async () => {
+      const techs = await getTechnologies()
+      setTechnologies(techs)
     }
-  }
+
+    fetchTechnologies()
+  }, [])
+
+  useEffect(() => {
+    // Set the status options from the enum
+    setStatus(Object.values(ProjectStatus))
+  }, [])
 
   const handleTextareaResize = (
     event: React.ChangeEvent<HTMLTextAreaElement>,
@@ -62,169 +83,222 @@ const ModalCreateNewProjetc = () => {
     )
   }
 
-  const handleTechnologyCreated = (newTechnology: Technology) => {
-    setTechnologies((prevTechnologies) => [...prevTechnologies, newTechnology])
+  // const handleTechnologyCreated = (newTechnology: Technology) => {
+  //   setTechnologies((prevTechnologies) => [...prevTechnologies, newTechnology])
+  // }
+
+  const handleSubmitProject = async (data: any) => {
+    await createProject({
+      title: data.title,
+      description: data.description,
+      imageURL: data.imageUrl,
+      repositoryURL: data.linkGithub,
+      liveURL: data.linkVercel,
+      status: data.status,
+      techIds: selectedTechnologies,
+    })
+
+    setImageUrl(null)
+    form.reset()
+    toast.success("Projeto criado com sucesso")
   }
 
-  useEffect(() => {
-    const fetchTechnologies = async () => {
-      const techs = await getTechnologies()
-      setTechnologies(techs)
-    }
-
-    fetchTechnologies()
-  }, [])
-
   return (
-    <TableRow>
-      <TableCell colSpan={6} />
-      <TableCell colSpan={2} className="w-full">
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              size={"lg"}
-              className="flex items-center gap-2 text-secondary"
-            >
-              <FilePlus2 size={14} />
-              Novo Projeto
-            </Button>
-          </DialogTrigger>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button className="flex items-center gap-2 text-secondary">
+          <FilePlus2 size={14} />
+          Novo Projeto
+        </Button>
+      </DialogTrigger>
 
-          <DialogContent className="w-full max-w-5xl">
-            <DialogHeader>
-              <DialogTitle>Novo Projeto</DialogTitle>
-            </DialogHeader>
+      <DialogContent className="w-full max-w-5xl">
+        <DialogHeader>
+          <DialogTitle>Novo Projeto</DialogTitle>
+        </DialogHeader>
 
-            <Form {...form}>
-              <div className="flex gap-3">
-                <div>
-                  <FormField
-                    control={form.control}
-                    name="image"
-                    render={({ field }) => (
-                      <FormItem className="size-fit">
-                        <FormLabel>Imagem do Projeto</FormLabel>
-                        <FormControl>
-                          {!imagePreview ? (
-                            <Input
-                              className="h-52 w-80"
-                              type="file"
-                              accept="image/*"
-                              onChange={(e) => {
-                                handleImageChange(e) // para pré-visualizar a imagem
-                                field.onChange(e.target.files?.[0]) // para capturar o arquivo no form
-                              }}
-                            />
-                          ) : (
-                            <div
-                              className="relative my-4 h-52 w-80 cursor-pointer"
-                              onClick={() => {
-                                // Ao clicar na imagem, resetar a pré-visualização e permitir nova seleção
-                                setImagePreview(null)
-                                field.onChange(null) // Reseta o valor do form
-                              }}
-                            >
-                              <Image
-                                src={imagePreview}
-                                alt="Pré-visualização da imagem"
-                                fill
-                                className="object-cover"
-                              />
-                            </div>
-                          )}
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Título do Projeto</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Meu Projeto" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Descrição</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            {...field}
-                            placeholder="Descrição do Projeto..."
-                            className="min-h-32 resize-none [&::-webkit-scrollbar]:hidden"
-                            onInput={handleTextareaResize}
+        <Form {...form}>
+          <form
+            className="flex gap-3"
+            onSubmit={form.handleSubmit(handleSubmitProject)}
+          >
+            <div>
+              <FormField
+                control={form.control}
+                name="imageUrl"
+                render={() => (
+                  <FormItem className="size-fit">
+                    <FormLabel>Imagem do Projeto</FormLabel>
+                    <FormControl className="relative my-4 h-52 w-80">
+                      {imageUrl ? (
+                        <div>
+                          <Image
+                            src={imageUrl}
+                            alt="Pré-visualização"
+                            fill
+                            className="object-cover"
                           />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="space-y-5">
-                  <FormField
-                    control={form.control}
-                    name="technologies"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Tecnologias</FormLabel>
-                        <div className="grid grid-cols-4 gap-2">
-                          {technologies.map((tech) => (
-                            <div
-                              key={tech.id}
-                              className="flex items-center gap-2"
-                            >
-                              <Checkbox
-                                checked={selectedTechnologies.includes(tech.id)}
-                                onCheckedChange={() =>
-                                  handleTechnologyChange(tech.id)
-                                }
-                                id={tech.id.toString()}
-                                {...field}
-                              />
-                              <Label
-                                htmlFor={tech.id.toString()}
-                                className="flex items-center gap-2"
-                              >
-                                <Image
-                                  alt={tech.name}
-                                  src={tech.iconURL}
-                                  width={18}
-                                  height={18}
-                                />
-                                {tech.name}
-                              </Label>
-                            </div>
-                          ))}
                         </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      ) : (
+                        <UploadButton
+                          className="size-full cursor-pointer rounded-md bg-popover hover:bg-accent"
+                          endpoint="imageUploader"
+                          onClientUploadComplete={(res) => {
+                            const uploadedURL = res[0].url
+                            setImageUrl(uploadedURL)
+                            form.setValue("imageUrl", uploadedURL)
+                          }}
+                          onUploadError={(error: Error) => {
+                            toast.error(error.message)
+                          }}
+                        />
+                      )}
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                  <div className="flex w-full items-center justify-center">
-                    <ModalCreateNewTechnology
-                      onTechnologyCreated={handleTechnologyCreated}
-                    />
-                  </div>
-                </div>
-              </div>
-            </Form>
-          </DialogContent>
-        </Dialog>
-      </TableCell>
-    </TableRow>
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Título do Projeto</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Meu Projeto" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Descrição</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        {...field}
+                        placeholder="Descrição do Projeto..."
+                        className="min-h-32 resize-none [&::-webkit-scrollbar]:hidden"
+                        onInput={handleTextareaResize}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="space-y-5">
+              <FormField
+                control={form.control}
+                name="technologies"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tecnologias</FormLabel>
+                    <div className="grid grid-cols-4 gap-2">
+                      {technologies.map((tech) => (
+                        <div key={tech.id} className="flex items-center gap-2">
+                          <Checkbox
+                            checked={selectedTechnologies.includes(tech.id)}
+                            onCheckedChange={() =>
+                              handleTechnologyChange(tech.id)
+                            }
+                            id={tech.id.toString()}
+                            {...field}
+                          />
+                          <Label
+                            htmlFor={tech.id.toString()}
+                            className="flex items-center gap-2"
+                          >
+                            <Image
+                              alt={tech.name}
+                              src={tech.iconURL}
+                              width={18}
+                              height={18}
+                            />
+                            {tech.name}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="linkVercel"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Vercel</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Link da vercel" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="linkGithub"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Github</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Link da Github" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Status</FormLabel>
+                    <Select
+                      {...field}
+                      onValueChange={(value) => {
+                        form.setValue("status", value)
+                      }}
+                    >
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Status</SelectLabel>
+                          {status.map((statusItem) => (
+                            <SelectItem key={statusItem} value={statusItem}>
+                              {statusItem}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button variant={"secondary"} type="submit">
+                <FilePlus2 className="mr-2" />
+                Salvar Projeto
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   )
 }
 

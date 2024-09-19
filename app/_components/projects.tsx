@@ -5,6 +5,12 @@ import { CardContent, CardHeader, CardTitle } from "./ui/card"
 import ProjectItem from "./project-item"
 import CarouselNavigationButton from "./carousel-navigation-button"
 
+enum ProjectStatus {
+  Finalizado = "Finalizado",
+  Em_Att = "Em Att",
+  Em_Dev = "Em Dev",
+}
+
 const Projects = () => {
   const finalizadoRef = useRef<HTMLDivElement | null>(null)
   const attRef = useRef<HTMLDivElement | null>(null)
@@ -103,7 +109,10 @@ const Projects = () => {
             ref={finalizadoRef}
             className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
           >
-            <ProjectItem status={"Finalizado"} setDataLoaded={setDataLoaded} />
+            <ProjectItem
+              status={ProjectStatus.Finalizado}
+              setDataLoaded={setDataLoaded}
+            />
           </div>
           {dataLoaded && (
             <>
@@ -143,7 +152,10 @@ const Projects = () => {
             ref={attRef}
             className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
           >
-            <ProjectItem status={"Em Att"} setDataLoaded={setDataLoaded} />
+            <ProjectItem
+              status={ProjectStatus.Em_Att}
+              setDataLoaded={setDataLoaded}
+            />
           </div>
           {dataLoaded && (
             <>
@@ -183,7 +195,10 @@ const Projects = () => {
             ref={devRef}
             className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
           >
-            <ProjectItem status={"Em Dev"} setDataLoaded={setDataLoaded} />
+            <ProjectItem
+              status={ProjectStatus.Em_Dev}
+              setDataLoaded={setDataLoaded}
+            />
           </div>
           {dataLoaded && (
             <>
