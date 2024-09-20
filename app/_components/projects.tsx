@@ -4,12 +4,9 @@ import { useRef, useState, useEffect } from "react"
 import { CardContent, CardHeader, CardTitle } from "./ui/card"
 import ProjectItem from "./project-item"
 import CarouselNavigationButton from "./carousel-navigation-button"
-
-enum ProjectStatus {
-  Finalizado = "Finalizado",
-  Em_Att = "Em Att",
-  Em_Dev = "Em Dev",
-}
+import { ProjectStatus } from "@prisma/client"
+import { getProjects } from "../_actions/get-projects"
+import { Project } from "../_types/types"
 
 const Projects = () => {
   const finalizadoRef = useRef<HTMLDivElement | null>(null)
@@ -22,6 +19,7 @@ const Projects = () => {
   const [showRightArrowAtt, setShowRightArrowAtt] = useState(false)
   const [showLeftArrowDev, setShowLeftArrowDev] = useState(false)
   const [showRightArrowDev, setShowRightArrowDev] = useState(false)
+  const [projects, setProjects] = useState<Project[]>([])
   const [dataLoaded, setDataLoaded] = useState(false)
 
   useEffect(() => {
@@ -91,6 +89,28 @@ const Projects = () => {
     }
   }
 
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const fetchedProjects = await getProjects({})
+      setProjects(fetchedProjects)
+      setDataLoaded(true)
+    }
+
+    fetchProjects()
+  }, [])
+
+  const filteredProjects = {
+    finalizado: projects.filter(
+      (project) => project.status === ProjectStatus.Finalizado,
+    ),
+    emAtt: projects.filter(
+      (project) => project.status === ProjectStatus.Em_Att,
+    ),
+    emDev: projects.filter(
+      (project) => project.status === ProjectStatus.Em_Dev,
+    ),
+  }
+
   return (
     <>
       <CardHeader className="space-y-3">
@@ -101,134 +121,155 @@ const Projects = () => {
       </CardHeader>
 
       <CardContent className="space-y-6">
-        <div className="relative space-y-3">
-          <h2 className="text-sm font-bold uppercase text-gray-400">
-            Finalizados
-          </h2>
-          <div
-            ref={finalizadoRef}
-            className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
-          >
-            <ProjectItem
-              status={ProjectStatus.Finalizado}
-              setDataLoaded={setDataLoaded}
-            />
-          </div>
-          {dataLoaded && (
-            <>
-              <CarouselNavigationButton
-                direction="left"
-                onClick={() =>
-                  scroll(
-                    finalizadoRef,
-                    "left",
-                    setShowLeftArrowFinalizado,
-                    setShowRightArrowFinalizado,
-                  )
-                }
-                show={showLeftArrowFinalizado}
-              />
-              <CarouselNavigationButton
-                direction="right"
-                onClick={() =>
-                  scroll(
-                    finalizadoRef,
-                    "right",
-                    setShowLeftArrowFinalizado,
-                    setShowRightArrowFinalizado,
-                  )
-                }
-                show={showRightArrowFinalizado}
-              />
-            </>
-          )}
-        </div>
+        {filteredProjects.finalizado.length > 0 && (
+          <div className="relative space-y-3">
+            <h2 className="text-sm font-bold uppercase text-gray-400">
+              Finalizados
+            </h2>
+            <div
+              ref={finalizadoRef}
+              className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
+            >
+              {filteredProjects.finalizado.map((project) => (
+                <ProjectItem
+                  key={project.id}
+                  setDataLoaded={setDataLoaded}
+                  project={project}
+                />
+              ))}
+            </div>
 
-        <div className="relative space-y-3">
-          <h2 className="text-sm font-bold uppercase text-gray-400">
-            Em Atualização
-          </h2>
-          <div
-            ref={attRef}
-            className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
-          >
-            <ProjectItem
-              status={ProjectStatus.Em_Att}
-              setDataLoaded={setDataLoaded}
-            />
-          </div>
-          {dataLoaded && (
-            <>
-              <CarouselNavigationButton
-                direction="left"
-                onClick={() =>
-                  scroll(
-                    attRef,
-                    "left",
-                    setShowLeftArrowAtt,
-                    setShowRightArrowAtt,
-                  )
-                }
-                show={showLeftArrowAtt}
-              />
-              <CarouselNavigationButton
-                direction="right"
-                onClick={() =>
-                  scroll(
-                    attRef,
-                    "right",
-                    setShowLeftArrowAtt,
-                    setShowRightArrowAtt,
-                  )
-                }
-                show={showRightArrowAtt}
-              />
-            </>
-          )}
-        </div>
+            {dataLoaded && (
+              <>
+                <CarouselNavigationButton
+                  direction="left"
+                  onClick={() =>
+                    scroll(
+                      finalizadoRef,
+                      "left",
+                      setShowLeftArrowFinalizado,
+                      setShowRightArrowFinalizado,
+                    )
+                  }
+                  show={showLeftArrowFinalizado}
+                />
 
-        <div className="relative space-y-3">
-          <h2 className="text-sm font-bold uppercase text-gray-400">
-            Em Desenvolvimento
-          </h2>
-          <div
-            ref={devRef}
-            className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
-          >
-            <ProjectItem
-              status={ProjectStatus.Em_Dev}
-              setDataLoaded={setDataLoaded}
-            />
+                <CarouselNavigationButton
+                  direction="right"
+                  onClick={() =>
+                    scroll(
+                      finalizadoRef,
+                      "right",
+                      setShowLeftArrowFinalizado,
+                      setShowRightArrowFinalizado,
+                    )
+                  }
+                  show={showRightArrowFinalizado}
+                />
+              </>
+            )}
           </div>
-          {dataLoaded && (
-            <>
-              <CarouselNavigationButton
-                direction="left"
-                onClick={() =>
-                  scroll(
-                    devRef,
-                    "left",
-                    setShowLeftArrowDev,
-                    setShowRightArrowDev,
-                  )
-                }
-                show={showLeftArrowDev}
-              />
-              <CarouselNavigationButton
-                direction="right"
-                onClick={() =>
-                  scroll(
-                    devRef,
-                    "right",
-                    setShowLeftArrowDev,
-                    setShowRightArrowDev,
-                  )
-                }
-                show={showRightArrowDev}
-              />
-            </>
-          )}
-        </div>
+        )}
+
+        {filteredProjects.emAtt.length > 0 && (
+          <div className="relative space-y-3">
+            <h2 className="text-sm font-bold uppercase text-gray-400">
+              Em Atualização
+            </h2>
+            <div
+              ref={attRef}
+              className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
+            >
+              {filteredProjects.emAtt.map((project) => (
+                <ProjectItem
+                  key={project.id}
+                  setDataLoaded={setDataLoaded}
+                  project={project}
+                />
+              ))}
+            </div>
+
+            {dataLoaded && (
+              <>
+                <CarouselNavigationButton
+                  direction="left"
+                  onClick={() =>
+                    scroll(
+                      attRef,
+                      "left",
+                      setShowLeftArrowAtt,
+                      setShowRightArrowAtt,
+                    )
+                  }
+                  show={showLeftArrowAtt}
+                />
+
+                <CarouselNavigationButton
+                  direction="right"
+                  onClick={() =>
+                    scroll(
+                      attRef,
+                      "right",
+                      setShowLeftArrowAtt,
+                      setShowRightArrowAtt,
+                    )
+                  }
+                  show={showRightArrowAtt}
+                />
+              </>
+            )}
+          </div>
+        )}
+
+        {filteredProjects.emDev.length > 0 && (
+          <div className="relative space-y-3">
+            <h2 className="text-sm font-bold uppercase text-gray-400">
+              Em Desenvolvimento
+            </h2>
+            <div
+              ref={devRef}
+              className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
+            >
+              {filteredProjects.emDev.map((project) => (
+                <ProjectItem
+                  key={project.id}
+                  setDataLoaded={setDataLoaded}
+                  project={project}
+                />
+              ))}
+            </div>
+
+            {dataLoaded && (
+              <>
+                <CarouselNavigationButton
+                  direction="left"
+                  onClick={() =>
+                    scroll(
+                      devRef,
+                      "left",
+                      setShowLeftArrowDev,
+                      setShowRightArrowDev,
+                    )
+                  }
+                  show={showLeftArrowDev}
+                />
+
+                <CarouselNavigationButton
+                  direction="right"
+                  onClick={() =>
+                    scroll(
+                      devRef,
+                      "right",
+                      setShowLeftArrowDev,
+                      setShowRightArrowDev,
+                    )
+                  }
+                  show={showRightArrowDev}
+                />
+              </>
+            )}
+          </div>
+        )}
       </CardContent>
     </>
   )

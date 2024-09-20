@@ -25,7 +25,7 @@ import { Textarea } from "./ui/textarea"
 import { Label } from "./ui/label"
 import { getTechnologies } from "../_actions/get-technologies"
 import { Checkbox } from "./ui/checkbox"
-import { Technology } from "@prisma/client"
+import { ProjectStatus, Technology } from "@prisma/client"
 import {
   Select,
   SelectContent,
@@ -39,18 +39,12 @@ import { createProject } from "../_actions/create-project"
 import { UploadButton } from "../utils/uploadthing"
 import { toast } from "sonner"
 
-export enum ProjectStatus {
-  Finalizado = "Finalizado",
-  Em_Att = "Em Att",
-  Em_Dev = "Em Dev",
-}
-
 const ModalCreateNewProjetc = () => {
   const form = useForm()
   const [technologies, setTechnologies] = useState<Technology[]>([])
   const [selectedTechnologies, setSelectedTechnologies] = useState<string[]>([])
   const [imageUrl, setImageUrl] = useState<string | null>(null)
-  const [status, setStatus] = useState<string[]>([])
+  const [status, setStatus] = useState<ProjectStatus[]>([])
 
   useEffect(() => {
     const fetchTechnologies = async () => {
@@ -62,7 +56,6 @@ const ModalCreateNewProjetc = () => {
   }, [])
 
   useEffect(() => {
-    // Set the status options from the enum
     setStatus(Object.values(ProjectStatus))
   }, [])
 
@@ -70,22 +63,17 @@ const ModalCreateNewProjetc = () => {
     event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     const textarea = event.target
-    textarea.style.height = "auto" // Redefine a altura para auto para calcular o scrollHeight
-    textarea.style.height = `${textarea.scrollHeight}px` // Define a altura com base no scrollHeight
+    textarea.style.height = "auto"
+    textarea.style.height = `${textarea.scrollHeight}px`
   }
 
   const handleTechnologyChange = (techId: string) => {
-    setSelectedTechnologies(
-      (prev) =>
-        prev.includes(techId)
-          ? prev.filter((id) => id !== techId) // Remover se já estiver selecionado
-          : [...prev, techId], // Adicionar se ainda não estiver selecionado
+    setSelectedTechnologies((prev) =>
+      prev.includes(techId)
+        ? prev.filter((id) => id !== techId)
+        : [...prev, techId],
     )
   }
-
-  // const handleTechnologyCreated = (newTechnology: Technology) => {
-  //   setTechnologies((prevTechnologies) => [...prevTechnologies, newTechnology])
-  // }
 
   const handleSubmitProject = async (data: any) => {
     await createProject({
@@ -279,7 +267,7 @@ const ModalCreateNewProjetc = () => {
                           <SelectLabel>Status</SelectLabel>
                           {status.map((statusItem) => (
                             <SelectItem key={statusItem} value={statusItem}>
-                              {statusItem}
+                              {statusItem.replace(/_/g, " ")}
                             </SelectItem>
                           ))}
                         </SelectGroup>

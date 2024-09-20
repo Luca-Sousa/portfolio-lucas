@@ -23,22 +23,12 @@ import { Settings2 } from "lucide-react"
 import { IoLogoVercel } from "react-icons/io5"
 import { FaGithub } from "react-icons/fa"
 import { Badge } from "./ui/badge"
-import { getTechnologiesByProject } from "../_actions/get-technologies-by-project"
-
-const fetchData = async () => {
-  const projects = await getProjects({})
-  const projectIds = projects.map((project) => project.id)
-  const technologiesByProject = await getTechnologiesByProject(projectIds)
-
-  return { projects, technologiesByProject }
-}
 
 const DashboardProjects = async () => {
-  const { projects, technologiesByProject } = await fetchData()
+  const projects = await getProjects({})
 
   return (
     <Table>
-      {/* <TableCaption>Lista de Projetos</TableCaption> */}
       <TableHeader>
         <TableRow>
           <TableHead></TableHead>
@@ -70,12 +60,14 @@ const DashboardProjects = async () => {
             </TableCell>
 
             <TableCell className="text-center">
-              <Badge className="text-secondary">{project.status}</Badge>
+              <Badge className="text-secondary">
+                {project.status.toString().replace(/_/g, " ")}
+              </Badge>
             </TableCell>
 
             <TableCell>
               <div className="flex items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-                {technologiesByProject[project.id].map((tech) => (
+                {project.technologies.map((tech) => (
                   <Image
                     key={tech.id}
                     alt={tech.name}
@@ -143,10 +135,6 @@ const DashboardProjects = async () => {
           </TableRow>
         ))}
       </TableBody>
-
-      {/* <TableFooter>
-        <ModalCreateNewProjetc />
-      </TableFooter> */}
     </Table>
   )
 }
