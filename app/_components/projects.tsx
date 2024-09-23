@@ -53,16 +53,10 @@ const Projects = () => {
       }
     }
 
-    updateArrows() // Initial check
-
-    const handleResize = () => {
-      updateArrows()
-    }
-
-    window.addEventListener("resize", handleResize)
-    return () => {
-      window.removeEventListener("resize", handleResize)
-    }
+    updateArrows() // Chamada inicial para verificar
+    const resizeObserver = new ResizeObserver(updateArrows)
+    resizeObserver.observe(document.body) // Pode observar elementos específicos
+    return () => resizeObserver.disconnect()
   }, [dataLoaded]) // Dependência em dataLoaded para atualizar quando os dados forem carregados
 
   const scroll = (

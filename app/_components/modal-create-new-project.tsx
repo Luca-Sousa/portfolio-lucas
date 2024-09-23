@@ -36,15 +36,41 @@ import {
   SelectValue,
 } from "./ui/select"
 import { createProject } from "../_actions/create-project"
-import { UploadButton } from "../utils/uploadthing"
+import { UploadDropzone } from "../utils/uploadthing"
 import { toast } from "sonner"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 const ModalCreateNewProjetc = () => {
-  const form = useForm()
   const [technologies, setTechnologies] = useState<Technology[]>([])
   const [selectedTechnologies, setSelectedTechnologies] = useState<string[]>([])
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [status, setStatus] = useState<ProjectStatus[]>([])
+
+  const formSchema = z.object({
+    imageUrl: z.string().url("URL da imagem inválida"),
+    title: z.string().min(1, "O título é obrigatório"),
+    description: z.string().min(1, "A descrição é obrigatória"),
+    linkVercel: z.string().url("URL da Vercel inválida"),
+    linkGithub: z.string().url("URL do Github inválida"),
+    status: z.string().min(1, "O status é obrigatório"),
+    technologies: z
+      .array(z.string())
+      .min(1, "Selecione pelo menos uma tecnologia"),
+  })
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      imageUrl: "",
+      title: "",
+      description: "",
+      linkVercel: "",
+      linkGithub: "",
+      status: "",
+      technologies: [] as string[],
+    },
+  })
 
   useEffect(() => {
     const fetchTechnologies = async () => {
@@ -73,6 +99,8 @@ const ModalCreateNewProjetc = () => {
         ? prev.filter((id) => id !== techId)
         : [...prev, techId],
     )
+
+    form.setValue("technologies", selectedTechnologies)
   }
 
   const handleSubmitProject = async (data: any) => {
@@ -94,20 +122,20 @@ const ModalCreateNewProjetc = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="flex items-center gap-2 text-secondary">
+        <Button className="flex items-center gap-2 font-medium text-secondary">
           <FilePlus2 size={14} />
           Novo Projeto
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="w-full max-w-5xl">
+      <DialogContent className="w-full max-w-fit">
         <DialogHeader>
           <DialogTitle>Novo Projeto</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
           <form
-            className="flex gap-3"
+            className="flex gap-5"
             onSubmit={form.handleSubmit(handleSubmitProject)}
           >
             <div>
@@ -117,7 +145,7 @@ const ModalCreateNewProjetc = () => {
                 render={() => (
                   <FormItem className="size-fit">
                     <FormLabel>Imagem do Projeto</FormLabel>
-                    <FormControl className="relative my-4 h-52 w-80">
+                    <FormControl className="relative my-4 h-64 w-96">
                       {imageUrl ? (
                         <div>
                           <Image
@@ -128,13 +156,29 @@ const ModalCreateNewProjetc = () => {
                           />
                         </div>
                       ) : (
-                        <UploadButton
+                        <UploadDropzone
+                          content={{
+                            label({ ready, isUploading, uploadProgress }) {
+                              if (ready) return "Adicione uma Imagem!"
+                              if (uploadProgress) return "Carregando..."
+                              if (isUploading) return "Carregando..."
+                            },
+                            button({ ready }) {
+                              if (ready) return "Upload"
+                            },
+                          }}
+                          appearance={{
+                            label: "Arraste ou clique aqui",
+                            button: "bg-background px-5 font-bold",
+                            allowedContent: "hidden",
+                          }}
                           className="size-full cursor-pointer rounded-md bg-popover hover:bg-accent"
                           endpoint="imageUploader"
                           onClientUploadComplete={(res) => {
                             const uploadedURL = res[0].url
                             setImageUrl(uploadedURL)
                             form.setValue("imageUrl", uploadedURL)
+                            toast.success("Upload Completed")
                           }}
                           onUploadError={(error: Error) => {
                             toast.error(error.message)
@@ -188,7 +232,7 @@ const ModalCreateNewProjetc = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Tecnologias</FormLabel>
-                    <div className="grid grid-cols-4 gap-2">
+                    <div className="grid grid-cols-3 gap-2">
                       {technologies.map((tech) => (
                         <div key={tech.id} className="flex items-center gap-2">
                           <Checkbox
@@ -247,41 +291,47 @@ const ModalCreateNewProjetc = () => {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Status</FormLabel>
-                    <Select
-                      {...field}
-                      onValueChange={(value) => {
-                        form.setValue("status", value)
-                      }}
-                    >
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Status</SelectLabel>
-                          {status.map((statusItem) => (
-                            <SelectItem key={statusItem} value={statusItem}>
-                              {statusItem.replace(/_/g, " ")}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="flex items-end justify-between">
+                <FormField
+                  control={form.control}
+                  name="status"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Status</FormLabel>
+                      <Select
+                        {...field}
+                        onValueChange={(value) => {
+                          form.setValue("status", value)
+                        }}
+                      >
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Status</SelectLabel>
+                            {status.map((statusItem) => (
+                              <SelectItem key={statusItem} value={statusItem}>
+                                {statusItem.replace(/_/g, " ")}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <Button variant={"secondary"} type="submit">
-                <FilePlus2 className="mr-2" />
-                Salvar Projeto
-              </Button>
+                <Button
+                  variant={"default"}
+                  type="submit"
+                  className="text-sm text-background"
+                >
+                  <FilePlus2 className="mr-2" />
+                  Salvar Projeto
+                </Button>
+              </div>
             </div>
           </form>
         </Form>

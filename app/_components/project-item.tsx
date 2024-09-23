@@ -50,7 +50,7 @@ const ProjectItem = ({ project, setDataLoaded }: ProjectItemProps) => {
           </span>
         </Skeleton>
       ) : (
-        <div className="flex w-full min-w-56 max-w-56 flex-col gap-3 overflow-hidden rounded-2xl bg-secondary p-1.5">
+        <div className="flex w-full min-w-52 max-w-52 flex-col gap-3 overflow-hidden rounded-2xl bg-secondary p-1.5">
           <div className="group relative flex h-48 w-full items-center justify-center overflow-hidden rounded-t-2xl">
             <motion.div
               className="relative h-full w-full"
@@ -118,9 +118,11 @@ const ProjectItem = ({ project, setDataLoaded }: ProjectItemProps) => {
               <h3 className="truncate text-center text-sm font-bold text-primary">
                 {project.title}
               </h3>
+
               <p className="line-clamp-4 min-h-14 text-left text-xs text-zinc-400">
                 {project.description}
               </p>
+
               <div className="flex items-center gap-3 overflow-y-auto [&::-webkit-scrollbar]:hidden">
                 {project.technologies.map((tech) => (
                   <Image

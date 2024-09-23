@@ -24,10 +24,24 @@ import { toast } from "sonner"
 import Image from "next/image"
 import { UploadButton } from "../utils/uploadthing"
 import { useState } from "react"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 const ModalCreateNewTechnology = () => {
-  const form = useForm()
   const [iconURL, setIconURL] = useState<string>("")
+
+  const formSchema = z.object({
+    name: z.string().min(1, "O nome é obrigatório"),
+    iconURL: z.string().url("*"),
+  })
+
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      iconURL: "",
+    },
+  })
 
   const handleCreateTechnology = async (data: any) => {
     await createTechnology({
@@ -43,11 +57,7 @@ const ModalCreateNewTechnology = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          variant={"default"}
-          size={"sm"}
-          className="flex items-center gap-2 text-secondary"
-        >
+        <Button className="flex items-center gap-2 font-medium text-secondary">
           <CirclePlusIcon size={16} />
           Criar uma Nova Tecnologia
         </Button>

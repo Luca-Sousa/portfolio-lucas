@@ -34,7 +34,7 @@ const Dashboard = async () => {
   if (!session?.user) return notFound()
 
   return (
-    <div className="mx-4 flex h-full flex-col gap-4 py-4 sm:mx-auto sm:max-w-xl sm:gap-8 sm:py-8 md:max-w-2xl lg:max-w-4xl xl:max-w-[1920px] xl:flex-row xl:gap-10 xl:p-0">
+    <div className="mx-4 flex h-fit min-h-full flex-col gap-4 py-4 sm:mx-auto sm:max-w-xl sm:gap-8 sm:py-8 md:max-w-2xl lg:max-w-4xl xl:max-w-[1920px] xl:flex-row xl:gap-10 xl:p-0">
       <Card
         className="fixed left-0 top-0 z-40 h-screen w-64 -translate-x-full rounded-none transition-transform sm:translate-x-0"
         aria-label="Sidebar"
@@ -132,7 +132,7 @@ const Dashboard = async () => {
           <ModalCreateNewProjetc />
         </div>
 
-        <Card className="w-full rounded-2xl">
+        <Card className="h-full w-full rounded-2xl">
           <CardHeader className="space-y-3">
             <div className="space-y-1 sm:space-y-3">
               <CardTitle className="sm:text-3xl">Projetos</CardTitle>

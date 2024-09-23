@@ -48,7 +48,7 @@ const SideBar = () => {
   }
 
   return (
-    <Card className="rounded-2xl xl:h-fit xl:w-full xl:max-w-96">
+    <Card className="rounded-2xl xl:h-full xl:w-full xl:max-w-96">
       <CardContent className="relative px-6 py-4">
         {detailsSideBar ? (
           <Button
