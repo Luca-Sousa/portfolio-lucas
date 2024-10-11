@@ -1,10 +1,12 @@
 "use client"
 
-import { FilePlus2, PanelLeftCloseIcon } from "lucide-react"
+import { FilePlus2, Loader2Icon, PanelLeftCloseIcon } from "lucide-react"
 import { Button } from "@/app/_components/ui/button"
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -48,11 +50,13 @@ import { MultiImageDropzoneUsage } from "@/app/(dashboard)/_components/MultiImag
 const CreateProjectButton = () => {
   const { edgestore } = useEdgeStore()
   const [url, setUrl] = useState<string>()
+  const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(false)
   const [technologies, setTechnologies] = useState<Technology[]>([])
   const [selectedTechnologies, setSelectedTechnologies] = useState<string[]>([])
   const [status, setStatus] = useState<ProjectStatus[]>([])
 
   const form = useForm({
+    shouldUnregister: true,
     resolver: zodResolver(createProjectSchema),
     defaultValues: {
       title: "",
@@ -78,14 +82,6 @@ const CreateProjectButton = () => {
     setStatus(Object.values(ProjectStatus))
   }, [])
 
-  // const handleTextareaResize = (
-  //   event: React.ChangeEvent<HTMLTextAreaElement>,
-  // ) => {
-  //   const textarea = event.target
-  //   textarea.style.height = "auto"
-  //   textarea.style.height = `${textarea.scrollHeight}px`
-  // }
-
   const handleTechnologyChange = (techId: string) => {
     setSelectedTechnologies((prev) =>
       prev.includes(techId)
@@ -97,14 +93,13 @@ const CreateProjectButton = () => {
   }
 
   const handleSubmitProject = async (data: CreateProjectSchema) => {
-    if (!url) {
-      toast.error("Selecione uma imagem para o projeto.")
-      return
-    }
-
-    data.imageUrl = url
-
     try {
+      if (!url) {
+        toast.error("Selecione uma imagem para o projeto.")
+        return
+      }
+      data.imageUrl = url
+
       await createProject({
         title: data.title,
         description: data.description,
@@ -119,6 +114,7 @@ const CreateProjectButton = () => {
         await edgestore.publicFiles.confirmUpload({ url })
       }
 
+      setDialogIsOpen(false)
       toast.success("Projeto criado com sucesso")
     } catch (error) {
       toast.error("Ocorreu um erro ao criar o projeto.")
@@ -126,7 +122,7 @@ const CreateProjectButton = () => {
   }
 
   return (
-    <Dialog>
+    <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
       <DialogTrigger asChild>
         <Button className="flex items-center gap-2 font-medium text-secondary">
           <FilePlus2 size={14} />
@@ -295,17 +291,33 @@ const CreateProjectButton = () => {
                   )}
                 />
 
-                <div className="flex items-end justify-end gap-3">
-                  <Button variant={"secondary"} className="gap-1.5">
-                    <PanelLeftCloseIcon size={18} />
-                    Cancelar
-                  </Button>
+                <DialogFooter className="flex items-end justify-end gap-3">
+                  <DialogClose asChild>
+                    <Button
+                      type="reset"
+                      disabled={form.formState.isSubmitting}
+                      variant={"secondary"}
+                      className="gap-1.5"
+                    >
+                      <PanelLeftCloseIcon size={18} />
+                      Cancelar
+                    </Button>
+                  </DialogClose>
 
-                  <Button type="submit" className="gap-1.5 text-secondary">
-                    <FilePlus2 size={18} />
+                  <Button
+                    onChange={() => setDialogIsOpen(true)}
+                    disabled={form.formState.isSubmitting}
+                    type="submit"
+                    className="gap-1.5 text-secondary"
+                  >
+                    {form.formState.isSubmitting ? (
+                      <Loader2Icon className="animate-spin" size={16} />
+                    ) : (
+                      <FilePlus2 size={16} />
+                    )}
                     Salvar Projeto
                   </Button>
-                </div>
+                </DialogFooter>
               </div>
             </div>
           </form>

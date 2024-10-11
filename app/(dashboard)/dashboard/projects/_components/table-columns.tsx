@@ -12,12 +12,19 @@ import {
 } from "@/app/_components/ui/dropdown-menu"
 import { ProjectStatus, Technology } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
+import {
+  ArrowUpDown,
+  ClipboardCopyIcon,
+  EditIcon,
+  MoreHorizontal,
+  TrashIcon,
+} from "lucide-react"
 import { Badge } from "@/app/_components/ui/badge"
 import Link from "next/link"
 import { IoLogoVercel } from "react-icons/io5"
 import { FaGithub } from "react-icons/fa"
 import Image from "next/image"
+import { toast } from "sonner"
 
 export type Project = {
   id: string
@@ -161,6 +168,11 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
     cell: ({ row }) => {
       const project = row.original
 
+      const copyID = () => {
+        navigator.clipboard.writeText(project.id)
+        toast.success("ID do projeto, copiado com sucesso!")
+      }
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -172,14 +184,21 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
 
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(project.id)}
-            >
-              Copiar - ID Projeto
+            <DropdownMenuItem onClick={copyID} className="gap-1.5">
+              <ClipboardCopyIcon size={16} />
+              Copiar ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+
+            <DropdownMenuItem className="gap-1.5">
+              <EditIcon size={16} />
+              Editar
+            </DropdownMenuItem>
+
+            <DropdownMenuItem className="gap-1.5">
+              <TrashIcon size={16} />
+              Deletar
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
