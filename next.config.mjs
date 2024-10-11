@@ -3,7 +3,7 @@
 const nextConfig = {
     images: {
         dangerouslyAllowSVG: true,
-        domains: ['utfs.io'],
+        domains: ['utfs.io', 'files.edgestore.dev'],
         remotePatterns: [
             {
                 protocol: 'https',
