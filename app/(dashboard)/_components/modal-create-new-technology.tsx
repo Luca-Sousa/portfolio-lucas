@@ -21,14 +21,10 @@ import {
 } from "../../_components/ui/form"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import Image from "next/image"
-import { useState } from "react"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 const ModalCreateNewTechnology = () => {
-  const [iconURL, setIconURL] = useState<string>("")
-
   const formSchema = z.object({
     name: z.string().min(1, "O nome é obrigatório"),
     iconURL: z.string().url("*"),
@@ -49,7 +45,6 @@ const ModalCreateNewTechnology = () => {
     })
 
     form.reset()
-    setIconURL("")
     toast.success("Tecnologia criada com sucesso!")
   }
 

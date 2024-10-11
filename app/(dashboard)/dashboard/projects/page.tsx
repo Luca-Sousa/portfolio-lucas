@@ -11,8 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "../../../_components/ui/dropdown-menu"
 import DashboardButtonUser from "../../../_components/dashboard-button-user"
-import ModalCreateNewProjetc from "../../../_components/modal-create-new-project"
-import ModalCreateNewTechnology from "../../_components/modal-create-new-technology"
 import { notFound } from "next/navigation"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/_lib/auth"
@@ -20,6 +18,7 @@ import { DataTable } from "@/app/(dashboard)/dashboard/projects/_components/data
 import { projectsTableColumns } from "./_components/table-columns"
 import { getProjects } from "@/app/_data_access/get-projects"
 import CreateProjectButton from "./_components/create-project-button"
+import ModalCreateNewTechnology from "../../_components/modal-create-new-technology"
 
 const Projects = async () => {
   const session = await getServerSession(authOptions)
