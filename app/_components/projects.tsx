@@ -5,8 +5,9 @@ import { CardContent, CardHeader, CardTitle } from "./ui/card"
 import ProjectItem from "./project-item"
 import CarouselNavigationButton from "./carousel-navigation-button"
 import { ProjectStatus } from "@prisma/client"
-import { getProjects } from "../_actions/get-projects"
+import { getProjects } from "../_data_access/get-projects"
 import { Project } from "../_types/types"
+import React from "react"
 
 const Projects = () => {
   const finalizadoRef = useRef<HTMLDivElement | null>(null)

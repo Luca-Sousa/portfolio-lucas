@@ -23,7 +23,7 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import { Textarea } from "./ui/textarea"
 import { Label } from "./ui/label"
-import { getTechnologies } from "../_actions/get-technologies"
+import { getTechnologies } from "../_data_access/get-technologies"
 import { Checkbox } from "./ui/checkbox"
 import { ProjectStatus, Technology } from "@prisma/client"
 import {
@@ -35,20 +35,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select"
-import { createProject } from "../_actions/create-project"
-import { UploadDropzone } from "../utils/uploadthing"
+import { createProject } from "../_actions/project/create-project"
 import { toast } from "sonner"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { SingleImageDropzoneUsage } from "../(dashboard)/_components/Single-image-dropzone-usage"
+import { useEdgeStore } from "../_lib/edgestore"
 
 const ModalCreateNewProjetc = () => {
   const [technologies, setTechnologies] = useState<Technology[]>([])
   const [selectedTechnologies, setSelectedTechnologies] = useState<string[]>([])
-  const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [status, setStatus] = useState<ProjectStatus[]>([])
 
+  const { edgestore } = useEdgeStore()
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+
   const formSchema = z.object({
-    imageUrl: z.string().url("URL da imagem inválida"),
+    imageUrl: z.string().optional(), // Torne o campo opcional
     title: z.string().min(1, "O título é obrigatório"),
     description: z.string().min(1, "A descrição é obrigatória"),
     linkVercel: z.string().url("URL da Vercel inválida"),
@@ -62,7 +65,7 @@ const ModalCreateNewProjetc = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      imageUrl: "",
+      imageUrl: "", // Este campo agora pode ser vazio
       title: "",
       description: "",
       linkVercel: "",
@@ -104,19 +107,37 @@ const ModalCreateNewProjetc = () => {
   }
 
   const handleSubmitProject = async (data: any) => {
-    await createProject({
-      title: data.title,
-      description: data.description,
-      imageURL: data.imageUrl,
-      repositoryURL: data.linkGithub,
-      liveURL: data.linkVercel,
-      status: data.status,
-      techIds: selectedTechnologies,
-    })
+    try {
+      // Inicializa imageUrl com uma string vazia ou a URL da imagem selecionada
+      let imageUrl = data.imageUrl || "" // A URL inicial é a do form ou uma string vazia
 
-    setImageUrl(null)
-    form.reset()
-    toast.success("Projeto criado com sucesso")
+      // Verifica se há um arquivo de imagem selecionado
+      if (selectedFile) {
+        const res = await edgestore.publicFiles.upload({
+          file: selectedFile,
+          onProgressChange: (progress) => {
+            console.log(`Progresso do upload: ${progress}%`)
+          },
+        })
+        imageUrl = res.url // Atualiza para a URL do upload
+      }
+
+      await createProject({
+        title: data.title,
+        description: data.description,
+        imageURL: imageUrl, // Aqui garantimos que imageUrl é sempre uma string
+        repositoryURL: data.linkGithub,
+        liveURL: data.linkVercel,
+        status: data.status,
+        techIds: selectedTechnologies,
+      })
+
+      form.reset()
+      toast.success("Projeto criado com sucesso")
+    } catch (error) {
+      console.error("Erro ao criar o projeto:", error)
+      toast.error("Ocorreu um erro ao criar o projeto.")
+    }
   }
 
   return (
@@ -146,45 +167,9 @@ const ModalCreateNewProjetc = () => {
                   <FormItem className="size-fit">
                     <FormLabel>Imagem do Projeto</FormLabel>
                     <FormControl className="relative my-4 h-64 w-96">
-                      {imageUrl ? (
-                        <div>
-                          <Image
-                            src={imageUrl}
-                            alt="Pré-visualização"
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                      ) : (
-                        <UploadDropzone
-                          content={{
-                            label({ ready, isUploading, uploadProgress }) {
-                              if (ready) return "Adicione uma Imagem!"
-                              if (uploadProgress) return "Carregando..."
-                              if (isUploading) return "Carregando..."
-                            },
-                            button({ ready }) {
-                              if (ready) return "Upload"
-                            },
-                          }}
-                          appearance={{
-                            label: "Arraste ou clique aqui",
-                            button: "bg-background px-5 font-bold",
-                            allowedContent: "hidden",
-                          }}
-                          className="size-full cursor-pointer rounded-md bg-popover hover:bg-accent"
-                          endpoint="imageUploader"
-                          onClientUploadComplete={(res) => {
-                            const uploadedURL = res[0].url
-                            setImageUrl(uploadedURL)
-                            form.setValue("imageUrl", uploadedURL)
-                            toast.success("Upload Completed")
-                          }}
-                          onUploadError={(error: Error) => {
-                            toast.error(error.message)
-                          }}
-                        />
-                      )}
+                      <SingleImageDropzoneUsage
+                        onFileChange={setSelectedFile}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
