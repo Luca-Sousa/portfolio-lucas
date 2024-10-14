@@ -30,9 +30,6 @@ import {
   AlertDialogTrigger,
 } from "@/app/_components/ui/alert-dialog"
 import DeleteProjectDialogContent from "./delete-dialog-content"
-import { useState } from "react"
-import { Dialog } from "@/app/_components/ui/dialog"
-import { DialogTrigger } from "@radix-ui/react-dialog"
 
 export type Project = {
   id: string
