@@ -1,11 +1,11 @@
 "use client"
 
 import { MultiImageDropzoneUsage } from "@/app/(dashboard)/_components/MultiImageDropzoneUsage"
-import { createProject } from "@/app/_actions/project/create-project"
+import { upsertProject } from "@/app/_actions/project/upsert-project"
 import {
-  createProjectSchema,
-  CreateProjectSchema,
-} from "@/app/_actions/project/create-project/schema"
+  upsertProjectSchema,
+  UpsertProjectSchema,
+} from "@/app/_actions/project/upsert-project/schema"
 import { Button } from "@/app/_components/ui/button"
 import { Checkbox } from "@/app/_components/ui/checkbox"
 import {
@@ -45,10 +45,12 @@ import { FormProvider, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 interface UpsertProductDialogContentProps {
+  defaultValues?: UpsertProjectSchema
   onSuccess?: () => void
 }
 
 const UpsertProductDialogContent = ({
+  defaultValues,
   onSuccess,
 }: UpsertProductDialogContentProps) => {
   const { edgestore } = useEdgeStore()
@@ -59,17 +61,19 @@ const UpsertProductDialogContent = ({
 
   const form = useForm({
     shouldUnregister: true,
-    resolver: zodResolver(createProjectSchema),
-    defaultValues: {
+    resolver: zodResolver(upsertProjectSchema),
+    defaultValues: defaultValues ?? {
       title: "",
       description: "",
-      imageUrl: "",
+      imageURL: "",
       repositoryURL: "",
       liveURL: "",
       status: "" as ProjectStatus,
       technologies: [] as string[],
     },
   })
+
+  const isEditing = !!defaultValues
 
   useEffect(() => {
     const fetchTechnologies = async () => {
@@ -94,21 +98,17 @@ const UpsertProductDialogContent = ({
     form.setValue("technologies", selectedTechnologies)
   }
 
-  const handleSubmitProject = async (data: CreateProjectSchema) => {
+  const handleSubmitProject = async (data: UpsertProjectSchema) => {
     try {
       if (!url) {
         toast.error("Selecione uma imagem para o projeto.")
         return
       }
-      data.imageUrl = url
+      data.imageURL = url
 
-      await createProject({
-        title: data.title,
-        description: data.description,
-        imageUrl: data.imageUrl,
-        repositoryURL: data.repositoryURL,
-        liveURL: data.liveURL,
-        status: data.status,
+      await upsertProject({
+        ...data,
+        id: defaultValues?.id,
         technologies: selectedTechnologies,
       })
 
@@ -117,9 +117,13 @@ const UpsertProductDialogContent = ({
       }
 
       onSuccess?.()
-      toast.success("Projeto criado com sucesso")
+      toast.success(
+        `Projeto ${isEditing ? "atualizado" : "criado"} com sucesso!`,
+      )
     } catch (error) {
-      toast.error("Ocorreu um erro ao criar o projeto.")
+      toast.error(
+        `Ocorreu um erro ao ${isEditing ? "atualizar" : "criar"} o projeto!`,
+      )
     }
   }
 
@@ -127,7 +131,9 @@ const UpsertProductDialogContent = ({
     <DialogContent className="w-full max-w-screen-lg">
       <FormProvider {...form}>
         <DialogHeader>
-          <DialogTitle>Novo Projeto</DialogTitle>
+          <DialogTitle>
+            {isEditing ? "Editar" : "Criar Novo"} Projeto
+          </DialogTitle>
         </DialogHeader>
 
         <form
@@ -137,7 +143,7 @@ const UpsertProductDialogContent = ({
           <div className="flex w-full gap-4">
             <FormField
               control={form.control}
-              name="imageUrl"
+              name="imageURL"
               render={() => (
                 <FormItem className="basis-[30%]">
                   <FormLabel>Imagem do Projeto</FormLabel>

@@ -2,14 +2,6 @@
 
 import { Button } from "@/app/_components/ui/button"
 import { Checkbox } from "@/app/_components/ui/checkbox"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/app/_components/ui/dropdown-menu"
 import { ProjectStatus, Technology } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 import {
@@ -29,7 +21,18 @@ import {
   AlertDialog,
   AlertDialogTrigger,
 } from "@/app/_components/ui/alert-dialog"
+import { Dialog, DialogTrigger } from "@/app/_components/ui/dialog"
+import UpsertProductDialogContent from "./upsert-dialog-content"
 import DeleteProjectDialogContent from "./delete-dialog-content"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/app/_components/ui/dropdown-menu"
+import { useState } from "react"
 
 export type Project = {
   id: string
@@ -170,7 +173,10 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
   {
     accessorKey: "Actions",
     id: "actions",
+    header: "Ações",
     cell: ({ row }) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false)
       const project = row.original
 
       const copyID = () => {
@@ -180,37 +186,54 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
 
       return (
         <AlertDialog>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
+          <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <MoreHorizontal size={16} />
+                </Button>
+              </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={copyID} className="gap-1.5">
-                <ClipboardCopyIcon size={16} />
-                Copiar ID
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem className="gap-1.5">
-                <EditIcon size={16} />
-                Editar
-              </DropdownMenuItem>
-
-              <AlertDialogTrigger asChild>
-                <DropdownMenuItem className="gap-1.5">
-                  <TrashIcon size={16} />
-                  Deletar
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuItem onClick={copyID} className="gap-1.5">
+                  <ClipboardCopyIcon size={16} />
+                  Copiar ID
                 </DropdownMenuItem>
-              </AlertDialogTrigger>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <DropdownMenuSeparator />
 
-          <DeleteProjectDialogContent productId={project.id} />
+                <DialogTrigger asChild>
+                  <DropdownMenuItem className="gap-1.5">
+                    <EditIcon size={16} />
+                    Editar
+                  </DropdownMenuItem>
+                </DialogTrigger>
+
+                <AlertDialogTrigger asChild>
+                  <DropdownMenuItem className="gap-1.5">
+                    <TrashIcon size={16} />
+                    Deletar
+                  </DropdownMenuItem>
+                </AlertDialogTrigger>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <UpsertProductDialogContent
+              defaultValues={{
+                id: project.id,
+                title: project.title,
+                description: project.description,
+                imageURL: project.imageURL,
+                repositoryURL: project.repositoryURL,
+                liveURL: project.liveURL,
+                status: project.status,
+                technologies: project.technologies.map((tech) => tech.id),
+              }}
+              onSuccess={() => setEditDialogOpen(false)}
+            />
+
+            <DeleteProjectDialogContent productId={project.id} />
+          </Dialog>
         </AlertDialog>
       )
     },
