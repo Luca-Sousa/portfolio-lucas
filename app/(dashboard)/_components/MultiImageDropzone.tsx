@@ -149,7 +149,7 @@ const MultiImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
           {value?.map(({ file, progress }, index) => (
             <div key={index} className={variants.image + "aspect-square"}>
               <img
-                className="h-72 w-72 rounded-md object-cover"
+                className="size-full rounded-md object-cover"
                 src={imageUrls[index]}
                 alt={typeof file === "string" ? file : file.name}
               />

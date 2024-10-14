@@ -69,7 +69,7 @@ const UpsertProductDialogContent = ({
       repositoryURL: "",
       liveURL: "",
       status: "" as ProjectStatus,
-      technologies: [] as string[],
+      technologies: [],
     },
   })
 
@@ -144,24 +144,24 @@ const UpsertProductDialogContent = ({
             <FormField
               control={form.control}
               name="imageURL"
-              render={() => (
-                <FormItem className="basis-[30%]">
+              render={({ field }) => (
+                <FormItem className="w-full max-w-xs">
                   <FormLabel>Imagem do Projeto</FormLabel>
                   <FormControl className="relative my-4 h-64 w-96">
-                    <MultiImageDropzoneUsage setUrl={setUrl} />
+                    <MultiImageDropzoneUsage setUrl={setUrl} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <div className="basis-[70%] px-2">
+            <div className="w-full px-2">
               <div className="flex gap-3">
                 <FormField
                   control={form.control}
                   name="title"
                   render={({ field }) => (
-                    <FormItem className="basis-4/5">
+                    <FormItem className="flex-1">
                       <FormLabel>Título do Projeto</FormLabel>
                       <FormControl>
                         <Input placeholder="Meu Projeto" {...field} />
@@ -175,18 +175,20 @@ const UpsertProductDialogContent = ({
                   control={form.control}
                   name="status"
                   render={({ field }) => (
-                    <FormItem className="basis-1/5">
+                    <FormItem>
                       <FormLabel>Status</FormLabel>
                       <Select
                         {...field}
-                        onValueChange={(value) => {
-                          form.setValue("status", value as ProjectStatus)
-                        }}
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
                       >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Status" />
-                        </SelectTrigger>
-                        <SelectContent>
+                        <FormControl>
+                          <SelectTrigger className="w-32">
+                            <SelectValue placeholder="Status" />
+                          </SelectTrigger>
+                        </FormControl>
+
+                        <SelectContent align="end">
                           <SelectGroup>
                             <SelectLabel>Status</SelectLabel>
                             {status.map((statusItem) => (
@@ -213,7 +215,7 @@ const UpsertProductDialogContent = ({
                       <Textarea
                         {...field}
                         placeholder="Descrição do Projeto..."
-                        className="min-h-[218px] resize-none"
+                        className="min-h-56 resize-none"
                         // onInput={handleTextareaResize}
                       />
                     </FormControl>

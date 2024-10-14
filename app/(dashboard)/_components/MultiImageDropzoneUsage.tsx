@@ -30,7 +30,7 @@ export function MultiImageDropzoneUsage({ setUrl }: MultiImageDropzoneProps) {
     <div>
       <MultiImageDropzone
         value={fileStates}
-        className="size-72"
+        className="w-full"
         dropzoneOptions={{
           maxFiles: 1,
         }}
