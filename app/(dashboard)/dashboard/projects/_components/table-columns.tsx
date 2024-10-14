@@ -2,13 +2,12 @@
 
 import { Button } from "@/app/_components/ui/button"
 import { Checkbox } from "@/app/_components/ui/checkbox"
-import { ProjectStatus, Technology } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 import {
   ArrowUpDown,
   ClipboardCopyIcon,
   EditIcon,
-  MoreHorizontal,
+  MoreHorizontalIcon,
   TrashIcon,
 } from "lucide-react"
 import { Badge } from "@/app/_components/ui/badge"
@@ -33,17 +32,7 @@ import {
   DropdownMenuTrigger,
 } from "@/app/_components/ui/dropdown-menu"
 import { useState } from "react"
-
-export type Project = {
-  id: string
-  title: string
-  description: string
-  imageURL: string
-  repositoryURL: string
-  liveURL: string
-  status: ProjectStatus
-  technologies: Technology[]
-}
+import { Project } from "@/app/_types/types"
 
 export const projectsTableColumns: ColumnDef<Project>[] = [
   {
@@ -190,7 +179,7 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="h-8 w-8 p-0">
-                  <MoreHorizontal size={16} />
+                  <MoreHorizontalIcon size={16} />
                 </Button>
               </DropdownMenuTrigger>
 
