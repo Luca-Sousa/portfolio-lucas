@@ -79,9 +79,9 @@ model Technology {
 }
 
 model ProjectTechnology {
-  project      Project    @relation("ProjectToTechnology", fields: [projectId], references: [id])
+  project      Project    @relation("ProjectToTechnology", fields: [projectId], references: [id], onDelete: Cascade)
   projectId    String
-  technology   Technology @relation("TechnologyToProject", fields: [technologyId], references: [id])
+  technology   Technology @relation("TechnologyToProject", fields: [technologyId], references: [id], onDelete: Cascade)
   technologyId String
   addedAt      DateTime   @default(now())
 
