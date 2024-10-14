@@ -4,6 +4,7 @@ import { db } from "../../../_lib/prisma"
 import { getServerSession } from "next-auth"
 import { authOptions } from "../../../_lib/auth"
 import { createProjectSchema, CreateProjectSchema } from "./schema"
+import { revalidatePath } from "next/cache"
 
 export const createProject = async (data: CreateProjectSchema) => {
   createProjectSchema.parse(data)
@@ -30,4 +31,6 @@ export const createProject = async (data: CreateProjectSchema) => {
       },
     },
   })
+
+  revalidatePath("/dashboard/projects")
 }

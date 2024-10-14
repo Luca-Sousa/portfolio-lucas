@@ -25,6 +25,14 @@ import { IoLogoVercel } from "react-icons/io5"
 import { FaGithub } from "react-icons/fa"
 import Image from "next/image"
 import { toast } from "sonner"
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+} from "@/app/_components/ui/alert-dialog"
+import DeleteProjectDialogContent from "./delete-dialog-content"
+import { useState } from "react"
+import { Dialog } from "@/app/_components/ui/dialog"
+import { DialogTrigger } from "@radix-ui/react-dialog"
 
 export type Project = {
   id: string
@@ -174,33 +182,39 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
       }
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
+        <AlertDialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
 
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={copyID} className="gap-1.5">
-              <ClipboardCopyIcon size={16} />
-              Copiar ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem onClick={copyID} className="gap-1.5">
+                <ClipboardCopyIcon size={16} />
+                Copiar ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
 
-            <DropdownMenuItem className="gap-1.5">
-              <EditIcon size={16} />
-              Editar
-            </DropdownMenuItem>
+              <DropdownMenuItem className="gap-1.5">
+                <EditIcon size={16} />
+                Editar
+              </DropdownMenuItem>
 
-            <DropdownMenuItem className="gap-1.5">
-              <TrashIcon size={16} />
-              Deletar
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <AlertDialogTrigger asChild>
+                <DropdownMenuItem className="gap-1.5">
+                  <TrashIcon size={16} />
+                  Deletar
+                </DropdownMenuItem>
+              </AlertDialogTrigger>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DeleteProjectDialogContent productId={project.id} />
+        </AlertDialog>
       )
     },
   },
