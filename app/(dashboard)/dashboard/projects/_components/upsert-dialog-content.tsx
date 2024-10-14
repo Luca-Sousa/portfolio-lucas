@@ -112,7 +112,7 @@ const UpsertProductDialogContent = ({
         technologies: selectedTechnologies,
       })
 
-      if (url) {
+      if (!defaultValues?.id) {
         await edgestore.publicFiles.confirmUpload({ url })
       }
 

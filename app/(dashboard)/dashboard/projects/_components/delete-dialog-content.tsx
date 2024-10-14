@@ -8,19 +8,28 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/app/_components/ui/alert-dialog"
+import { useEdgeStore } from "@/app/_lib/edgestore"
 import { SquareXIcon, StepForwardIcon } from "lucide-react"
 import { toast } from "sonner"
 
 interface DeleteProjectDialogContentProps {
   productId: string
+  imageURL: string
 }
 
 const DeleteProjectDialogContent = ({
   productId,
+  imageURL,
 }: DeleteProjectDialogContentProps) => {
+  const { edgestore } = useEdgeStore()
+
   const handleContinueClick = async () => {
     try {
       await deleteProject({ id: productId })
+
+      await edgestore.publicFiles.delete({
+        url: imageURL,
+      })
 
       toast.success("Projeto excluído com sucesso!")
     } catch (error) {

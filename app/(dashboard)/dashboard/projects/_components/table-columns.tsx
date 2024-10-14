@@ -221,7 +221,10 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
               onSuccess={() => setEditDialogOpen(false)}
             />
 
-            <DeleteProjectDialogContent productId={project.id} />
+            <DeleteProjectDialogContent
+              productId={project.id}
+              imageURL={project.imageURL}
+            />
           </Dialog>
         </AlertDialog>
       )
