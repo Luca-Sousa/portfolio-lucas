@@ -23,6 +23,8 @@ import React from "react"
 import { Input } from "../../../../_components/ui/input"
 import { Button } from "../../../../_components/ui/button"
 import { DataTableViewOptions } from "@/app/(dashboard)/dashboard/projects/_components/ui-data-table/data-table-view-options"
+import ModalCreateNewTechnology from "@/app/(dashboard)/dashboard/projects/_components/create-new-technology"
+import CreateProjectButton from "./create-project-button"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -57,21 +59,28 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center">
+      <div className="flex w-full items-center justify-between">
         {/* FILTER TITLE - PROJECT */}
-        <div className="flex items-center py-4">
+        <div className="flex w-full max-w-lg items-center py-4">
           <Input
             placeholder="Filter project..."
             value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn("title")?.setFilterValue(event.target.value)
             }
-            className="max-w-sm"
           />
         </div>
 
-        {/* VISUALIZAÇÃO DAS COLUNAS */}
-        <DataTableViewOptions table={table} />
+        <div className="flex gap-3">
+          {/* MODAL NOVA TECNOLOGIA */}
+          <ModalCreateNewTechnology />
+
+          {/* MODAL NOVO PROJETO */}
+          <CreateProjectButton />
+
+          {/* VISUALIZAÇÃO DAS COLUNAS */}
+          <DataTableViewOptions table={table} />
+        </div>
       </div>
 
       {/* TABELA */}
@@ -103,7 +112,7 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell className="py-2" key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -118,7 +127,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Não há projetos.
                 </TableCell>
               </TableRow>
             )}

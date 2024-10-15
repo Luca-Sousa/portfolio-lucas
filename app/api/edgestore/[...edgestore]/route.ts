@@ -13,6 +13,18 @@ const edgeStoreRouter = es.router({
     .beforeDelete(() => {
       return true // permite a deleção
     }),
+
+  publicImages: es
+    .imageBucket({
+      maxSize: 1024 * 1024 * 10, // 10MB
+      accept: ["image/jpeg", "image/png", "image/svg+xml"],
+    })
+    .beforeUpload(() => {
+      return true // permite o upload
+    })
+    .beforeDelete(() => {
+      return true // permite a deleção
+    }),
 })
 
 const handler = createEdgeStoreNextHandler({

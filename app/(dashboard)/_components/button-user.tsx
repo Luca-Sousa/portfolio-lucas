@@ -1,13 +1,13 @@
 "use client"
 
 import { signOut } from "next-auth/react"
-import { Button } from "./ui/button"
+import { Button } from "../../_components/ui/button"
 import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from "./ui/dropdown-menu"
+} from "../../_components/ui/dropdown-menu"
 import { LogOutIcon } from "lucide-react"
 
 const DashboardButtonUser = () => {

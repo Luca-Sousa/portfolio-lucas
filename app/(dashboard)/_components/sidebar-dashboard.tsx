@@ -17,7 +17,7 @@ const SidebarDashboard = async () => {
   if (!session?.user) return notFound()
 
   return (
-    <Card className="max-w-64 rounded-none" aria-label="Sidebar">
+    <Card className="min-h-screen max-w-64 rounded-none" aria-label="Sidebar">
       <CardHeader className="flex flex-row items-center gap-3">
         <Image
           className="rounded-full"

@@ -10,15 +10,13 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
 } from "../../../_components/ui/dropdown-menu"
-import DashboardButtonUser from "../../../_components/dashboard-button-user"
+import DashboardButtonUser from "../../_components/button-user"
 import { notFound } from "next/navigation"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/_lib/auth"
 import { DataTable } from "@/app/(dashboard)/dashboard/projects/_components/data-table"
 import { projectsTableColumns } from "./_components/table-columns"
 import { getProjects } from "@/app/_data_access/get-projects"
-import CreateProjectButton from "./_components/create-project-button"
-import ModalCreateNewTechnology from "../../_components/modal-create-new-technology"
 
 const Projects = async () => {
   const session = await getServerSession(authOptions)
@@ -26,41 +24,33 @@ const Projects = async () => {
   const projects = await getProjects({})
 
   return (
-    <div className="w-full bg-accent">
-      <div className="flex flex-col items-center gap-5 p-8">
-        <div className="flex w-full justify-end gap-4">
+    <div className="flex min-h-screen w-full items-center justify-center overflow-y-auto bg-accent px-6">
+      <Card className="w-full rounded-2xl">
+        <CardHeader className="flex-row items-center justify-between py-3">
+          <div className="space-y-1">
+            <CardTitle className="text-3xl">Projetos</CardTitle>
+            <div className="h-2 w-10 rounded-3xl bg-primary"></div>
+          </div>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
-                size={"icon"}
-                variant={"ghost"}
-                className="rounded-full bg-popover hover:scale-110 hover:bg-popover"
+                size="icon"
+                variant="secondary"
+                className="rounded-full ring-2 ring-ring ring-offset-2"
               >
-                <User2Icon />
+                <User2Icon size={24} />
               </Button>
             </DropdownMenuTrigger>
 
             <DashboardButtonUser />
           </DropdownMenu>
-        </div>
+        </CardHeader>
 
-        <div className="flex w-full items-center justify-end gap-3">
-          <ModalCreateNewTechnology />
-
-          <CreateProjectButton />
-        </div>
-
-        <Card className="h-full w-full rounded-2xl">
-          <CardHeader className="space-y-3">
-            <CardTitle className="text-3xl">Projetos</CardTitle>
-            <div className="h-2 w-8 rounded-3xl bg-primary"></div>
-          </CardHeader>
-
-          <CardContent>
-            <DataTable columns={projectsTableColumns} data={projects} />
-          </CardContent>
-        </Card>
-      </div>
+        <CardContent className="pb-0">
+          <DataTable columns={projectsTableColumns} data={projects} />
+        </CardContent>
+      </Card>
     </div>
   )
 }

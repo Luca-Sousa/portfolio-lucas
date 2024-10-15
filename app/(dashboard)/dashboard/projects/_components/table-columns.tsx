@@ -67,13 +67,14 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
       const project = row.original
 
       return (
-        <Image
-          alt="Imagem do projeto"
-          src={project.imageURL}
-          width={64}
-          height={56}
-          className="rounded-xl"
-        />
+        <div className="relative size-12 overflow-hidden rounded-md">
+          <Image
+            alt="Imagem do projeto"
+            src={project.imageURL}
+            fill
+            className="object-cover"
+          />
+        </div>
       )
     },
   },
@@ -84,6 +85,17 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
   {
     accessorKey: "description",
     header: "Descrição",
+    cell: ({ row }) => {
+      const project = row.original
+
+      return (
+        <div className="truncate text-sm">
+          {project.description.length > 50
+            ? `${project.description.slice(0, 50)}...`
+            : project.description}
+        </div>
+      )
+    },
   },
   {
     accessorKey: "status",
@@ -121,8 +133,8 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
               key={tech.id}
               alt={tech.name}
               src={tech.iconURL}
-              width={24}
-              height={24}
+              width={18}
+              height={18}
             />
           ))}
         </div>
