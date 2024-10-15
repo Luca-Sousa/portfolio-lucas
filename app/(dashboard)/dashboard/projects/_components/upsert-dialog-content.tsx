@@ -90,6 +90,9 @@ const UpsertProductDialogContent = ({
 
   const handleSubmitProject = async (data: UpsertProjectSchema) => {
     try {
+      if (isEditing) {
+        setUrl(data.imageURL)
+      }
       if (!url) {
         toast.error("Selecione uma imagem para o projeto.")
         return
@@ -132,19 +135,35 @@ const UpsertProductDialogContent = ({
           className="space-y-2"
         >
           <div className="flex w-full gap-4">
-            <FormField
-              control={form.control}
-              name="imageURL"
-              render={({ field }) => (
-                <FormItem className="w-full max-w-xs">
-                  <FormLabel>Imagem do Projeto</FormLabel>
-                  <FormControl className="relative my-4 h-64 w-96">
-                    <MultiImageDropzoneUsage setUrl={setUrl} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {isEditing ? (
+              <FormField
+                control={form.control}
+                name="imageURL"
+                render={({ field }) => (
+                  <FormItem className="w-full max-w-xs">
+                    <FormLabel>Imagem do Projeto</FormLabel>
+                    <FormControl className="relative my-4 h-64 w-96">
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ) : (
+              <FormField
+                control={form.control}
+                name="imageURL"
+                render={({ field }) => (
+                  <FormItem className="w-full max-w-xs">
+                    <FormLabel>Imagem do Projeto</FormLabel>
+                    <FormControl className="relative my-4 h-64 w-96">
+                      <MultiImageDropzoneUsage setUrl={setUrl} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <div className="w-full px-2">
               <div className="flex gap-3">
@@ -228,6 +247,7 @@ const UpsertProductDialogContent = ({
                     {technologies.map((tech) => (
                       <div key={tech.id} className="flex items-center gap-2">
                         <Checkbox
+                          className="data-[state=checked]:text-black"
                           checked={field.value?.includes(tech.id) || false}
                           onCheckedChange={(checked) => {
                             setSelectedTechnologies((prev) => {
@@ -247,7 +267,6 @@ const UpsertProductDialogContent = ({
                           id={tech.id.toString()}
                           {...field}
                         />
-
                         <Label
                           htmlFor={tech.id.toString()}
                           className="flex items-center gap-2"
