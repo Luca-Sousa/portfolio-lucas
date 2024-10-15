@@ -25,11 +25,14 @@ import {
 } from "../../../../_components/ui/form"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEdgeStore } from "@/app/_lib/edgestore"
 import { useState } from "react"
 import { SingleImageDropzone } from "../../../_components/single-image-dropzone"
+import {
+  CreateTechnologySchema,
+  createTechnologySchema,
+} from "@/app/_actions/technology/create-technology/schema"
 
 const ModalCreateNewTechnology = () => {
   const { edgestore } = useEdgeStore()
@@ -39,16 +42,9 @@ const ModalCreateNewTechnology = () => {
   const [uploadImage, setUploadImage] = useState<boolean>(false)
   const [nextDialog, setNextDialog] = useState<boolean>(false)
 
-  const formSchema = z.object({
-    name: z.string().min(1, "O nome é obrigatório"),
-    iconURL: z.string().url("A imagem é obrigatória"),
-  })
-
-  type FormSchema = z.infer<typeof formSchema>
-
   const form = useForm({
     shouldUnregister: true,
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createTechnologySchema),
     defaultValues: {
       name: "",
       iconURL: "",
@@ -71,15 +67,13 @@ const ModalCreateNewTechnology = () => {
     }
   }
 
-  const handleCreateTechnology = async (data: FormSchema) => {
+  const handleCreateTechnology = async (data: CreateTechnologySchema) => {
     await createTechnology({
       name: data.name,
       iconURL: data.iconURL,
     })
 
-    if (url) {
-      await edgestore.publicFiles.confirmUpload({ url })
-    }
+    if (url) await edgestore.publicFiles.confirmUpload({ url })
 
     setFile(undefined)
     setUploadImage(false)
