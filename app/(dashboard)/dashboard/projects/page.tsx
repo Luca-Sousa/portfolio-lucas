@@ -24,7 +24,7 @@ const Projects = async () => {
   const projects = await getProjects({})
 
   return (
-    <div className="flex min-h-screen w-full items-center justify-center overflow-y-auto bg-accent px-6">
+    <div className="flex min-h-screen w-full overflow-y-auto bg-accent px-6 py-4">
       <Card className="w-full rounded-2xl">
         <CardHeader className="flex-row items-center justify-between py-3">
           <div className="space-y-1">

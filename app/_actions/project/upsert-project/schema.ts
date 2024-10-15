@@ -5,8 +5,8 @@ export const upsertProjectSchema = z.object({
   title: z.string().min(1, "O título é obrigatório"),
   description: z.string().min(1, "A descrição é obrigatória"),
   imageURL: z.string(),
-  repositoryURL: z.string().url("URL do Github inválida"),
-  liveURL: z.string().url().min(1, "URL da Vercel inválida"),
+  repositoryURL: z.string().url({ message: "URL do GitHub inválida" }),
+  liveURL: z.string().url({ message: "URL da Vercel inválida" }),
   status: z.enum(["Finalizado", "Em_Att", "Em_Dev"], {
     message: "O status é obrigatório",
   }),

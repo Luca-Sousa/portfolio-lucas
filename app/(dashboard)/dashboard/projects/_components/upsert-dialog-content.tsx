@@ -88,16 +88,6 @@ const UpsertProductDialogContent = ({
     setStatus(Object.values(ProjectStatus))
   }, [])
 
-  const handleTechnologyChange = (techId: string) => {
-    setSelectedTechnologies((prev) =>
-      prev.includes(techId)
-        ? prev.filter((id) => id !== techId)
-        : [...prev, techId],
-    )
-
-    form.setValue("technologies", selectedTechnologies)
-  }
-
   const handleSubmitProject = async (data: UpsertProjectSchema) => {
     try {
       if (!url) {
@@ -121,6 +111,7 @@ const UpsertProductDialogContent = ({
         `Projeto ${isEditing ? "atualizado" : "criado"} com sucesso!`,
       )
     } catch (error) {
+      console.error(error)
       toast.error(
         `Ocorreu um erro ao ${isEditing ? "atualizar" : "criar"} o projeto!`,
       )
@@ -237,13 +228,26 @@ const UpsertProductDialogContent = ({
                     {technologies.map((tech) => (
                       <div key={tech.id} className="flex items-center gap-2">
                         <Checkbox
-                          checked={selectedTechnologies.includes(tech.id)}
-                          onCheckedChange={() =>
-                            handleTechnologyChange(tech.id)
-                          }
+                          checked={field.value?.includes(tech.id) || false}
+                          onCheckedChange={(checked) => {
+                            setSelectedTechnologies((prev) => {
+                              // Atualiza a lista de tecnologias selecionadas
+                              const updatedTechnologies = checked
+                                ? [...prev, tech.id] // Adiciona a tecnologia se marcada
+                                : prev.filter((id) => id !== tech.id) // Remove a tecnologia se desmarcada
+
+                              // Atualiza o valor no formulário via react-hook-form
+                              form.setValue("technologies", updatedTechnologies)
+                              // Notifica o formulário sobre a mudança para validação do Zod
+                              field.onChange(updatedTechnologies)
+
+                              return updatedTechnologies // Retorna o novo estado
+                            })
+                          }}
                           id={tech.id.toString()}
                           {...field}
                         />
+
                         <Label
                           htmlFor={tech.id.toString()}
                           className="flex items-center gap-2"
