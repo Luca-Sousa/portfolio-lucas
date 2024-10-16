@@ -39,8 +39,6 @@ const ModalCreateNewTechnology = () => {
   const [file, setFile] = useState<File>()
   const [url, setUrl] = useState<string>()
   const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(false)
-  const [uploadImage, setUploadImage] = useState<boolean>(false)
-  const [nextDialog, setNextDialog] = useState<boolean>(false)
 
   const form = useForm({
     shouldUnregister: true,
@@ -51,7 +49,9 @@ const ModalCreateNewTechnology = () => {
     },
   })
 
-  const handleUploadImage = async () => {
+  const handleFileChange = async (file: File) => {
+    setFile(file)
+
     if (file) {
       const res = await edgestore.publicFiles.upload({
         file,
@@ -60,10 +60,8 @@ const ModalCreateNewTechnology = () => {
         },
       })
 
-      form.setValue("iconURL", res.url)
       setUrl(res.url)
-      setNextDialog(true)
-      setUploadImage(true)
+      form.setValue("iconURL", res.url)
     }
   }
 
@@ -73,12 +71,12 @@ const ModalCreateNewTechnology = () => {
       iconURL: data.iconURL,
     })
 
-    if (url) await edgestore.publicFiles.confirmUpload({ url })
+    if (url) {
+      await edgestore.publicFiles.confirmUpload({ url })
+    }
 
     setFile(undefined)
-    setUploadImage(false)
     setDialogIsOpen(false)
-    setNextDialog(false)
     toast.success("Tecnologia criada com sucesso!")
   }
 
@@ -89,9 +87,6 @@ const ModalCreateNewTechnology = () => {
         setDialogIsOpen(isOpen)
         if (!isOpen) {
           setFile(undefined)
-          setNextDialog(false)
-          setUploadImage(false)
-
           if (url) {
             ;(async () => {
               try {
@@ -125,27 +120,25 @@ const ModalCreateNewTechnology = () => {
             onSubmit={form.handleSubmit(handleCreateTechnology)}
             className="space-y-6"
           >
-            {nextDialog && (
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nome</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Nome da tecnologia..." {...field} />
-                    </FormControl>
-                    <FormDescription />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nome</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nome da tecnologia..." {...field} />
+                  </FormControl>
+                  <FormDescription />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
               name="iconURL"
-              render={() => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Ícone da Tecnologia</FormLabel>
                   <FormControl className="mx-auto bg-accent">
@@ -153,9 +146,7 @@ const ModalCreateNewTechnology = () => {
                       width={80}
                       height={80}
                       value={file}
-                      onChange={(file) => {
-                        setFile(file)
-                      }}
+                      onChange={(file) => handleFileChange(file as File)}
                     />
                   </FormControl>
                   <FormMessage />
@@ -175,30 +166,18 @@ const ModalCreateNewTechnology = () => {
                 </Button>
               </DialogClose>
 
-              {uploadImage ? (
-                <Button
-                  type="submit"
-                  className="flex items-center gap-2 text-secondary"
-                  disabled={form.formState.isSubmitting}
-                >
-                  {form.formState.isSubmitting ? (
-                    <Loader2Icon className="animate-spin" size={16} />
-                  ) : (
-                    <SaveIcon size={16} />
-                  )}
-                  Salvar Tecnologia
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  className="flex items-center gap-2 text-secondary"
-                  onClick={handleUploadImage}
-                  disabled={!file}
-                >
+              <Button
+                type="submit"
+                className="flex items-center gap-2 text-secondary"
+                disabled={form.formState.isSubmitting}
+              >
+                {form.formState.isSubmitting ? (
+                  <Loader2Icon className="animate-spin" size={16} />
+                ) : (
                   <SaveIcon size={16} />
-                  Upload Image
-                </Button>
-              )}
+                )}
+                Salvar Tecnologia
+              </Button>
             </DialogFooter>
           </form>
         </Form>
