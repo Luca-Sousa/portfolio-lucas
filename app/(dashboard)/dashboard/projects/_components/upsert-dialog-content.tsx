@@ -1,6 +1,6 @@
 "use client"
 
-import { MultiImageDropzoneUsage } from "@/app/(dashboard)/_components/MultiImageDropzoneUsage"
+import { SingleImageDropzone } from "@/app/(dashboard)/_components/single-image-dropzone"
 import { upsertProject } from "@/app/_actions/project/upsert-project"
 import {
   upsertProjectSchema,
@@ -11,6 +11,7 @@ import { Checkbox } from "@/app/_components/ui/checkbox"
 import {
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -21,6 +22,8 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
+  Form,
+  FormDescription,
 } from "@/app/_components/ui/form"
 import { Input } from "@/app/_components/ui/input"
 import { Label } from "@/app/_components/ui/label"
@@ -39,6 +42,7 @@ import { useEdgeStore } from "@/app/_lib/edgestore"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ProjectStatus, Technology } from "@prisma/client"
 import { PanelLeftCloseIcon, Loader2Icon, FilePlus2 } from "lucide-react"
+import { revalidatePath } from "next/cache"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
@@ -54,6 +58,7 @@ const UpsertProductDialogContent = ({
   onSuccess,
 }: UpsertProductDialogContentProps) => {
   const { edgestore } = useEdgeStore()
+  const [file, setFile] = useState<File>()
   const [url, setUrl] = useState<string>()
   const [technologies, setTechnologies] = useState<Technology[]>([])
   const [selectedTechnologies, setSelectedTechnologies] = useState<string[]>([])
@@ -88,33 +93,62 @@ const UpsertProductDialogContent = ({
     setStatus(Object.values(ProjectStatus))
   }, [])
 
+  const handleFileChange = async (file: File) => {
+    if (isEditing) {
+      console.log("Substituindo imagem:", defaultValues.imageURL)
+      const res = await edgestore.publicFiles.upload({
+        file,
+        options: {
+          replaceTargetUrl: form.getValues("imageURL"),
+        },
+      })
+
+      setFile(file)
+      form.setValue("imageURL", res.url)
+      toast.success("Imagem alterada com sucesso!")
+    } else {
+      setFile(file)
+
+      if (file) {
+        if (url === undefined) {
+          const res = await edgestore.publicFiles.upload({
+            file,
+          })
+
+          toast.success("Imagem adicionada com sucesso!")
+          setUrl(res.url)
+          form.setValue("imageURL", res.url)
+        } else {
+          const res = await edgestore.publicFiles.upload({
+            file,
+            options: {
+              replaceTargetUrl: form.getValues("imageURL"),
+            },
+          })
+
+          toast.success("Imagem alterada com sucesso!")
+          setUrl(res.url)
+          form.setValue("imageURL", res.url)
+        }
+      }
+    }
+  }
+
   const handleSubmitProject = async (data: UpsertProjectSchema) => {
     try {
-      if (isEditing) {
-        setUrl(data.imageURL)
-      }
-      if (!url) {
-        toast.error("Selecione uma imagem para o projeto.")
-        return
-      }
-      data.imageURL = url
-
       await upsertProject({
         ...data,
         id: defaultValues?.id,
         technologies: selectedTechnologies,
       })
 
-      if (!defaultValues?.id) {
-        await edgestore.publicFiles.confirmUpload({ url })
-      }
-
+      setUrl(undefined)
+      setFile(undefined)
       onSuccess?.()
       toast.success(
         `Projeto ${isEditing ? "atualizado" : "criado"} com sucesso!`,
       )
     } catch (error) {
-      console.error(error)
       toast.error(
         `Ocorreu um erro ao ${isEditing ? "atualizar" : "criar"} o projeto!`,
       )
@@ -123,11 +157,12 @@ const UpsertProductDialogContent = ({
 
   return (
     <DialogContent className="w-full max-w-screen-lg">
-      <FormProvider {...form}>
+      <Form {...form}>
         <DialogHeader>
           <DialogTitle>
             {isEditing ? "Editar" : "Criar Novo"} Projeto
           </DialogTitle>
+          <DialogDescription />
         </DialogHeader>
 
         <form
@@ -135,35 +170,24 @@ const UpsertProductDialogContent = ({
           className="space-y-2"
         >
           <div className="flex w-full gap-4">
-            {isEditing ? (
-              <FormField
-                control={form.control}
-                name="imageURL"
-                render={({ field }) => (
-                  <FormItem className="w-full max-w-xs">
-                    <FormLabel>Imagem do Projeto</FormLabel>
-                    <FormControl className="relative my-4 h-64 w-96">
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ) : (
-              <FormField
-                control={form.control}
-                name="imageURL"
-                render={({ field }) => (
-                  <FormItem className="w-full max-w-xs">
-                    <FormLabel>Imagem do Projeto</FormLabel>
-                    <FormControl className="relative my-4 h-64 w-96">
-                      <MultiImageDropzoneUsage setUrl={setUrl} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
+            <FormField
+              control={form.control}
+              name="imageURL"
+              render={({ field }) => (
+                <FormItem className="w-full max-w-xs">
+                  <FormLabel>Imagem do Projeto</FormLabel>
+                  <FormControl className="relative my-4 h-64 w-96">
+                    <SingleImageDropzone
+                      width={300}
+                      height={300}
+                      value={file || field.value}
+                      onChange={(file) => handleFileChange(file as File)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <div className="w-full px-2">
               <div className="flex gap-3">
@@ -240,46 +264,69 @@ const UpsertProductDialogContent = ({
             <FormField
               control={form.control}
               name="technologies"
-              render={({ field }) => (
+              render={() => (
                 <FormItem className="basis-1/2">
-                  <FormLabel>Tecnologias</FormLabel>
+                  <div className="mb-4">
+                    <FormLabel className="text-base">Tecnologias</FormLabel>
+                    <FormDescription>
+                      selecione as tecnologias para o projeto.
+                    </FormDescription>
+                  </div>
                   <div className="grid grid-cols-3 gap-2">
                     {technologies.map((tech) => (
-                      <div key={tech.id} className="flex items-center gap-2">
-                        <Checkbox
-                          className="data-[state=checked]:text-black"
-                          checked={field.value?.includes(tech.id) || false}
-                          onCheckedChange={(checked) => {
-                            setSelectedTechnologies((prev) => {
-                              // Atualiza a lista de tecnologias selecionadas
-                              const updatedTechnologies = checked
-                                ? [...prev, tech.id] // Adiciona a tecnologia se marcada
-                                : prev.filter((id) => id !== tech.id) // Remove a tecnologia se desmarcada
+                      <FormField
+                        key={tech.id}
+                        control={form.control}
+                        name="technologies"
+                        render={({ field }) => {
+                          return (
+                            <FormItem key={tech.id}>
+                              <div className="flex items-center gap-3">
+                                <FormControl>
+                                  <Checkbox
+                                    className="data-[state=checked]:text-black"
+                                    checked={
+                                      field.value?.includes(tech.id) || false
+                                    }
+                                    onCheckedChange={(checked) => {
+                                      setSelectedTechnologies((prev) => {
+                                        // Atualiza a lista de tecnologias selecionadas
+                                        const updatedTechnologies = checked
+                                          ? [...prev, tech.id] // Adiciona a tecnologia se marcada
+                                          : prev.filter((id) => id !== tech.id) // Remove a tecnologia se desmarcada
 
-                              // Atualiza o valor no formulário via react-hook-form
-                              form.setValue("technologies", updatedTechnologies)
-                              // Notifica o formulário sobre a mudança para validação do Zod
-                              field.onChange(updatedTechnologies)
+                                        // Atualiza o valor no formulário via react-hook-form
+                                        form.setValue(
+                                          "technologies",
+                                          updatedTechnologies,
+                                        )
+                                        // Notifica o formulário sobre a mudança para validação do Zod
+                                        field.onChange(updatedTechnologies)
 
-                              return updatedTechnologies // Retorna o novo estado
-                            })
-                          }}
-                          id={tech.id.toString()}
-                          {...field}
-                        />
-                        <Label
-                          htmlFor={tech.id.toString()}
-                          className="flex items-center gap-2"
-                        >
-                          <Image
-                            alt={tech.name}
-                            src={tech.iconURL}
-                            width={18}
-                            height={18}
-                          />
-                          {tech.name}
-                        </Label>
-                      </div>
+                                        return updatedTechnologies // Retorna o novo estado
+                                      })
+                                    }}
+                                    id={tech.id.toString()}
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormLabel
+                                  htmlFor={tech.id.toString()}
+                                  className="flex items-center gap-2"
+                                >
+                                  <Image
+                                    alt={tech.name}
+                                    src={tech.iconURL}
+                                    width={18}
+                                    height={18}
+                                  />
+                                  {tech.name}
+                                </FormLabel>
+                              </div>
+                            </FormItem>
+                          )
+                        }}
+                      />
                     ))}
                   </div>
                   <FormMessage />
@@ -345,7 +392,7 @@ const UpsertProductDialogContent = ({
             </div>
           </div>
         </form>
-      </FormProvider>
+      </Form>
     </DialogContent>
   )
 }
