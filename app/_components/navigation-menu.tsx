@@ -1,5 +1,5 @@
 import { Contact2Icon } from "lucide-react"
-import Contact from "./contact"
+import Contact from "../(home)/_components/contact"
 import { Button } from "./ui/button"
 import {
   NavigationMenu,

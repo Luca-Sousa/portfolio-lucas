@@ -5,10 +5,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card"
+} from "../_components/ui/card"
 import Image from "next/image"
 
-const About = () => {
+const Home = () => {
   return (
     <>
       <CardHeader className="space-y-4">
@@ -98,4 +98,4 @@ const About = () => {
   )
 }
 
-export default About
+export default Home

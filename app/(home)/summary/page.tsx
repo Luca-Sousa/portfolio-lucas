@@ -1,11 +1,16 @@
 import { BookOpenText, CodeSquare, SectionIcon } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
-import { Description } from "@radix-ui/react-toast"
 import { FaDatabase, FaJava, FaProjectDiagram } from "react-icons/fa"
 import Link from "next/link"
 import { MdWebhook } from "react-icons/md"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/app/_components/ui/card"
 
-const Resume = () => {
+const Summary = () => {
   return (
     <>
       <CardHeader className="space-y-4">
@@ -52,10 +57,10 @@ const Resume = () => {
                   </p>
                 </div>
 
-                <Description className="text-center text-sm text-gray-200">
+                <CardDescription className="text-center text-sm text-gray-200">
                   O curso tem como objetivo a formação de profissionais em
                   desenvolvimento WEB, utilizando Java e ReactJS.
-                </Description>
+                </CardDescription>
               </CardHeader>
 
               <CardContent className="space-y-2 text-sm">
@@ -124,13 +129,13 @@ const Resume = () => {
                   </p>
                 </div>
 
-                <Description className="text-center text-sm text-gray-200">
+                <CardDescription className="text-center text-sm text-gray-200">
                   O curso visa a formação de profissionais em bases científica,
                   técnica, ética e humanista, condizentes com a especificidade
                   da área de Ciência da Computação, aliado à formação prática,
                   através do desenvolvimento de projetos e do domínio de
                   tecnologias computacionais
-                </Description>
+                </CardDescription>
               </CardHeader>
             </Card>
           </div>
@@ -155,4 +160,4 @@ const Resume = () => {
   )
 }
 
-export default Resume
+export default Summary

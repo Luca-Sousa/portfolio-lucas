@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { ArrowRight, StarIcon } from "lucide-react"
-import { Button } from "./ui/button"
+import { Button } from "../../../_components/ui/button"
 import {
   Dialog,
   DialogClose,
@@ -12,9 +12,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog"
-import { AspectRatio } from "./ui/aspect-ratio"
-import { Badge } from "./ui/badge"
+} from "../../../_components/ui/dialog"
+import { AspectRatio } from "../../../_components/ui/aspect-ratio"
+import { Badge } from "../../../_components/ui/badge"
 import { MdDeveloperBoard } from "react-icons/md"
 import { GrUpdate } from "react-icons/gr"
 import Image from "next/image"
@@ -22,10 +22,10 @@ import { motion } from "framer-motion"
 import { FaGithub } from "react-icons/fa"
 import { IoLogoVercel } from "react-icons/io5"
 import Link from "next/link"
-import { Skeleton } from "./ui/skeleton"
+import { Skeleton } from "../../../_components/ui/skeleton"
 import { AiOutlineLoading3Quarters } from "react-icons/ai"
 import { ProjectStatus } from "@prisma/client"
-import { Project } from "../_types/types"
+import { Project } from "../../../_types/types"
 
 interface ProjectItemProps {
   project: Project

@@ -1,10 +1,8 @@
 import { IoLocationOutline } from "react-icons/io5"
-import { Skeleton } from "./ui/skeleton"
-import { FaFacebook, FaGithub, FaLinkedin } from "react-icons/fa"
-import { RiInstagramFill } from "react-icons/ri"
+import { Skeleton } from "../../_components/ui/skeleton"
 import { CalendarDaysIcon, MailIcon, SmartphoneIcon } from "lucide-react"
 
-const SkeletonSidebar = () => {
+const SidebarHomeSkeleton = () => {
   return (
     <div className="mt-6 hidden space-y-6 xl:block">
       <Skeleton className="h-px w-full bg-zinc-800" />
@@ -69,20 +67,20 @@ const SkeletonSidebar = () => {
 
       <div className="flex justify-center space-x-3">
         <Skeleton className="flex size-8 h-8 w-8 items-center justify-center rounded-full bg-zinc-700 ring-primary">
-          <FaGithub className="size-6 fill-zinc-300" />
+          <div className="size-6 fill-zinc-300" />
         </Skeleton>
         <Skeleton className="flex size-8 h-8 w-8 items-center justify-center rounded-full bg-zinc-700 ring-primary">
-          <FaLinkedin className="size-6 fill-zinc-300" />
+          <div className="size-6 fill-zinc-300" />
         </Skeleton>
         <Skeleton className="flex size-8 h-8 w-8 items-center justify-center rounded-full bg-zinc-700 ring-primary">
-          <FaFacebook className="size-6 fill-zinc-300" />
+          <div className="size-6 fill-zinc-300" />
         </Skeleton>
         <Skeleton className="flex size-8 h-8 w-8 items-center justify-center rounded-full bg-zinc-700 ring-primary">
-          <RiInstagramFill className="size-6 fill-zinc-300" />
+          <div className="size-6 fill-zinc-300" />
         </Skeleton>
       </div>
     </div>
   )
 }
 
-export default SkeletonSidebar
+export default SidebarHomeSkeleton

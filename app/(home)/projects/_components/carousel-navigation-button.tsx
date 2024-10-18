@@ -1,6 +1,6 @@
 import { ArrowLeft, ArrowRight } from "lucide-react"
 import { motion } from "framer-motion"
-import { Button } from "./ui/button"
+import { Button } from "@/app/_components/ui/button"
 
 interface CarrouselNavigationButtonProps {
   direction: "left" | "right"
