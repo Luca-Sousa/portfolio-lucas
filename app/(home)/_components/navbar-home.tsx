@@ -1,8 +1,5 @@
-import { Sheet, SheetTrigger } from "@/app/_components/ui/sheet"
 import NavbarHomeButton from "./navbar-home-button"
-import { Button } from "@/app/_components/ui/button"
-import { Contact2Icon } from "lucide-react"
-import Contact from "./contact"
+import ContactButton from "./contact-button"
 
 const NavbarHome = () => {
   return (
@@ -14,20 +11,7 @@ const NavbarHome = () => {
 
         <NavbarHomeButton href="/projects">Projetos</NavbarHomeButton>
 
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button
-              size={"sm"}
-              variant={"default"}
-              className="flex items-center gap-1 px-3 font-semibold text-secondary"
-            >
-              <Contact2Icon size={20} />
-              Contato
-            </Button>
-          </SheetTrigger>
-
-          <Contact />
-        </Sheet>
+        <ContactButton />
       </div>
     </div>
   )

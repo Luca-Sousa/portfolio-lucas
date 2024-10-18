@@ -36,7 +36,11 @@ const contactSchema = z.object({
 
 type ContactSchema = z.infer<typeof contactSchema>
 
-const Contact = () => {
+interface ContactProps {
+  onSuccess: () => void
+}
+
+const Contact = ({ onSuccess }: ContactProps) => {
   const form = useForm({
     shouldUnregister: true,
     resolver: zodResolver(contactSchema),
@@ -70,6 +74,7 @@ const Contact = () => {
         process.env.NEXT_PUBLIC_EMAILJS_USER_ID,
       )
 
+      onSuccess?.()
       if (response.status === 200) {
         toast.success("Mensagem enviada com sucesso!")
       } else {
@@ -140,7 +145,7 @@ const Contact = () => {
                     {...field}
                     placeholder="Escreva sua mensagem aqui..."
                     className="min-h-32 resize-none [&::-webkit-scrollbar]:hidden"
-                    onInput={handleTextareaResize} // Chama a função para redimensionar ao digitar
+                    onInput={handleTextareaResize}
                   />
                 </FormControl>
                 <FormMessage />
