@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="ptBr">
       <body className={`${inter.className} antialiased`}>
-        <div className="flex flex-col gap-4 p-4 pb-24 sm:mx-auto sm:max-w-xl sm:gap-8 sm:py-8 md:max-w-2xl lg:max-w-4xl xl:max-w-[1440px] xl:flex-row xl:gap-10 2xl:px-0">
+        <div className="flex flex-col gap-4 p-4 pb-24 sm:mx-auto sm:max-w-xl sm:gap-8 sm:py-8 md:max-w-2xl lg:max-w-4xl xl:max-w-[1440px] xl:flex-row xl:gap-10 xl:px-8 2xl:px-0">
           <SidebarHome />
 
           <Card className="w-full rounded-2xl sm:relative xl:overflow-y-auto xl:[&&::-webkit-scrollbar]:hidden">

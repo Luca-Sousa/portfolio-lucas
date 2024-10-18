@@ -32,6 +32,29 @@ const SidebarHome = () => {
     }
   }, [])
 
+  const itemsNetworks = [
+    {
+      title: "Github",
+      link: "https://github.com/Luca-Sousa",
+      icon: FaGithub,
+    },
+    {
+      title: "LinkedIn",
+      link: "https://www.linkedin.com/in/lucas-silva-0b79a72a7/",
+      icon: FaLinkedin,
+    },
+    {
+      title: "Facebook",
+      link: "https://www.facebook.com/LukeSousa21/",
+      icon: FaFacebook,
+    },
+    {
+      title: "Instagram",
+      link: "https://www.instagram.com/lk._dev/",
+      icon: RiInstagramFill,
+    },
+  ]
+
   return (
     <Card className="rounded-2xl xl:h-full xl:w-full xl:max-w-96">
       <CardContent className="relative px-6 py-4">
@@ -98,52 +121,19 @@ const SidebarHome = () => {
 
       {detailsSidebar && (
         <CardFooter className="space-x-3 xl:flex xl:justify-center">
-          <Button
-            size={"icon"}
-            variant={"link"}
-            className="size-8 rounded-full ring-primary hover:scale-110 hover:ring-2"
-            asChild
-          >
-            <Link href="https://github.com/Luca-Sousa" target="_blank">
-              <FaGithub className="size-6 fill-zinc-300" />
-            </Link>
-          </Button>
-
-          <Button
-            size={"icon"}
-            variant={"link"}
-            className="size-8 rounded-full ring-primary hover:scale-110 hover:ring-2"
-            asChild
-          >
-            <Link
-              href="https://www.linkedin.com/in/lucas-silva-0b79a72a7/"
-              target="_blank"
+          {itemsNetworks.map(({ title, link, icon: Icon }) => (
+            <Button
+              key={title}
+              size={"icon"}
+              variant={"link"}
+              className="size-8 rounded-full ring-primary hover:scale-110 hover:ring-2"
+              asChild
             >
-              <FaLinkedin className="size-6 fill-zinc-300" />
-            </Link>
-          </Button>
-
-          <Button
-            size={"icon"}
-            variant={"link"}
-            className="size-8 rounded-full ring-primary hover:scale-110 hover:ring-2"
-            asChild
-          >
-            <Link href="https://www.facebook.com/LukeSousa21/" target="_blank">
-              <FaFacebook className="size-6 fill-zinc-300" />
-            </Link>
-          </Button>
-
-          <Button
-            size={"icon"}
-            variant={"link"}
-            className="size-8 rounded-full ring-primary hover:scale-110 hover:ring-2"
-            asChild
-          >
-            <Link href="https://www.instagram.com/lk._dev/" target="_blank">
-              <RiInstagramFill className="size-6 fill-zinc-300" />
-            </Link>
-          </Button>
+              <Link href={link} target="_blank">
+                <Icon className="size-6 fill-zinc-300" />
+              </Link>
+            </Button>
+          ))}
         </CardFooter>
       )}
     </Card>
