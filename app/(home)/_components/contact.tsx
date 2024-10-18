@@ -26,7 +26,6 @@ import {
 import Link from "next/link"
 import { toast } from "sonner"
 import emailjs from "emailjs-com"
-import { useState } from "react"
 import { AiOutlineLoading3Quarters } from "react-icons/ai"
 
 const contactSchema = z.object({
@@ -35,8 +34,9 @@ const contactSchema = z.object({
   message: z.string().min(1, "Mensagem é obrigatório"),
 })
 
+type ContactSchema = z.infer<typeof contactSchema>
+
 const Contact = () => {
-  const [isLoading, setIsLoading] = useState(false) // Estado para controlar o carregamento
   const form = useForm({
     shouldUnregister: true,
     resolver: zodResolver(contactSchema),
@@ -51,32 +51,32 @@ const Contact = () => {
     event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     const textarea = event.target
-    textarea.style.height = "auto" // Redefine a altura para auto para calcular o scrollHeight
-    textarea.style.height = `${textarea.scrollHeight}px` // Define a altura com base no scrollHeight
+    textarea.style.height = "auto"
+    textarea.style.height = `${textarea.scrollHeight}px`
   }
 
-  const onSubmit = async (data: any) => {
-    setIsLoading(true) // Ativa o estado de carregamento
+  const onSubmit = async (data: ContactSchema) => {
+    const templateParams = {
+      name: data.name,
+      email: data.email,
+      message: data.message,
+    }
+
     try {
       const response = await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-        data,
-        process.env.NEXT_PUBLIC_EMAILJS_USER_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ?? "",
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "",
+        templateParams,
+        process.env.NEXT_PUBLIC_EMAILJS_USER_ID,
       )
 
       if (response.status === 200) {
         toast.success("Mensagem enviada com sucesso!")
-        form.setValue("name", "")
-        form.setValue("email", "")
-        form.setValue("message", "")
       } else {
-        throw new Error("Failed to send message")
+        throw new Error("Falha ao enviar a mensagem!")
       }
     } catch (error) {
       toast.error("Ocorreu um erro ao enviar a mensagem.")
-    } finally {
-      setIsLoading(false) // Desativa o estado de carregamento
     }
   }
 
@@ -87,6 +87,7 @@ const Contact = () => {
           <SheetTitle className="text-3xl">Contato</SheetTitle>
           <div className="h-1 w-8 rounded-3xl bg-primary sm:h-2"></div>
         </div>
+
         <SheetDescription>
           Entre em contato ou envie-me um e-mail diretamente para{" "}
           <Link
@@ -107,12 +108,7 @@ const Contact = () => {
               <FormItem className="lg:basis-1/2">
                 <FormLabel>Nome</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    value={field.value}
-                    type="text"
-                    placeholder="Seu nome"
-                  />
+                  <Input {...field} placeholder="Seu nome" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -126,12 +122,7 @@ const Contact = () => {
               <FormItem className="basis-1/2">
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    value={field.value}
-                    type="email"
-                    placeholder="Seu email"
-                  />
+                  <Input {...field} type="email" placeholder="Seu email" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -147,7 +138,6 @@ const Contact = () => {
                 <FormControl>
                   <Textarea
                     {...field}
-                    value={field.value}
                     placeholder="Escreva sua mensagem aqui..."
                     className="min-h-32 resize-none [&::-webkit-scrollbar]:hidden"
                     onInput={handleTextareaResize} // Chama a função para redimensionar ao digitar
@@ -175,10 +165,7 @@ const Contact = () => {
               disabled={form.formState.isSubmitting}
             >
               {form.formState.isSubmitting ? (
-                <AiOutlineLoading3Quarters
-                  size={18}
-                  className={`animate-spin ${isLoading ? "animate-spin" : ""}`}
-                />
+                <AiOutlineLoading3Quarters size={18} className="animate-spin" />
               ) : (
                 <Send size={18} />
               )}

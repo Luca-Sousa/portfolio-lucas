@@ -26,7 +26,6 @@ import {
   FormDescription,
 } from "@/app/_components/ui/form"
 import { Input } from "@/app/_components/ui/input"
-import { Label } from "@/app/_components/ui/label"
 import {
   Select,
   SelectContent,
@@ -42,10 +41,9 @@ import { useEdgeStore } from "@/app/_lib/edgestore"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ProjectStatus, Technology } from "@prisma/client"
 import { PanelLeftCloseIcon, Loader2Icon, FilePlus2 } from "lucide-react"
-import { revalidatePath } from "next/cache"
 import Image from "next/image"
 import { useEffect, useState } from "react"
-import { FormProvider, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 interface UpsertProductDialogContentProps {
