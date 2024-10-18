@@ -15,7 +15,7 @@ const NavbarHomeButton = ({ children, href }: NavbarHomeButtonProps) => {
   return (
     <Button
       variant="secondary"
-      className={`${pathname === href && "text-primary hover:bg-secondary"} w-full justify-start p-0`}
+      className={`${pathname === href && "border-primary text-primary xl:mt-1 xl:border-b-4"} h-full w-full justify-start rounded-none p-0 text-base`}
       asChild
     >
       <Link href={href}>{children}</Link>

@@ -167,17 +167,17 @@ const UpsertProductDialogContent = ({
           onSubmit={form.handleSubmit(handleSubmitProject)}
           className="space-y-2"
         >
-          <div className="flex w-full gap-4">
+          <div className="flex gap-4">
             <FormField
               control={form.control}
               name="imageURL"
               render={({ field }) => (
-                <FormItem className="w-full max-w-xs">
+                <FormItem className="h-fit w-full max-w-md">
                   <FormLabel>Imagem do Projeto</FormLabel>
-                  <FormControl className="relative my-4 h-64 w-96">
+                  <FormControl className="relative mx-auto my-2">
                     <SingleImageDropzone
-                      width={300}
-                      height={300}
+                      width={400}
+                      height={250}
                       value={file || field.value}
                       onChange={(file) => handleFileChange(file as File)}
                     />
@@ -187,13 +187,13 @@ const UpsertProductDialogContent = ({
               )}
             />
 
-            <div className="w-full px-2">
+            <div className="mb-2 flex flex-1 flex-col justify-between">
               <div className="flex gap-3">
                 <FormField
                   control={form.control}
                   name="title"
                   render={({ field }) => (
-                    <FormItem className="flex-1">
+                    <FormItem className="h-fit flex-1">
                       <FormLabel>Título do Projeto</FormLabel>
                       <FormControl>
                         <Input placeholder="Meu Projeto" {...field} />
@@ -247,7 +247,7 @@ const UpsertProductDialogContent = ({
                       <Textarea
                         {...field}
                         placeholder="Descrição do Projeto..."
-                        className="min-h-56 resize-none"
+                        className="min-h-40 resize-none"
                         // onInput={handleTextareaResize}
                       />
                     </FormControl>
@@ -258,12 +258,12 @@ const UpsertProductDialogContent = ({
             </div>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             <FormField
               control={form.control}
               name="technologies"
               render={() => (
-                <FormItem className="basis-1/2">
+                <FormItem className="w-full max-w-md">
                   <div className="mb-4">
                     <FormLabel className="text-base">Tecnologias</FormLabel>
                     <FormDescription>
@@ -332,7 +332,7 @@ const UpsertProductDialogContent = ({
               )}
             />
 
-            <div className="basis-1/2 space-y-5">
+            <div className="flex-1 space-y-2">
               <FormField
                 control={form.control}
                 name="liveURL"
@@ -361,7 +361,7 @@ const UpsertProductDialogContent = ({
                 )}
               />
 
-              <DialogFooter className="flex items-end justify-end gap-3">
+              <DialogFooter className="flex items-end justify-end gap-3 pt-4">
                 <DialogClose asChild>
                   <Button
                     type="reset"

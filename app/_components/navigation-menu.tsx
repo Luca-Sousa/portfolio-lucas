@@ -8,6 +8,7 @@ import {
   NavigationMenuList,
 } from "./ui/navigation-menu"
 import { Sheet, SheetTrigger } from "./ui/sheet"
+import { useState } from "react"
 
 interface NavigationMenuItemsProps {
   active: string
@@ -18,6 +19,8 @@ const NavigationMenuItems = ({
   active,
   handleClick,
 }: NavigationMenuItemsProps) => {
+  const [sheetIsOpen, setSheetIsOpen] = useState<boolean>(false)
+
   const MenuItems = [
     { label: "sobre" },
     { label: "resumo" },
@@ -42,7 +45,7 @@ const NavigationMenuItems = ({
             </NavigationMenuLink>
           </NavigationMenuItem>
         ))}
-        <Sheet>
+        <Sheet open={sheetIsOpen} onOpenChange={setSheetIsOpen}>
           <SheetTrigger asChild>
             <Button
               variant={"default"}
@@ -52,7 +55,7 @@ const NavigationMenuItems = ({
               Contato
             </Button>
           </SheetTrigger>
-          <Contact />
+          <Contact onSuccess={() => setSheetIsOpen(false)} />
         </Sheet>
       </NavigationMenuList>
     </NavigationMenu>
