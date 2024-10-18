@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import { Toaster } from "sonner"
 import SidebarDashboard from "./_components/sidebar-dashboard"
 import { EdgeStoreProvider } from "../_lib/edgestore"
 
@@ -27,7 +26,6 @@ export default function RootLayout({
             <SidebarDashboard />
             {children}
           </div>
-          <Toaster />
         </EdgeStoreProvider>
       </body>
     </html>

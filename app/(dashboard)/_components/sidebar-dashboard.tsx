@@ -44,7 +44,7 @@ const SidebarDashboard = async () => {
         <SidebarDashboardButton href="/dashboard/kanban">
           <FolderKanbanIcon size={20} />
           Kanban
-          <span className="ml-auto inline-flex items-center justify-center rounded-full bg-gray-100 px-2 text-sm font-medium text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+          <span className="ml-auto inline-flex items-center justify-center rounded-full bg-gray-700 px-2 text-sm font-medium text-gray-300">
             Pro
           </span>
         </SidebarDashboardButton>
@@ -52,7 +52,7 @@ const SidebarDashboard = async () => {
         <SidebarDashboardButton href="/dashboard/inbox">
           <InboxIcon size={20} />
           Inbox
-          <span className="ml-auto inline-flex h-3 w-3 items-center justify-center rounded-full bg-blue-100 p-3 text-sm font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+          <span className="ml-auto inline-flex h-3 w-3 items-center justify-center rounded-full bg-blue-900 p-3 text-sm font-medium text-blue-300">
             3
           </span>
         </SidebarDashboardButton>
