@@ -4,9 +4,11 @@ import { CardContent, CardHeader, CardTitle } from "@/app/_components/ui/card"
 import { getProjects } from "@/app/_data_access/get-projects"
 import { ProjectStatus } from "@prisma/client"
 import React, { useEffect, useRef, useState } from "react"
-import CarouselNavigationButton from "./_components/carousel-navigation-button"
 import ProjectItem from "./_components/project-item"
 import { Project } from "@/app/_types/types"
+import CarouselNavigation from "./_components/carousel-navigation"
+import { Skeleton } from "@/app/_components/ui/skeleton"
+import { AiOutlineLoading3Quarters } from "react-icons/ai"
 
 const Projects = () => {
   const finalizadoRef = useRef<HTMLDivElement | null>(null)
@@ -21,6 +23,7 @@ const Projects = () => {
   const [showRightArrowDev, setShowRightArrowDev] = useState(false)
   const [projects, setProjects] = useState<Project[]>([])
   const [dataLoaded, setDataLoaded] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const checkOverflow = (
@@ -88,6 +91,7 @@ const Projects = () => {
       const fetchedProjects = await getProjects({})
       setProjects(fetchedProjects)
       setDataLoaded(true)
+      setLoading(false)
     }
 
     fetchProjects()
@@ -115,154 +119,160 @@ const Projects = () => {
       </CardHeader>
 
       <CardContent className="space-y-6">
-        {filteredProjects.finalizado.length > 0 && (
-          <div className="relative space-y-3">
-            <h2 className="text-sm font-bold uppercase text-gray-400">
-              Finalizados
-            </h2>
-            <div
-              ref={finalizadoRef}
-              className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
-            >
-              {filteredProjects.finalizado.map((project) => (
-                <ProjectItem
-                  key={project.id}
-                  setDataLoaded={setDataLoaded}
-                  project={project}
-                />
-              ))}
-            </div>
-
-            {dataLoaded && (
-              <>
-                <CarouselNavigationButton
-                  direction="left"
-                  onClick={() =>
-                    scroll(
-                      finalizadoRef,
-                      "left",
-                      setShowLeftArrowFinalizado,
-                      setShowRightArrowFinalizado,
-                    )
-                  }
-                  show={showLeftArrowFinalizado}
-                />
-
-                <CarouselNavigationButton
-                  direction="right"
-                  onClick={() =>
-                    scroll(
-                      finalizadoRef,
-                      "right",
-                      setShowLeftArrowFinalizado,
-                      setShowRightArrowFinalizado,
-                    )
-                  }
-                  show={showRightArrowFinalizado}
-                />
-              </>
-            )}
+        {loading ? (
+          <div className="flex gap-3">
+            {Array.from({ length: 5 }, (_, index) => (
+              <Skeleton
+                key={index}
+                className="h-[400px] w-full min-w-52 max-w-52 rounded-2xl"
+              >
+                <span className="flex h-full animate-pulse items-center justify-center gap-3 bg-secondary/50 text-sm text-secondary-foreground">
+                  <AiOutlineLoading3Quarters
+                    size={18}
+                    className="animate-spin"
+                  />
+                  Carregando...
+                </span>
+              </Skeleton>
+            ))}
           </div>
+        ) : (
+          <>
+            {filteredProjects.finalizado.length > 0 && (
+              <div className="relative space-y-3">
+                <h2 className="text-sm font-bold uppercase text-gray-400">
+                  Finalizados
+                </h2>
+                <div
+                  ref={finalizadoRef}
+                  className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
+                >
+                  {filteredProjects.finalizado.map((project) => (
+                    <ProjectItem
+                      key={project.id}
+                      setDataLoaded={setDataLoaded}
+                      project={project}
+                    />
+                  ))}
+                </div>
+
+                {dataLoaded && (
+                  <CarouselNavigation
+                    refElement={finalizadoRef}
+                    scroll={scroll}
+                    showLeftArrow={showLeftArrowFinalizado}
+                    showRightArrow={showRightArrowFinalizado}
+                    setShowLeftArrow={setShowLeftArrowFinalizado}
+                    setShowRightArrow={setShowRightArrowFinalizado}
+                  />
+                )}
+              </div>
+            )}
+          </>
         )}
 
-        {filteredProjects.emAtt.length > 0 && (
-          <div className="relative space-y-3">
-            <h2 className="text-sm font-bold uppercase text-gray-400">
-              Em Atualização
-            </h2>
-            <div
-              ref={attRef}
-              className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
-            >
-              {filteredProjects.emAtt.map((project) => (
-                <ProjectItem
-                  key={project.id}
-                  setDataLoaded={setDataLoaded}
-                  project={project}
-                />
-              ))}
-            </div>
-
-            {dataLoaded && (
-              <>
-                <CarouselNavigationButton
-                  direction="left"
-                  onClick={() =>
-                    scroll(
-                      attRef,
-                      "left",
-                      setShowLeftArrowAtt,
-                      setShowRightArrowAtt,
-                    )
-                  }
-                  show={showLeftArrowAtt}
-                />
-
-                <CarouselNavigationButton
-                  direction="right"
-                  onClick={() =>
-                    scroll(
-                      attRef,
-                      "right",
-                      setShowLeftArrowAtt,
-                      setShowRightArrowAtt,
-                    )
-                  }
-                  show={showRightArrowAtt}
-                />
-              </>
-            )}
+        {loading ? (
+          <div className="flex gap-3">
+            {Array.from({ length: 5 }, (_, index) => (
+              <Skeleton
+                key={index}
+                className="h-[400px] w-full min-w-52 max-w-52 rounded-2xl"
+              >
+                <span className="flex h-full animate-pulse items-center justify-center gap-3 bg-secondary/50 text-sm text-secondary-foreground">
+                  <AiOutlineLoading3Quarters
+                    size={18}
+                    className="animate-spin"
+                  />
+                  Carregando...
+                </span>
+              </Skeleton>
+            ))}
           </div>
+        ) : (
+          <>
+            {filteredProjects.emAtt.length > 0 && (
+              <div className="relative space-y-3">
+                <h2 className="text-sm font-bold uppercase text-gray-400">
+                  Em Atualização
+                </h2>
+                <div
+                  ref={attRef}
+                  className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
+                >
+                  {filteredProjects.emAtt.map((project) => (
+                    <ProjectItem
+                      key={project.id}
+                      setDataLoaded={setDataLoaded}
+                      project={project}
+                    />
+                  ))}
+                </div>
+
+                {dataLoaded && (
+                  <CarouselNavigation
+                    refElement={attRef}
+                    scroll={scroll}
+                    showLeftArrow={showLeftArrowAtt}
+                    showRightArrow={showRightArrowAtt}
+                    setShowLeftArrow={setShowLeftArrowAtt}
+                    setShowRightArrow={setShowRightArrowAtt}
+                  />
+                )}
+              </div>
+            )}
+          </>
         )}
 
-        {filteredProjects.emDev.length > 0 && (
-          <div className="relative space-y-3">
-            <h2 className="text-sm font-bold uppercase text-gray-400">
-              Em Desenvolvimento
-            </h2>
-            <div
-              ref={devRef}
-              className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
-            >
-              {filteredProjects.emDev.map((project) => (
-                <ProjectItem
-                  key={project.id}
-                  setDataLoaded={setDataLoaded}
-                  project={project}
-                />
-              ))}
-            </div>
-
-            {dataLoaded && (
-              <>
-                <CarouselNavigationButton
-                  direction="left"
-                  onClick={() =>
-                    scroll(
-                      devRef,
-                      "left",
-                      setShowLeftArrowDev,
-                      setShowRightArrowDev,
-                    )
-                  }
-                  show={showLeftArrowDev}
-                />
-
-                <CarouselNavigationButton
-                  direction="right"
-                  onClick={() =>
-                    scroll(
-                      devRef,
-                      "right",
-                      setShowLeftArrowDev,
-                      setShowRightArrowDev,
-                    )
-                  }
-                  show={showRightArrowDev}
-                />
-              </>
-            )}
+        {loading ? (
+          <div className="flex gap-3">
+            {Array.from({ length: 5 }, (_, index) => (
+              <Skeleton
+                key={index}
+                className="h-[400px] w-full min-w-52 max-w-52 rounded-2xl"
+              >
+                <span className="flex h-full animate-pulse items-center justify-center gap-3 bg-secondary/50 text-sm text-secondary-foreground">
+                  <AiOutlineLoading3Quarters
+                    size={18}
+                    className="animate-spin"
+                  />
+                  Carregando...
+                </span>
+              </Skeleton>
+            ))}
           </div>
+        ) : (
+          <>
+            {filteredProjects.emDev.length > 0 && (
+              <div className="relative space-y-3">
+                <h2 className="text-sm font-bold uppercase text-gray-400">
+                  Em Desenvolvimento
+                </h2>
+                <div
+                  ref={devRef}
+                  className="flex gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden"
+                >
+                  {filteredProjects.emDev.map((project) => (
+                    <ProjectItem
+                      key={project.id}
+                      setDataLoaded={setDataLoaded}
+                      project={project}
+                    />
+                  ))}
+                </div>
+
+                {dataLoaded && (
+                  <CarouselNavigation
+                    refElement={devRef}
+                    scroll={scroll}
+                    showLeftArrow={showLeftArrowDev}
+                    showRightArrow={showRightArrowDev}
+                    setShowLeftArrow={setShowLeftArrowDev}
+                    setShowRightArrow={setShowRightArrowDev}
+                  />
+                )}
+              </div>
+            )}
+          </>
         )}
       </CardContent>
     </>
