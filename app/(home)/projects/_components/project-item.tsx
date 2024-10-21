@@ -22,8 +22,6 @@ import { motion } from "framer-motion"
 import { FaGithub } from "react-icons/fa"
 import { IoLogoVercel } from "react-icons/io5"
 import Link from "next/link"
-import { Skeleton } from "../../../_components/ui/skeleton"
-import { AiOutlineLoading3Quarters } from "react-icons/ai"
 import { ProjectStatus } from "@prisma/client"
 import { Project } from "../../../_types/types"
 
@@ -97,7 +95,9 @@ const ProjectItem = ({ project, setDataLoaded }: ProjectItemProps) => {
             )}
 
             <p className="text-xs font-semibold">
-              {project.status.replace(/_/g, " ")}
+              {project.status === "Finalizado" && <span>Finalizado</span>}
+              {project.status === "Em_Att" && <span>Atualização</span>}
+              {project.status === "Em_Dev" && <span>Desenvolvimento</span>}
             </p>
           </Badge>
         </div>
