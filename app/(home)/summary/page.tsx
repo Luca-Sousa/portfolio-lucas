@@ -134,7 +134,7 @@ const Summary = () => {
                   técnica, ética e humanista, condizentes com a especificidade
                   da área de Ciência da Computação, aliado à formação prática,
                   através do desenvolvimento de projetos e do domínio de
-                  tecnologias computacionais
+                  tecnologias computacionais.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -150,7 +150,7 @@ const Summary = () => {
           <Card>
             <CardHeader>
               <CardTitle className="text-base text-muted-foreground">
-                Em busca da minha primeira experiência como Desenvolvedor...
+                Em busca da minha primeira experiência como Desenvolvedor Web...
               </CardTitle>
             </CardHeader>
           </Card>

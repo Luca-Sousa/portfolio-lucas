@@ -99,7 +99,7 @@ const SidebarHome = () => {
 
             <div className="rounded-xl bg-zinc-800">
               <p className="px-2 py-0.5 text-sm text-zinc-300 xl:px-3 xl:py-1.5">
-                Desenvolvedor FrontEnd
+                Desenvolvedor Web
               </p>
             </div>
 

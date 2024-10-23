@@ -1,29 +1,16 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { ArrowRight, StarIcon } from "lucide-react"
+import { useEffect } from "react"
+import { StarIcon } from "lucide-react"
 import { Button } from "../../../_components/ui/button"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../../../_components/ui/dialog"
-import { AspectRatio } from "../../../_components/ui/aspect-ratio"
 import { Badge } from "../../../_components/ui/badge"
 import { MdDeveloperBoard } from "react-icons/md"
 import { GrUpdate } from "react-icons/gr"
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { FaGithub } from "react-icons/fa"
-import { IoLogoVercel } from "react-icons/io5"
-import Link from "next/link"
 import { ProjectStatus } from "@prisma/client"
 import { Project } from "../../../_types/types"
+import { useRouter } from "next/navigation"
 
 interface ProjectItemProps {
   project: Project
@@ -34,6 +21,8 @@ const ProjectItem = ({ project, setDataLoaded }: ProjectItemProps) => {
   useEffect(() => {
     setDataLoaded(true)
   }, [project, setDataLoaded])
+
+  const router = useRouter()
 
   return (
     <div className="flex gap-4">
@@ -127,114 +116,16 @@ const ProjectItem = ({ project, setDataLoaded }: ProjectItemProps) => {
             </div>
           </div>
 
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button
-                className="w-full rounded-xl bg-gray-700 px-4 hover:bg-gray-600"
-                variant="ghost"
-              >
-                Ver Projeto
-              </Button>
-            </DialogTrigger>
-
-            <DialogContent className="mx-auto flex w-full max-w-xs flex-col gap-6 px-4 min-[450px]:max-w-sm sm:max-w-lg md:max-w-2xl lg:max-w-4xl lg:flex-row xl:max-w-6xl">
-              <AspectRatio
-                ratio={16 / 9}
-                className="mt-4 size-full flex-1 bg-muted lg:mt-0 lg:flex-1"
-              >
-                <Image
-                  src={project.imageURL}
-                  alt={project.title}
-                  fill
-                  className="rounded-md object-cover"
-                />
-              </AspectRatio>
-
-              <div className="mt-3 flex flex-col gap-4 lg:mt-5 lg:w-64 xl:w-96">
-                <DialogHeader className="space-y-4">
-                  <DialogTitle className="text-primary">
-                    {project.title}
-                  </DialogTitle>
-                  <DialogDescription>{project.description}</DialogDescription>
-                </DialogHeader>
-
-                <div className="flex flex-wrap items-center justify-center gap-3 py-3">
-                  {project.technologies.map((tech) => (
-                    <div key={tech.id} className="flex gap-1">
-                      <Image
-                        alt={`Logo ${tech.name}`}
-                        src={tech.iconURL}
-                        width={24}
-                        height={24}
-                      />
-                      <p className="text-sm">{tech.name}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex flex-col gap-4 md:flex-row lg:h-full lg:flex-col lg:justify-between">
-                  <div className="flex w-full gap-4 lg:flex-col">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.8 }}
-                      className="w-full"
-                    >
-                      <Button
-                        size={"lg"}
-                        className="w-full overflow-hidden bg-cyan-600 px-0 hover:bg-cyan-600 xl:w-[90%]"
-                        asChild
-                      >
-                        <Link target="_blank" href={project.repositoryURL}>
-                          <div className="flex flex-1 items-center justify-center gap-2 uppercase">
-                            <FaGithub size={20} />
-                            Github
-                          </div>
-                          <div className="hidden h-full w-10 items-center justify-center bg-orange-400 sm:flex lg:w-14">
-                            <ArrowRight />
-                          </div>
-                        </Link>
-                      </Button>
-                    </motion.button>
-
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.8 }}
-                      className="w-full"
-                    >
-                      <Button
-                        size={"lg"}
-                        className="w-full overflow-hidden bg-cyan-600 px-0 hover:bg-cyan-600 xl:w-[90%]"
-                        asChild
-                      >
-                        <Link target="_blank" href={project.liveURL}>
-                          <div className="flex flex-1 items-center justify-center gap-2 uppercase">
-                            <IoLogoVercel size={20} />
-                            Vercel
-                          </div>
-                          <div className="hidden h-full w-10 items-center justify-center bg-orange-400 sm:flex lg:w-14">
-                            <ArrowRight />
-                          </div>
-                        </Link>
-                      </Button>
-                    </motion.button>
-                  </div>
-
-                  <DialogFooter className="w-full">
-                    <DialogClose asChild>
-                      <Button
-                        size={"lg"}
-                        className="w-full"
-                        type="button"
-                        variant="destructive"
-                      >
-                        Fechar
-                      </Button>
-                    </DialogClose>
-                  </DialogFooter>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <Button
+            className="w-full rounded-xl bg-gray-700 px-4 hover:bg-gray-600"
+            variant="ghost"
+            onClick={() => {
+              router.push(`/projects/${project.id}`)
+              project
+            }}
+          >
+            Ver Projeto
+          </Button>
         </div>
       </div>
     </div>

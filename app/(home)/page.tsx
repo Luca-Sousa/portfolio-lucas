@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "../_components/ui/card"
 import Image from "next/image"
+import RedirectToProjectsButton from "./_components/redirect-to-projects-button"
 
 const Home = () => {
   return (
@@ -18,18 +19,18 @@ const Home = () => {
         </div>
 
         <CardDescription>
-          Sou um desenvolvedor FrontEnd com a missão de criar experiências
-          digitais agradáveis e intuitivas. Estou sempre me desafiando com novos
-          projetos e buscando feedback na comunidade de programação, além de
-          compartilhar meus conhecimentos. Atualmente, estou em busca do meu
-          primeiro trabalho como desenvolvedor FrontEnd. Meu objetivo é se
-          tornar desenvolvedor Full-Stack.
+          Sou um Desenvolvedor Web com a missão de criar experiências digitais
+          agradáveis e intuitivas. Estou sempre me desafiando com novos projetos
+          e buscando feedback na comunidade de programação, além de compartilhar
+          meus conhecimentos. Atualmente, estou em busca do meu primeiro
+          trabalho como desenvolvedor web. Meu objetivo é se tornar
+          desenvolvedor Full-Stack.
         </CardDescription>
 
         <CardDescription>
-          Atualmente sou graduando de Ciências da Computação, no{" "}
+          Atualmente sou graduando de Ciências da Computação (5° Semestre), no{" "}
           <Link
-            className="text-primary"
+            className="text-primary hover:underline"
             target="_blank"
             href={"https://ifce.edu.br/"}
           >
@@ -62,38 +63,33 @@ const Home = () => {
           , e canais de programação e tecnologias no YouTube, dentre outras
           plataformas.
         </CardDescription>
-
-        <CardContent className="space-y-4 px-0">
-          <h3 className="text-lg font-semibold">Desenvolvendo: </h3>
-
-          <Card className="rounded-2xl text-center lg:max-w-[50%]">
-            <CardHeader className="flex items-center justify-center">
-              <Image
-                alt="Logo Web Development"
-                src="/web-development-icon.svg"
-                width={50}
-                height={50}
-              />
-
-              <CardTitle className="text-base">Web Development</CardTitle>
-
-              <CardDescription className="text-gray-300">
-                Tenho desenvolvido aplicações web a nível Júnior e venho
-                buscando desenvolver mais ainda minhas skills.
-              </CardDescription>
-            </CardHeader>
-
-            {/* <CardContent className="flex justify-end">
-              <Button
-                variant={"secondary"}
-                className="ring-primary hover:ring-2"
-              >
-                Ver Projetos
-              </Button>
-            </CardContent> */}
-          </Card>
-        </CardContent>
       </CardHeader>
+
+      <CardContent className="space-y-4">
+        <h3 className="text-lg font-semibold">Desenvolvendo: </h3>
+
+        <Card className="rounded-2xl text-center lg:max-w-[50%]">
+          <CardHeader className="flex items-center justify-center">
+            <Image
+              alt="Logo Web Development"
+              src="/web-development-icon.svg"
+              width={50}
+              height={50}
+            />
+
+            <CardTitle className="text-base">Web Development</CardTitle>
+
+            <CardDescription className="text-gray-300">
+              Tenho desenvolvido aplicações web a nível Júnior e venho buscando
+              desenvolver mais ainda minhas skills.
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="flex justify-end">
+            <RedirectToProjectsButton />
+          </CardContent>
+        </Card>
+      </CardContent>
     </>
   )
 }
