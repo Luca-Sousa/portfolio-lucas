@@ -144,7 +144,7 @@ const Contact = ({ onSuccess }: ContactProps) => {
                   <Textarea
                     {...field}
                     placeholder="Escreva sua mensagem aqui..."
-                    className="min-h-32 resize-none [&::-webkit-scrollbar]:hidden"
+                    className="max-h-72 min-h-32 resize-none [&::-webkit-scrollbar]:hidden"
                     onInput={handleTextareaResize}
                   />
                 </FormControl>
@@ -153,8 +153,8 @@ const Contact = ({ onSuccess }: ContactProps) => {
             )}
           />
 
-          <SheetFooter className="flex-row gap-3">
-            <SheetClose asChild className="basis-2/5">
+          <SheetFooter className="flex-row">
+            <SheetClose asChild className="basis-1/3">
               <Button
                 variant="destructive"
                 type="reset"
@@ -166,7 +166,7 @@ const Contact = ({ onSuccess }: ContactProps) => {
 
             <Button
               type="submit"
-              className="flex w-full basis-3/5 items-center gap-2 text-secondary"
+              className="flex w-full basis-2/3 items-center gap-2 text-secondary"
               disabled={form.formState.isSubmitting}
             >
               {form.formState.isSubmitting ? (
