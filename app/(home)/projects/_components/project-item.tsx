@@ -91,17 +91,17 @@ const ProjectItem = ({ project, setDataLoaded }: ProjectItemProps) => {
           </Badge>
         </div>
 
-        <div className="space-y-3">
+        <div className="flex flex-1 flex-col justify-between space-y-3">
           <div className="space-y-3 px-1.5">
             <h3 className="truncate text-center text-sm font-bold text-primary">
               {project.title}
             </h3>
 
-            <p className="line-clamp-4 min-h-14 text-left text-xs text-zinc-400">
+            <p className="line-clamp-4 max-h-16 min-h-16 text-left text-xs text-zinc-400">
               {project.description}
             </p>
 
-            <div className="flex items-center gap-3 overflow-y-auto [&::-webkit-scrollbar]:hidden">
+            <div className="grid grid-cols-5 items-center gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
               {project.technologies.map((tech) => (
                 <Image
                   title={tech.name}

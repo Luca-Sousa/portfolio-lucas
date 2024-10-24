@@ -13,6 +13,8 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { FaGithub } from "react-icons/fa"
 import { IoLogoVercel } from "react-icons/io5"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
 
 interface ProjectPageProps {
   params: { id: string }
@@ -35,7 +37,15 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
         </Button>
 
         <div className="space-y-3">
-          <CardTitle className="sm:text-3xl">{project.title}</CardTitle>
+          <div>
+            <CardTitle className="sm:text-3xl">{project.title}</CardTitle>
+            <span className="text-sm text-muted-foreground">
+              Última Atualização:{" "}
+              {format(project.updatedAt, "d 'de' MMMM 'de' yyyy", {
+                locale: ptBR,
+              })}
+            </span>
+          </div>
           <div className="h-1 w-8 rounded-3xl bg-primary sm:h-2"></div>
         </div>
 
@@ -55,12 +65,13 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
         <div className="flex flex-col gap-4 lg:mx-auto lg:max-w-[600px]">
           <div className="flex flex-wrap items-center justify-center gap-3 py-3">
             {project.technologies.map((tech) => (
-              <div key={tech.id} className="flex gap-1">
+              <div key={tech.id} className="flex items-center gap-1">
                 <Image
                   alt={`Logo ${tech.name}`}
                   src={tech.iconURL}
-                  width={24}
-                  height={24}
+                  width={16}
+                  height={16}
+                  className=""
                 />
                 <p className="text-sm">{tech.name}</p>
               </div>
