@@ -71,7 +71,6 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
                   src={tech.iconURL}
                   width={16}
                   height={16}
-                  className=""
                 />
                 <p className="text-sm">{tech.name}</p>
               </div>
