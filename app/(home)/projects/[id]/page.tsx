@@ -77,10 +77,10 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
             ))}
           </div>
 
-          <div className="mx-auto flex w-full max-w-72 flex-col gap-4 md:max-w-[430px] md:flex-row lg:max-w-full">
+          <div className="mx-auto flex w-full max-w-72 flex-col gap-4 sm:max-w-[430px] sm:flex-row lg:max-w-full">
             <Button
               size={"lg"}
-              className="w-full overflow-hidden bg-cyan-600 px-0 hover:bg-cyan-600 xl:w-[90%]"
+              className="w-full overflow-hidden bg-cyan-600 px-0 hover:bg-cyan-600"
               asChild
             >
               <Link target="_blank" href={project.repositoryURL}>
@@ -88,7 +88,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
                   <FaGithub size={20} />
                   Github
                 </div>
-                <div className="hidden h-full w-10 items-center justify-center bg-orange-400 sm:flex lg:w-14">
+                <div className="flex h-full w-10 items-center justify-center bg-orange-400 lg:w-14">
                   <ArrowRight />
                 </div>
               </Link>
@@ -96,7 +96,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
 
             <Button
               size={"lg"}
-              className="w-full overflow-hidden bg-cyan-600 px-0 hover:bg-cyan-600 xl:w-[90%]"
+              className="w-full overflow-hidden bg-cyan-600 px-0 hover:bg-cyan-600"
               asChild
             >
               <Link target="_blank" href={project.liveURL}>
@@ -104,7 +104,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
                   <IoLogoVercel size={20} />
                   Vercel
                 </div>
-                <div className="hidden h-full w-10 items-center justify-center bg-orange-400 sm:flex lg:w-14">
+                <div className="flex h-full w-10 items-center justify-center bg-orange-400 lg:w-14">
                   <ArrowRight />
                 </div>
               </Link>

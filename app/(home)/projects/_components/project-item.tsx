@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect } from "react"
 import { StarIcon } from "lucide-react"
 import { Button } from "../../../_components/ui/button"
 import { Badge } from "../../../_components/ui/badge"
@@ -14,19 +13,14 @@ import { useRouter } from "next/navigation"
 
 interface ProjectItemProps {
   project: Project
-  setDataLoaded: (loaded: boolean) => void
 }
 
-const ProjectItem = ({ project, setDataLoaded }: ProjectItemProps) => {
-  useEffect(() => {
-    setDataLoaded(true)
-  }, [project, setDataLoaded])
-
+const ProjectItem = ({ project }: ProjectItemProps) => {
   const router = useRouter()
 
   return (
     <div className="flex gap-4">
-      <div className="flex w-full min-w-52 max-w-52 flex-col gap-3 overflow-hidden rounded-2xl bg-secondary p-1.5">
+      <div className="flex w-full max-w-full flex-col gap-3 overflow-hidden rounded-2xl bg-secondary p-1.5">
         <div className="group relative flex h-48 w-full items-center justify-center overflow-hidden rounded-t-2xl">
           <motion.div
             className="relative h-full w-full"
@@ -101,7 +95,7 @@ const ProjectItem = ({ project, setDataLoaded }: ProjectItemProps) => {
               {project.description}
             </p>
 
-            <div className="grid grid-cols-5 items-center gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+            <div className="flex flex-wrap items-center justify-center gap-3">
               {project.technologies.map((tech) => (
                 <Image
                   title={tech.name}

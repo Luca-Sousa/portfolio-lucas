@@ -42,6 +42,7 @@ const Home = () => {
           online, como o{" "}
           <Link
             className="hover:text-primary hover:underline"
+            target="_blank"
             href={"https://lp.fullstackclub.com.br/"}
           >
             Full Stack Club
@@ -49,6 +50,7 @@ const Home = () => {
           ,{" "}
           <Link
             className="hover:text-primary hover:underline"
+            target="_blank"
             href={"https://www.rocketseat.com.br/"}
           >
             RocketSeat
@@ -56,6 +58,7 @@ const Home = () => {
           ,{" "}
           <Link
             className="hover:text-primary hover:underline"
+            target="_blank"
             href={"https://cursos.dankicode.com/"}
           >
             Danki Code
