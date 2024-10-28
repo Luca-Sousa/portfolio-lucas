@@ -59,7 +59,6 @@ const UpsertProductDialogContent = ({
   const [file, setFile] = useState<File>()
   const [url, setUrl] = useState<string>()
   const [technologies, setTechnologies] = useState<Technology[]>([])
-  const [selectedTechnologies, setSelectedTechnologies] = useState<string[]>([])
   const [status, setStatus] = useState<ProjectStatus[]>([])
 
   const form = useForm({
@@ -137,7 +136,6 @@ const UpsertProductDialogContent = ({
       await upsertProject({
         ...data,
         id: defaultValues?.id,
-        technologies: selectedTechnologies,
       })
 
       setUrl(undefined)
@@ -210,7 +208,6 @@ const UpsertProductDialogContent = ({
                     <FormItem>
                       <FormLabel>Status</FormLabel>
                       <Select
-                        {...field}
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
@@ -283,35 +280,22 @@ const UpsertProductDialogContent = ({
                                 <FormControl>
                                   <Checkbox
                                     className="data-[state=checked]:text-black"
-                                    checked={
-                                      field.value?.includes(tech.id) || false
-                                    }
+                                    checked={field.value?.includes(tech.id)}
                                     onCheckedChange={(checked) => {
-                                      setSelectedTechnologies((prev) => {
-                                        // Atualiza a lista de tecnologias selecionadas
-                                        const updatedTechnologies = checked
-                                          ? [...prev, tech.id] // Adiciona a tecnologia se marcada
-                                          : prev.filter((id) => id !== tech.id) // Remove a tecnologia se desmarcada
-
-                                        // Atualiza o valor no formulário via react-hook-form
-                                        form.setValue(
-                                          "technologies",
-                                          updatedTechnologies,
-                                        )
-                                        // Notifica o formulário sobre a mudança para validação do Zod
-                                        field.onChange(updatedTechnologies)
-
-                                        return updatedTechnologies // Retorna o novo estado
-                                      })
+                                      return checked
+                                        ? field.onChange([
+                                            ...field.value,
+                                            tech.id,
+                                          ])
+                                        : field.onChange(
+                                            field.value.filter(
+                                              (value) => value !== tech.id,
+                                            ),
+                                          )
                                     }}
-                                    id={tech.id.toString()}
-                                    {...field}
                                   />
                                 </FormControl>
-                                <FormLabel
-                                  htmlFor={tech.id.toString()}
-                                  className="flex items-center gap-2"
-                                >
+                                <FormLabel className="flex items-center gap-2">
                                   <Image
                                     alt={tech.name}
                                     src={tech.iconURL}
