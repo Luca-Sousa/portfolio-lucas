@@ -15,6 +15,7 @@ import { FaGithub } from "react-icons/fa"
 import { IoLogoVercel } from "react-icons/io5"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
+import RedirectBackProjectsButton from "../_components/redirect-back-projects-button"
 
 interface ProjectPageProps {
   params: { id: string }
@@ -30,11 +31,9 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
   return (
     <>
       <CardHeader className="gap-3">
-        <Button size="icon" variant="ghost" className="rounded-full" asChild>
-          <Link href="/projects" aria-label="Voltar para Projetos">
-            <CircleArrowLeft size={36} className="text-primary" />
-          </Link>
-        </Button>
+        <div>
+          <RedirectBackProjectsButton />
+        </div>
 
         <div className="space-y-3">
           <div>

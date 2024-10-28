@@ -43,4 +43,5 @@ export const upsertProject = async (data: UpsertProjectSchema) => {
   })
 
   revalidatePath("/dashboard/projects")
+  revalidatePath("/projects")
 }
