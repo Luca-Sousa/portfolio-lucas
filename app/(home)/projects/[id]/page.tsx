@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/app/_components/ui/card"
 import { getProjectById } from "@/app/_data_access/get-project-by-id"
-import { ArrowRight, CircleArrowLeft } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"

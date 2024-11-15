@@ -63,9 +63,7 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
   {
     accessorKey: "imageURL",
     header: "",
-    cell: ({ row }) => {
-      const project = row.original
-
+    cell: ({ row: { original: project } }) => {
       return (
         <div className="relative size-12 overflow-hidden rounded-md">
           <Image
@@ -81,13 +79,20 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
   {
     accessorKey: "title",
     header: "Projeto",
+    cell: ({ row: { original: project } }) => {
+      return (
+        <div className="truncate text-sm">
+          {project.title.length > 20
+            ? `${project.title.slice(0, 20)}...`
+            : project.title}
+        </div>
+      )
+    },
   },
   {
     accessorKey: "description",
     header: "Descrição",
-    cell: ({ row }) => {
-      const project = row.original
-
+    cell: ({ row: { original: project } }) => {
       return (
         <div className="truncate text-sm">
           {project.description.length > 50
@@ -110,9 +115,7 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => {
-      const project = row.original
-
+    cell: ({ row: { original: project } }) => {
       return (
         <Badge className="text-secondary">
           {project.status.toString().replace(/_/g, " ")}
@@ -123,9 +126,7 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
   {
     accessorKey: "technologies",
     header: "Tecnologias",
-    cell: ({ row }) => {
-      const project = row.original
-
+    cell: ({ row: { original: project } }) => {
       return (
         <div className="flex items-center gap-2 overflow-x-auto">
           {project.technologies.map((tech) => (
@@ -144,9 +145,7 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
   {
     accessorKey: "liveURL",
     header: "Vercel",
-    cell: ({ row }) => {
-      const project = row.original
-
+    cell: ({ row: { original: project } }) => {
       return (
         <Button variant={"ghost"} asChild>
           <Link target="_blank" href={project.liveURL}>
@@ -159,9 +158,7 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
   {
     accessorKey: "repositoryURL",
     header: "GitHub",
-    cell: ({ row }) => {
-      const project = row.original
-
+    cell: ({ row: { original: project } }) => {
       return (
         <Button variant={"ghost"} asChild>
           <Link target="_blank" href={project.repositoryURL}>
@@ -175,10 +172,9 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
     accessorKey: "Actions",
     id: "actions",
     header: "Ações",
-    cell: ({ row }) => {
+    cell: ({ row: { original: project } }) => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false)
-      const project = row.original
 
       const copyID = () => {
         navigator.clipboard.writeText(project.id)

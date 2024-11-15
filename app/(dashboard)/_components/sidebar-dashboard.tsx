@@ -1,4 +1,21 @@
-import { Card, CardContent, CardHeader } from "@/app/_components/ui/card"
+import Image from "next/image"
+import { getServerSession } from "next-auth"
+import { notFound } from "next/navigation"
+import { authOptions } from "@/app/_lib/auth"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+} from "@/app/_components/ui/sidebar"
+import NavUser from "./nav-user"
+import SidebarDashboardButton from "./sidebar-dashboard-button"
 import {
   CalendarCheckIcon,
   FolderKanbanIcon,
@@ -6,31 +23,104 @@ import {
   LayoutDashboardIcon,
   SquareChartGanttIcon,
 } from "lucide-react"
-import Image from "next/image"
-import SidebarDashboardButton from "./sidebar-dashboard-button"
-import { getServerSession } from "next-auth"
-import { notFound } from "next/navigation"
-import { authOptions } from "@/app/_lib/auth"
+
+const MENU_ITEMS_SIDE_BAR_LABELS = [
+  {
+    title: "Dashboard",
+    url: "/dashboard",
+    icon: <LayoutDashboardIcon size={20} />,
+  },
+  {
+    title: "Projetos",
+    url: "/dashboard/projects",
+    icon: <SquareChartGanttIcon size={20} />,
+  },
+  {
+    title: "Kanban",
+    url: "/dashboard/kanban",
+    badge: "Pro",
+    icon: <FolderKanbanIcon size={20} />,
+  },
+  {
+    title: "Mensagens",
+    url: "/dashboard/inbox",
+    badge: 3,
+    icon: <InboxIcon size={20} />,
+  },
+  {
+    title: "Diário",
+    url: "/dashboard/diario",
+    icon: <CalendarCheckIcon size={20} />,
+  },
+]
 
 const SidebarDashboard = async () => {
   const session = await getServerSession(authOptions)
   if (!session?.user) return notFound()
 
+  const user = {
+    name: session.user.name as string,
+    email: session.user.email as string,
+    image: session.user.image as string,
+  }
+
   return (
-    <Card className="min-h-screen max-w-64 rounded-none" aria-label="Sidebar">
-      <CardHeader className="flex flex-row items-center gap-3">
-        <Image
-          className="rounded-full"
-          src={"/logo.png"}
-          width={32}
-          height={32}
-          alt="Image Logo"
-        />
+    <Sidebar>
+      <SidebarHeader className="py-8">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
+                <Image
+                  className="rounded-full"
+                  src={"/logo.png"}
+                  width={32}
+                  height={32}
+                  alt="Logo"
+                />
+              </div>
 
-        <span>{session.user.name}</span>
-      </CardHeader>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">{user.name}</span>
+                <span className="truncate text-xs">Portifólio</span>
+              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
 
-      <CardContent className="space-y-2 font-medium">
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {MENU_ITEMS_SIDE_BAR_LABELS.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <SidebarDashboardButton href={item.url}>
+                      {item.icon}
+
+                      {item.title}
+                    </SidebarDashboardButton>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarFooter>
+        <NavUser user={user} />
+      </SidebarFooter>
+      <SidebarRail />
+    </Sidebar>
+  )
+}
+
+export default SidebarDashboard
+
+{
+  /* <CardContent className="space-y-2 font-medium">
         <SidebarDashboardButton href="/dashboard">
           <LayoutDashboardIcon size={20} />
           Dashboard
@@ -61,9 +151,5 @@ const SidebarDashboard = async () => {
           <CalendarCheckIcon size={20} />
           Diário
         </SidebarDashboardButton>
-      </CardContent>
-    </Card>
-  )
+      </CardContent> */
 }
-
-export default SidebarDashboard
