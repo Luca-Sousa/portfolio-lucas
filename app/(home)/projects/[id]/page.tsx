@@ -31,28 +31,28 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
 
   return (
     <>
-      <CardHeader className="gap-3">
-        <div>
-          <RedirectBackProjectsButton />
-        </div>
-
-        <div className="space-y-3">
-          <div>
-            <CardTitle className="sm:text-3xl">{project.title}</CardTitle>
-            <span className="text-sm text-muted-foreground">
-              Última Atualização:{" "}
-              {format(project.updatedAt, "d 'de' MMMM 'de' yyyy", {
-                locale: ptBR,
-              })}
-            </span>
-          </div>
-          <div className="h-1 w-8 rounded-3xl bg-primary sm:h-2"></div>
-        </div>
-
-        <CardDescription>{project.description}</CardDescription>
-      </CardHeader>
+      <div className="p-6">
+        <RedirectBackProjectsButton />
+      </div>
 
       <ScrollArea>
+        <CardHeader className="gap-3 pt-0">
+          <div className="space-y-3">
+            <>
+              <CardTitle className="sm:text-3xl">{project.title}</CardTitle>
+              <span className="text-sm text-muted-foreground">
+                Última Atualização:{" "}
+                {format(project.updatedAt, "d 'de' MMMM 'de' yyyy", {
+                  locale: ptBR,
+                })}
+              </span>
+            </>
+            <div className="h-1 w-8 rounded-3xl bg-primary sm:h-2"></div>
+          </div>
+
+          <CardDescription>{project.description}</CardDescription>
+        </CardHeader>
+
         <CardContent className="space-y-5">
           <AspectRatio ratio={16 / 9}>
             <Image
