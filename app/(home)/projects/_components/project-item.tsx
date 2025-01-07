@@ -1,7 +1,6 @@
 "use client"
 
-import { StarIcon } from "lucide-react"
-import { Button } from "../../../_components/ui/button"
+import { FolderOpenDotIcon, StarIcon } from "lucide-react"
 import { Badge } from "../../../_components/ui/badge"
 import { MdDeveloperBoard } from "react-icons/md"
 import { GrUpdate } from "react-icons/gr"
@@ -10,6 +9,14 @@ import { motion } from "framer-motion"
 import { ProjectStatus } from "@prisma/client"
 import { Project } from "../../../_types/types"
 import { useRouter } from "next/navigation"
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/app/_components/ui/card"
+import { Button } from "@/app/_components/ui/button"
 
 interface ProjectItemProps {
   project: Project
@@ -19,26 +26,26 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
   const router = useRouter()
 
   return (
-    <div className="flex gap-4">
-      <div className="flex w-full max-w-full flex-col gap-3 overflow-hidden rounded-2xl bg-secondary p-1.5">
-        <div className="group relative flex h-48 w-full items-center justify-center overflow-hidden rounded-t-2xl">
-          <motion.div
-            className="relative h-full w-full"
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.4 }}
-          >
-            <Image
-              className="object-cover"
-              src={project.imageURL}
-              alt={project.title}
-              fill
-            />
-            <div className="absolute inset-0 flex items-center justify-center bg-card/25 group-hover:bg-card/10"></div>
-          </motion.div>
+    <Card>
+      <div className="px-4 pt-4">
+        <Button
+          title="Ver Projeto"
+          variant={"ghost"}
+          className="relative aspect-square size-full overflow-hidden"
+          onClick={() => {
+            router.push(`/projects/${project.id}`)
+          }}
+        >
+          <Image
+            className="object-left-top"
+            src={project.imageURL}
+            alt={project.title}
+            fill
+          />
 
           <Badge
-            className="absolute left-2 top-2 z-10 cursor-default space-x-1"
-            variant={"secondary"}
+            className="absolute right-2 top-2 max-w-fit space-x-1.5 px-1 py-px text-xs font-medium"
+            variant="secondary"
           >
             {project.status === ProjectStatus.Em_Dev && (
               <motion.div
@@ -77,52 +84,48 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
               </motion.div>
             )}
 
-            <p className="text-xs font-semibold">
-              {project.status === "Finalizado" && <span>Finalizado</span>}
-              {project.status === "Em_Att" && <span>Atualização</span>}
-              {project.status === "Em_Dev" && <span>Desenvolvimento</span>}
-            </p>
+            {project.status === "Finalizado" && <span>Finalizado</span>}
+            {project.status === "Em_Att" && <span>Atualização</span>}
+            {project.status === "Em_Dev" && <span>Desenvolvimento</span>}
           </Badge>
-        </div>
-
-        <div className="flex flex-1 flex-col justify-between space-y-3">
-          <div className="space-y-3 px-1.5">
-            <h3 className="truncate text-center text-sm font-bold text-primary">
-              {project.title}
-            </h3>
-
-            <p className="line-clamp-4 max-h-16 min-h-16 text-left text-xs text-zinc-400">
-              {project.description}
-            </p>
-
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              {project.technologies.map((tech) => (
-                <Image
-                  title={tech.name}
-                  key={tech.id}
-                  alt={`Logo ${tech.name}`}
-                  src={tech.iconURL}
-                  width={24}
-                  height={24}
-                  className="hover:scale-105"
-                />
-              ))}
-            </div>
-          </div>
-
-          <Button
-            className="w-full rounded-xl bg-gray-700 px-4 hover:bg-gray-600"
-            variant="ghost"
-            onClick={() => {
-              router.push(`/projects/${project.id}`)
-              project
-            }}
-          >
-            Ver Projeto
-          </Button>
-        </div>
+        </Button>
       </div>
-    </div>
+
+      <CardHeader className="p-4">
+        <CardTitle className="truncate text-sm font-bold text-primary">
+          {project.title}
+        </CardTitle>
+        <CardDescription className="line-clamp-4 max-h-16 min-h-16 text-xs">
+          {project.description}
+        </CardDescription>
+      </CardHeader>
+
+      <CardFooter className="flex flex-col gap-4 px-4 pb-4">
+        <div className="flex gap-2 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+          {project.technologies.map((tech) => (
+            <Image
+              key={tech.id}
+              title={tech.name}
+              alt={`Logo ${tech.name}`}
+              src={tech.iconURL}
+              width={24}
+              height={24}
+            />
+          ))}
+        </div>
+
+        <Button
+          variant="secondary"
+          className="w-full"
+          onClick={() => {
+            router.push(`/projects/${project.id}`)
+          }}
+        >
+          <FolderOpenDotIcon size={16} className="mr-2" />
+          Ver Projeto
+        </Button>
+      </CardFooter>
+    </Card>
   )
 }
 
