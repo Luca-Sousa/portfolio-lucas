@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "../globals.css"
-import SidebarHome from "./_components/sidebar-home"
 import NavbarHome from "./_components/navbar-home"
 import { Card } from "../_components/ui/card"
+import SidebarHomeDesktop from "./_components/sidebar-home-desktop"
+import SidebarHomeMobile from "./_components/sidebar-home-mobile"
 
 export const metadata: Metadata = {
   title: "Portfolio - Lucas",
@@ -23,14 +24,17 @@ export default function RootLayout({
   return (
     <html lang="ptBr">
       <body className={`${inter.className} antialiased`}>
-        <div className="flex flex-col gap-4 p-4 pb-24 sm:mx-auto sm:max-w-xl sm:gap-8 sm:py-8 md:max-w-2xl lg:max-w-4xl xl:max-w-[1536px] xl:flex-row xl:gap-10 xl:px-8 2xl:px-0">
-          <div className="xl:sticky xl:top-8 xl:self-start">
-            <SidebarHome />
+        <div className="flex h-full flex-col gap-4 overflow-hidden p-4 pb-[86px] sm:mx-auto sm:max-w-xl sm:gap-8 sm:py-8 md:max-w-2xl lg:max-w-4xl xl:max-w-[1536px] xl:flex-row xl:gap-10 xl:px-8 2xl:px-0">
+          <div className="xl:hidden">
+            <SidebarHomeMobile />
           </div>
 
-          <Card className="w-full rounded-2xl sm:relative xl:overflow-y-auto xl:[&&::-webkit-scrollbar]:hidden">
-            <NavbarHome />
+          <div className="hidden xl:block">
+            <SidebarHomeDesktop />
+          </div>
 
+          <Card className="flex h-full flex-col overflow-hidden sm:relative">
+            <NavbarHome />
             {children}
           </Card>
         </div>

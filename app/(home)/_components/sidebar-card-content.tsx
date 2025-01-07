@@ -1,10 +1,11 @@
 import { Button } from "@/app/_components/ui/button"
-import { MailIcon, SmartphoneIcon, CalendarDaysIcon } from "lucide-react"
+import { CardContent } from "@/app/_components/ui/card"
+import { Separator } from "@/app/_components/ui/separator"
+import { itemsMailTel, itemsNiverAddress } from "@/app/_contants"
 import Link from "next/link"
-import { IoLocationOutline } from "react-icons/io5"
 import { toast } from "sonner"
 
-const SidebarHomeInfo = () => {
+const SidebarCardContent = () => {
   const handleCopyItemsClick = (label: string, value: string) => {
     navigator.clipboard.writeText(value)
     toast.success(
@@ -12,35 +13,9 @@ const SidebarHomeInfo = () => {
     )
   }
 
-  const itemsMailTel = [
-    {
-      label: "email",
-      value: "lucas.sousa.dev@gmail.com",
-      icon: MailIcon,
-    },
-    {
-      label: "telefone",
-      value: "+55 (88) 99454-5892",
-      icon: SmartphoneIcon,
-    },
-  ]
-
-  const itemsNiverAddress = [
-    {
-      label: "Data de Nascimento",
-      value: "27/09/1999",
-      icon: CalendarDaysIcon,
-    },
-    {
-      label: "Endereço",
-      value: "Ubajara, Ceará",
-      icon: IoLocationOutline,
-    },
-  ]
-
   return (
-    <div className="mt-4 space-y-4 sm:mt-6 sm:space-y-6">
-      <div className="h-px w-full bg-zinc-800"></div>
+    <CardContent className="space-y-4 sm:space-y-6">
+      <Separator className="my-4" />
 
       <div className="flex flex-col gap-4 sm:flex-row lg:items-center lg:gap-8 xl:flex-col xl:gap-4">
         {itemsMailTel.map(({ label, value, icon: Icon }) => (
@@ -93,9 +68,9 @@ const SidebarHomeInfo = () => {
         ))}
       </div>
 
-      <div className="h-px w-full bg-zinc-800"></div>
-    </div>
+      <Separator className="my-4" />
+    </CardContent>
   )
 }
 
-export default SidebarHomeInfo
+export default SidebarCardContent

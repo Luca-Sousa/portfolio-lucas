@@ -153,7 +153,7 @@ const Contact = ({ onSuccess }: ContactProps) => {
             )}
           />
 
-          <SheetFooter className="flex-row">
+          <SheetFooter className="gap-3 sm:flex-col-reverse sm:justify-center sm:space-x-0">
             <SheetClose asChild className="basis-1/3">
               <Button
                 variant="destructive"
