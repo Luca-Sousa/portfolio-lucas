@@ -62,9 +62,12 @@ model Project {
   id            String              @id @default(uuid())
   title         String
   description   String
-  imageURL      String
-  repositoryURL String
-  liveURL       String
+  startDate     DateTime
+  features      String[]
+  thumbnailUrl  String?
+  imagesUrl     String[]
+  repositoryUrl String
+  deployUrl     String
   status        ProjectStatus
   technologies  ProjectTechnology[] @relation("ProjectToTechnology")
   createdAt     DateTime            @default(now())
@@ -89,7 +92,7 @@ model ProjectTechnology {
 }
 
 enum ProjectStatus {
-  Finalizado
-  Em_Att
-  Em_Dev
+  IN_PROGRESS // Em Desenvolvimento
+  IN_UPDATE // Em Atualização
+  IN_PRODUCTION // Em Produção
 }
