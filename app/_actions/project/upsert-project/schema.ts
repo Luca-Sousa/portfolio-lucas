@@ -1,18 +1,32 @@
-import { z } from "zod"
+import { z } from "zod";
 
 export const upsertProjectSchema = z.object({
   id: z.string().uuid().optional(),
   title: z.string().min(1, "O título é obrigatório"),
   description: z.string().min(1, "A descrição é obrigatória"),
-  imageURL: z.string(),
-  repositoryURL: z.string().url({ message: "URL do GitHub inválida" }),
-  liveURL: z.string().url({ message: "URL da Vercel inválida" }),
-  status: z.enum(["Finalizado", "Em_Att", "Em_Dev"], {
-    message: "O status é obrigatório",
+  startDate: z
+    .date({ message: "A data é obrigatória" })
+    .refine((date) => date <= new Date(), {
+      message: "A data não pode ser no futuro",
+    }),
+  features: z.array(z.string()).min(1, {
+    message: "Adicione pelo menos uma funcionalidade",
   }),
-  technologies: z.array(z.string()).min(1, {
-    message: "Selecione pelo menos uma tecnologia",
+  imagesUrl: z.array(z.string().url()).min(1, {
+    message: "Adicione pelo menos uma imagem válida",
   }),
-})
+  thumbnailUrl: z
+    .string()
+    .url({ message: "URL da imagem inválida" })
+    .optional(),
+  repositoryUrl: z.string().url({ message: "URL do repositório inválida" }),
+  deployUrl: z.string().url({ message: "URL de deploy inválida" }),
+  status: z.enum(["IN_PROGRESS", "IN_UPDATE", "IN_PRODUCTION"], {
+    message: "Selecione um status válido",
+  }),
+  technologies: z
+    .array(z.string().min(1, { message: "O nome da tecnologia é obrigatório" }))
+    .min(1, { message: "Selecione pelo menos uma tecnologia" }),
+});
 
-export type UpsertProjectSchema = z.infer<typeof upsertProjectSchema>
+export type UpsertProjectSchema = z.infer<typeof upsertProjectSchema>;

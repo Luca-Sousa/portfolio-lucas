@@ -7,7 +7,6 @@ import { GrUpdate } from "react-icons/gr";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ProjectStatus } from "@prisma/client";
-import { Project } from "../../../_types/types";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -17,6 +16,7 @@ import {
   CardTitle,
 } from "@/app/_components/ui/card";
 import { Button } from "@/app/_components/ui/button";
+import { Project } from "@/app/_types/types";
 
 interface ProjectItemProps {
   project: Project;
@@ -38,7 +38,7 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
         >
           <Image
             className="object-left-top"
-            src={project.imageURL}
+            src={project.imagesUrl[0]}
             alt={project.title}
             fill
           />
@@ -47,7 +47,7 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
             className="absolute right-2 top-2 max-w-fit space-x-1.5 px-1 py-px text-xs font-medium"
             variant="secondary"
           >
-            {project.status === ProjectStatus.Em_Dev && (
+            {project.status === ProjectStatus.IN_PROGRESS && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -61,7 +61,7 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
               </motion.div>
             )}
 
-            {project.status === ProjectStatus.Finalizado && (
+            {project.status === ProjectStatus.IN_PRODUCTION && (
               <motion.div
                 animate={{
                   scale: [1, 1.2, 1],
@@ -74,7 +74,7 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
               </motion.div>
             )}
 
-            {project.status === ProjectStatus.Em_Att && (
+            {project.status === ProjectStatus.IN_UPDATE && (
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 2 }}
@@ -84,9 +84,9 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
               </motion.div>
             )}
 
-            {project.status === "Finalizado" && <span>Finalizado</span>}
-            {project.status === "Em_Att" && <span>Atualização</span>}
-            {project.status === "Em_Dev" && <span>Desenvolvimento</span>}
+            {project.status === "IN_PRODUCTION" && <span>Finalizado</span>}
+            {project.status === "IN_UPDATE" && <span>Atualização</span>}
+            {project.status === "IN_PROGRESS" && <span>Desenvolvimento</span>}
           </Badge>
         </Button>
       </div>

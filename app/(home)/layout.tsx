@@ -33,7 +33,7 @@ export default function RootLayout({
             <SidebarHomeDesktop />
           </div>
 
-          <Card className="flex h-full flex-col overflow-hidden bg-popover sm:relative">
+          <Card className="flex h-full w-full flex-col overflow-hidden bg-popover sm:relative">
             <NavbarHome />
             {children}
           </Card>

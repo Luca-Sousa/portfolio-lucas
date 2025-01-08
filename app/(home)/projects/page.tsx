@@ -1,10 +1,10 @@
-import { CardContent, CardHeader, CardTitle } from "@/app/_components/ui/card"
-import ProjectItem from "./_components/project-item"
-import { getProjects } from "@/app/_data_access/get-projects"
-import { ScrollArea } from "@/app/_components/ui/scroll-area"
+import { CardContent, CardHeader, CardTitle } from "@/app/_components/ui/card";
+import ProjectItem from "./_components/project-item";
+import { ScrollArea } from "@/app/_components/ui/scroll-area";
+import { getProjects } from "@/app/_data_access/get-projects";
 
 const Projects = async () => {
-  const projects = await getProjects({})
+  const projects = await getProjects({});
 
   return (
     <>
@@ -25,7 +25,7 @@ const Projects = async () => {
         </CardContent>
       </ScrollArea>
     </>
-  )
-}
+  );
+};
 
-export default Projects
+export default Projects;

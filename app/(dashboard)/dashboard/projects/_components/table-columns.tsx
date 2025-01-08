@@ -1,28 +1,27 @@
-"use client"
+"use client";
 
-import { Button } from "@/app/_components/ui/button"
-import { Checkbox } from "@/app/_components/ui/checkbox"
-import { ColumnDef } from "@tanstack/react-table"
+import { Button } from "@/app/_components/ui/button";
+import { Checkbox } from "@/app/_components/ui/checkbox";
+import { ColumnDef } from "@tanstack/react-table";
 import {
   ArrowUpDown,
   ClipboardCopyIcon,
   EditIcon,
   MoreHorizontalIcon,
   TrashIcon,
-} from "lucide-react"
-import { Badge } from "@/app/_components/ui/badge"
-import Link from "next/link"
-import { IoLogoVercel } from "react-icons/io5"
-import { FaGithub } from "react-icons/fa"
-import Image from "next/image"
-import { toast } from "sonner"
+} from "lucide-react";
+import { Badge } from "@/app/_components/ui/badge";
+import Link from "next/link";
+import { FaGithub } from "react-icons/fa";
+import Image from "next/image";
+import { toast } from "sonner";
 import {
   AlertDialog,
   AlertDialogTrigger,
-} from "@/app/_components/ui/alert-dialog"
-import { Dialog, DialogTrigger } from "@/app/_components/ui/dialog"
-import UpsertProductDialogContent from "./upsert-dialog-content"
-import DeleteProjectDialogContent from "./delete-dialog-content"
+} from "@/app/_components/ui/alert-dialog";
+import { Dialog, DialogTrigger } from "@/app/_components/ui/dialog";
+import UpsertProductDialogContent from "./upsert-dialog-content";
+import DeleteProjectDialogContent from "./delete-dialog-content";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,9 +29,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/app/_components/ui/dropdown-menu"
-import { useState } from "react"
-import { Project } from "@/app/_types/types"
+} from "@/app/_components/ui/dropdown-menu";
+import { useState } from "react";
+import { Project } from "@/app/_types/types";
+import { GrDeploy } from "react-icons/gr";
 
 export const projectsTableColumns: ColumnDef<Project>[] = [
   {
@@ -61,19 +61,19 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "imageURL",
+    accessorKey: "imagesUrl",
     header: "",
     cell: ({ row: { original: project } }) => {
       return (
         <div className="relative size-12 overflow-hidden rounded-md">
           <Image
             alt="Imagem do projeto"
-            src={project.imageURL}
+            src={project.imagesUrl[0]}
             fill
             className="object-cover"
           />
         </div>
-      )
+      );
     },
   },
   {
@@ -86,7 +86,7 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
             ? `${project.title.slice(0, 20)}...`
             : project.title}
         </div>
-      )
+      );
     },
   },
   {
@@ -99,7 +99,7 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
             ? `${project.description.slice(0, 50)}...`
             : project.description}
         </div>
-      )
+      );
     },
   },
   {
@@ -113,14 +113,14 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
           Status
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row: { original: project } }) => {
       return (
         <Badge className="text-secondary">
           {project.status.toString().replace(/_/g, " ")}
         </Badge>
-      )
+      );
     },
   },
   {
@@ -139,33 +139,33 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
             />
           ))}
         </div>
-      )
+      );
     },
   },
   {
-    accessorKey: "liveURL",
-    header: "Vercel",
+    accessorKey: "deployUrl",
+    header: "Deploy",
     cell: ({ row: { original: project } }) => {
       return (
         <Button variant={"ghost"} asChild>
-          <Link target="_blank" href={project.liveURL}>
-            <IoLogoVercel size={20} />
+          <Link target="_blank" href={project.deployUrl}>
+            <GrDeploy size={20} />
           </Link>
         </Button>
-      )
+      );
     },
   },
   {
     accessorKey: "repositoryURL",
-    header: "GitHub",
+    header: "Repositório",
     cell: ({ row: { original: project } }) => {
       return (
         <Button variant={"ghost"} asChild>
-          <Link target="_blank" href={project.repositoryURL}>
+          <Link target="_blank" href={project.repositoryUrl}>
             <FaGithub size={20} />
           </Link>
         </Button>
-      )
+      );
     },
   },
   {
@@ -174,12 +174,12 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
     header: "Ações",
     cell: ({ row: { original: project } }) => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false)
+      const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
 
       const copyID = () => {
-        navigator.clipboard.writeText(project.id)
-        toast.success("ID do projeto, copiado com sucesso!")
-      }
+        navigator.clipboard.writeText(project.id);
+        toast.success("ID do projeto, copiado com sucesso!");
+      };
 
       return (
         <AlertDialog>
@@ -220,9 +220,12 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
                 id: project.id,
                 title: project.title,
                 description: project.description,
-                imageURL: project.imageURL,
-                repositoryURL: project.repositoryURL,
-                liveURL: project.liveURL,
+                startDate: project.startDate,
+                features: project.features,
+                thumbnailUrl: project.thumbnailUrl,
+                imagesUrl: project.imagesUrl,
+                repositoryUrl: project.repositoryUrl,
+                deployUrl: project.deployUrl,
                 status: project.status,
                 technologies: project.technologies.map((tech) => tech.id),
               }}
@@ -231,11 +234,11 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
 
             <DeleteProjectDialogContent
               productId={project.id}
-              imageURL={project.imageURL}
+              imageURL={project.imagesUrl[0]}
             />
           </Dialog>
         </AlertDialog>
-      )
+      );
     },
   },
-]
+];

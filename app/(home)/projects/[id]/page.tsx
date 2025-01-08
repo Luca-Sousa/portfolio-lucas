@@ -1,32 +1,32 @@
-import { AspectRatio } from "@/app/_components/ui/aspect-ratio"
-import { Button } from "@/app/_components/ui/button"
+import { AspectRatio } from "@/app/_components/ui/aspect-ratio";
+import { Button } from "@/app/_components/ui/button";
 import {
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/app/_components/ui/card"
-import { getProjectById } from "@/app/_data_access/get-project-by-id"
-import { ArrowRight } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { FaGithub } from "react-icons/fa"
-import { IoLogoVercel } from "react-icons/io5"
-import { format } from "date-fns"
-import { ptBR } from "date-fns/locale"
-import RedirectBackProjectsButton from "../_components/redirect-back-projects-button"
-import { ScrollArea } from "@/app/_components/ui/scroll-area"
+} from "@/app/_components/ui/card";
+import { getProjectById } from "@/app/_data_access/get-project-by-id";
+import { ArrowRight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import RedirectBackProjectsButton from "../_components/redirect-back-projects-button";
+import { ScrollArea } from "@/app/_components/ui/scroll-area";
+import { GrDeploy } from "react-icons/gr";
+import { RiGitRepositoryCommitsFill } from "react-icons/ri";
 
 interface ProjectPageProps {
-  params: { id: string }
+  params: { id: string };
 }
 
 const ProjectPage = async ({ params }: ProjectPageProps) => {
-  const project = await getProjectById(params.id)
+  const project = await getProjectById(params.id);
 
   if (!project) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -56,7 +56,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
         <CardContent className="space-y-5">
           <AspectRatio ratio={16 / 9}>
             <Image
-              src={project.imageURL}
+              src={project.imagesUrl[0]}
               alt={project.title}
               fill
               className="h-full w-full rounded-md object-cover"
@@ -84,10 +84,10 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
                 className="w-full overflow-hidden bg-cyan-600 px-0 hover:bg-cyan-600"
                 asChild
               >
-                <Link target="_blank" href={project.repositoryURL}>
+                <Link target="_blank" href={project.repositoryUrl}>
                   <div className="flex flex-1 items-center justify-center gap-2 uppercase">
-                    <FaGithub size={20} />
-                    Github
+                    <RiGitRepositoryCommitsFill size={20} />
+                    Repositório
                   </div>
                   <div className="flex h-full w-10 items-center justify-center bg-orange-400 lg:w-14">
                     <ArrowRight />
@@ -100,10 +100,10 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
                 className="w-full overflow-hidden bg-cyan-600 px-0 hover:bg-cyan-600"
                 asChild
               >
-                <Link target="_blank" href={project.liveURL}>
+                <Link target="_blank" href={project.deployUrl}>
                   <div className="flex flex-1 items-center justify-center gap-2 uppercase">
-                    <IoLogoVercel size={20} />
-                    Vercel
+                    <GrDeploy size={20} />
+                    Deploy
                   </div>
                   <div className="flex h-full w-10 items-center justify-center bg-orange-400 lg:w-14">
                     <ArrowRight />
@@ -115,7 +115,7 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
         </CardContent>
       </ScrollArea>
     </>
-  )
-}
+  );
+};
 
-export default ProjectPage
+export default ProjectPage;

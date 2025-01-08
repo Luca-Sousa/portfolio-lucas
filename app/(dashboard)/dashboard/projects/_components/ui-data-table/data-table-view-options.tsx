@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { Button } from "@/app/_components/ui/button"
+import { Button } from "@/app/_components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from "@/app/_components/ui/dropdown-menu"
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
-import { MixerHorizontalIcon } from "@radix-ui/react-icons"
-import { Table } from "@tanstack/react-table"
+} from "@/app/_components/ui/dropdown-menu";
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { MixerHorizontalIcon } from "@radix-ui/react-icons";
+import { Table } from "@tanstack/react-table";
 
 interface DataTableViewOptionsProps<TData> {
-  table: Table<TData>
+  table: Table<TData>;
 }
 
 export function DataTableViewOptions<TData>({
@@ -48,18 +48,18 @@ export function DataTableViewOptions<TData>({
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                {column.id.valueOf() === "imageURL" && "Imagens"}
+                {column.id.valueOf() === "imagesUrl" && "Imagens"}
                 {column.id.valueOf() === "title" && "Projeto"}
                 {column.id.valueOf() === "description" && "Descrição"}
                 {column.id.valueOf() === "status" && "Status"}
                 {column.id.valueOf() === "technologies" && "Tecnologias"}
-                {column.id.valueOf() === "liveURL" && "Vercel"}
-                {column.id.valueOf() === "repositoryURL" && "GitHub"}
+                {column.id.valueOf() === "deployUrl" && "Vercel"}
+                {column.id.valueOf() === "repositoryUrl" && "GitHub"}
                 {column.id.valueOf() === "actions" && "Ações"}
               </DropdownMenuCheckboxItem>
-            )
+            );
           })}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

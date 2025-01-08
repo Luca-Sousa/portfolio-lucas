@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { SingleImageDropzone } from "@/app/(dashboard)/_components/single-image-dropzone"
-import { upsertProject } from "@/app/_actions/project/upsert-project"
+import { SingleImageDropzone } from "@/app/(dashboard)/_components/single-image-dropzone";
+import { upsertProject } from "@/app/_actions/project/upsert-project";
 import {
   upsertProjectSchema,
   UpsertProjectSchema,
-} from "@/app/_actions/project/upsert-project/schema"
-import { Button } from "@/app/_components/ui/button"
-import { Checkbox } from "@/app/_components/ui/checkbox"
+} from "@/app/_actions/project/upsert-project/schema";
+import { Button } from "@/app/_components/ui/button";
+import { Checkbox } from "@/app/_components/ui/checkbox";
 import {
   DialogClose,
   DialogContent,
@@ -15,7 +15,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/app/_components/ui/dialog"
+} from "@/app/_components/ui/dialog";
 import {
   FormField,
   FormItem,
@@ -24,8 +24,8 @@ import {
   FormMessage,
   Form,
   FormDescription,
-} from "@/app/_components/ui/form"
-import { Input } from "@/app/_components/ui/input"
+} from "@/app/_components/ui/form";
+import { Input } from "@/app/_components/ui/input";
 import {
   Select,
   SelectContent,
@@ -34,32 +34,32 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/app/_components/ui/select"
-import { Textarea } from "@/app/_components/ui/textarea"
-import { getTechnologies } from "@/app/_data_access/get-technologies"
-import { useEdgeStore } from "@/app/_lib/edgestore"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { ProjectStatus, Technology } from "@prisma/client"
-import { PanelLeftCloseIcon, Loader2Icon, FilePlus2 } from "lucide-react"
-import Image from "next/image"
-import { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
+} from "@/app/_components/ui/select";
+import { Textarea } from "@/app/_components/ui/textarea";
+import { getTechnologies } from "@/app/_data_access/get-technologies";
+import { useEdgeStore } from "@/app/_lib/edgestore";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ProjectStatus, Technology } from "@prisma/client";
+import { PanelLeftCloseIcon, Loader2Icon, FilePlus2 } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface UpsertProductDialogContentProps {
-  defaultValues?: UpsertProjectSchema
-  onSuccess?: () => void
+  defaultValues?: UpsertProjectSchema;
+  onSuccess?: () => void;
 }
 
 const UpsertProductDialogContent = ({
   defaultValues,
   onSuccess,
 }: UpsertProductDialogContentProps) => {
-  const { edgestore } = useEdgeStore()
-  const [file, setFile] = useState<File>()
-  const [url, setUrl] = useState<string>()
-  const [technologies, setTechnologies] = useState<Technology[]>([])
-  const [status, setStatus] = useState<ProjectStatus[]>([])
+  // const { edgestore } = useEdgeStore();
+  // const [file, setFile] = useState<File>();
+  // const [url, setUrl] = useState<string>();
+  const [technologies, setTechnologies] = useState<Technology[]>([]);
+  const [status, setStatus] = useState<ProjectStatus[]>([]);
 
   const form = useForm({
     shouldUnregister: true,
@@ -67,89 +67,92 @@ const UpsertProductDialogContent = ({
     defaultValues: defaultValues ?? {
       title: "",
       description: "",
-      imageURL: "",
-      repositoryURL: "",
-      liveURL: "",
+      startDate: new Date(),
+      features: [],
+      imagesUrl: [],
+      thumbnailUrl: undefined,
+      repositoryUrl: "",
+      deployUrl: "",
       status: "" as ProjectStatus,
       technologies: [],
     },
-  })
+  });
 
-  const isEditing = !!defaultValues
+  const isEditing = !!defaultValues;
 
   useEffect(() => {
     const fetchTechnologies = async () => {
-      const techs = await getTechnologies()
-      setTechnologies(techs)
-    }
+      const techs = await getTechnologies();
+      setTechnologies(techs);
+    };
 
-    fetchTechnologies()
-  }, [])
+    fetchTechnologies();
+  }, []);
 
   useEffect(() => {
-    setStatus(Object.values(ProjectStatus))
-  }, [])
+    setStatus(Object.values(ProjectStatus));
+  }, []);
 
-  const handleFileChange = async (file: File) => {
-    if (isEditing) {
-      console.log("Substituindo imagem:", defaultValues.imageURL)
-      const res = await edgestore.publicFiles.upload({
-        file,
-        options: {
-          replaceTargetUrl: form.getValues("imageURL"),
-        },
-      })
+  // const handleFileChange = async (file: File) => {
+  //   if (isEditing) {
+  //     console.log("Substituindo imagem:", defaultValues.imagesUrl);
+  //     const res = await edgestore.publicFiles.upload({
+  //       file,
+  //       options: {
+  //         replaceTargetUrl: form.getValues("imagesUrl"),
+  //       },
+  //     });
 
-      setFile(file)
-      form.setValue("imageURL", res.url)
-      toast.success("Imagem alterada com sucesso!")
-    } else {
-      setFile(file)
+  //     setFile(file);
+  //     form.setValue("imagesUrl", res.url);
+  //     toast.success("Imagem alterada com sucesso!");
+  //   } else {
+  //     setFile(file);
 
-      if (file) {
-        if (url === undefined) {
-          const res = await edgestore.publicFiles.upload({
-            file,
-          })
+  //     if (file) {
+  //       if (url === undefined) {
+  //         const res = await edgestore.publicFiles.upload({
+  //           file,
+  //         });
 
-          toast.success("Imagem adicionada com sucesso!")
-          setUrl(res.url)
-          form.setValue("imageURL", res.url)
-        } else {
-          const res = await edgestore.publicFiles.upload({
-            file,
-            options: {
-              replaceTargetUrl: form.getValues("imageURL"),
-            },
-          })
+  //         toast.success("Imagem adicionada com sucesso!");
+  //         setUrl(res.url);
+  //         form.setValue("imageURL", res.url);
+  //       } else {
+  //         const res = await edgestore.publicFiles.upload({
+  //           file,
+  //           options: {
+  //             replaceTargetUrl: form.getValues("imageURL"),
+  //           },
+  //         });
 
-          toast.success("Imagem alterada com sucesso!")
-          setUrl(res.url)
-          form.setValue("imageURL", res.url)
-        }
-      }
-    }
-  }
+  //         toast.success("Imagem alterada com sucesso!");
+  //         setUrl(res.url);
+  //         form.setValue("imageURL", res.url);
+  //       }
+  //     }
+  //   }
+  // };
 
   const handleSubmitProject = async (data: UpsertProjectSchema) => {
     try {
       await upsertProject({
         ...data,
         id: defaultValues?.id,
-      })
+      });
 
-      setUrl(undefined)
-      setFile(undefined)
-      onSuccess?.()
+      // setUrl(undefined);
+      // setFile(undefined);
+      onSuccess?.();
       toast.success(
         `Projeto ${isEditing ? "atualizado" : "criado"} com sucesso!`,
-      )
+      );
     } catch (error) {
       toast.error(
         `Ocorreu um erro ao ${isEditing ? "atualizar" : "criar"} o projeto!`,
-      )
+      );
     }
-  }
+  };
 
   return (
     <DialogContent className="w-full max-w-screen-lg">
@@ -168,17 +171,17 @@ const UpsertProductDialogContent = ({
           <div className="flex gap-4">
             <FormField
               control={form.control}
-              name="imageURL"
+              name="imagesUrl"
               render={({ field }) => (
                 <FormItem className="h-fit w-full max-w-md">
                   <FormLabel>Imagem do Projeto</FormLabel>
                   <FormControl className="relative mx-auto my-2">
-                    <SingleImageDropzone
+                    {/* <SingleImageDropzone
                       width={400}
                       height={250}
                       value={file || field.value}
                       onChange={(file) => handleFileChange(file as File)}
-                    />
+                    /> */}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -291,7 +294,7 @@ const UpsertProductDialogContent = ({
                                             field.value.filter(
                                               (value) => value !== tech.id,
                                             ),
-                                          )
+                                          );
                                     }}
                                   />
                                 </FormControl>
@@ -306,7 +309,7 @@ const UpsertProductDialogContent = ({
                                 </FormLabel>
                               </div>
                             </FormItem>
-                          )
+                          );
                         }}
                       />
                     ))}
@@ -319,12 +322,12 @@ const UpsertProductDialogContent = ({
             <div className="flex-1 space-y-2">
               <FormField
                 control={form.control}
-                name="liveURL"
+                name="deployUrl"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Vercel</FormLabel>
                     <FormControl>
-                      <Input placeholder="Link da vercel" {...field} />
+                      <Input placeholder="Link do Deploy" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -333,12 +336,12 @@ const UpsertProductDialogContent = ({
 
               <FormField
                 control={form.control}
-                name="repositoryURL"
+                name="repositoryUrl"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Github</FormLabel>
                     <FormControl>
-                      <Input placeholder="Link da Github" {...field} />
+                      <Input placeholder="Link do Repositório" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -376,7 +379,7 @@ const UpsertProductDialogContent = ({
         </form>
       </Form>
     </DialogContent>
-  )
-}
+  );
+};
 
-export default UpsertProductDialogContent
+export default UpsertProductDialogContent;
