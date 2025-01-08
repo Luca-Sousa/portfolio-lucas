@@ -1,7 +1,7 @@
-import Image from "next/image"
-import { getServerSession } from "next-auth"
-import { notFound } from "next/navigation"
-import { authOptions } from "@/app/_lib/auth"
+import Image from "next/image";
+import { getServerSession } from "next-auth";
+import { notFound } from "next/navigation";
+import { authOptions } from "@/app/_lib/auth";
 import {
   Sidebar,
   SidebarContent,
@@ -13,16 +13,17 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/app/_components/ui/sidebar"
-import NavUser from "./nav-user"
-import SidebarDashboardButton from "./sidebar-dashboard-button"
+} from "@/app/_components/ui/sidebar";
+import NavUser from "./nav-user";
+import SidebarDashboardButton from "./sidebar-dashboard-button";
 import {
   CalendarCheckIcon,
   FolderKanbanIcon,
   InboxIcon,
   LayoutDashboardIcon,
   SquareChartGanttIcon,
-} from "lucide-react"
+} from "lucide-react";
+import Link from "next/link";
 
 const MENU_ITEMS_SIDE_BAR_LABELS = [
   {
@@ -52,38 +53,40 @@ const MENU_ITEMS_SIDE_BAR_LABELS = [
     url: "/dashboard/diario",
     icon: <CalendarCheckIcon size={20} />,
   },
-]
+];
 
 const SidebarDashboard = async () => {
-  const session = await getServerSession(authOptions)
-  if (!session?.user) return notFound()
+  const session = await getServerSession(authOptions);
+  if (!session?.user) return notFound();
 
   const user = {
     name: session.user.name as string,
     email: session.user.email as string,
     image: session.user.image as string,
-  }
+  };
 
   return (
     <Sidebar>
       <SidebarHeader className="py-8">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg">
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
-                <Image
-                  className="rounded-full"
-                  src={"/logo.png"}
-                  width={32}
-                  height={32}
-                  alt="Logo"
-                />
-              </div>
+            <SidebarMenuButton size="lg" asChild>
+              <Link href="/">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
+                  <Image
+                    className="rounded-full"
+                    src={"/logo.png"}
+                    width={32}
+                    height={32}
+                    alt="Logo"
+                  />
+                </div>
 
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.name}</span>
-                <span className="truncate text-xs">Portifólio</span>
-              </div>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">{user.name}</span>
+                  <span className="truncate text-xs">Portifólio</span>
+                </div>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -114,10 +117,10 @@ const SidebarDashboard = async () => {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
-}
+  );
+};
 
-export default SidebarDashboard
+export default SidebarDashboard;
 
 {
   /* <CardContent className="space-y-2 font-medium">

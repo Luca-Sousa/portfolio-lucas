@@ -1,23 +1,23 @@
-"use client"
+"use client";
 
-import Image from "next/image"
+import Image from "next/image";
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../../_components/ui/card"
-import { Button } from "../../_components/ui/button"
-import { ChevronDown, ChevronUp } from "lucide-react"
-import { useState } from "react"
-import SidebarHomeInfo from "./sidebar-card-content"
-import SidebarCardFooter from "./sidebar-card-footer"
+} from "../../_components/ui/card";
+import { Button } from "../../_components/ui/button";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { useState } from "react";
+import SidebarHomeInfo from "./sidebar-card-content";
+import SidebarCardFooter from "./sidebar-card-footer";
 
 const SidebarHomeMobile = () => {
-  const [detailsSidebar, setDetailsSidebar] = useState<boolean>(false)
+  const [detailsSidebar, setDetailsSidebar] = useState<boolean>(false);
 
   return (
-    <Card>
+    <Card className="bg-popover">
       <CardHeader className="relative flex-row items-center gap-4 py-3 sm:py-4">
         <Button
           variant="outline"
@@ -45,7 +45,7 @@ const SidebarHomeMobile = () => {
           </p>
         </Button>
 
-        <div className="relative size-24 overflow-hidden rounded-full bg-card ring-2 ring-primary">
+        <div className="relative size-24 overflow-hidden rounded-full bg-popover ring-2 ring-primary">
           <Image
             alt="perfil"
             src="/perfil.png"
@@ -67,7 +67,7 @@ const SidebarHomeMobile = () => {
 
       {detailsSidebar && <SidebarCardFooter />}
     </Card>
-  )
-}
+  );
+};
 
-export default SidebarHomeMobile
+export default SidebarHomeMobile;

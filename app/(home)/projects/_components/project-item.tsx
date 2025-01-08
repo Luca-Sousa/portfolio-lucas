@@ -1,39 +1,39 @@
-"use client"
+"use client";
 
-import { FolderOpenDotIcon, StarIcon } from "lucide-react"
-import { Badge } from "../../../_components/ui/badge"
-import { MdDeveloperBoard } from "react-icons/md"
-import { GrUpdate } from "react-icons/gr"
-import Image from "next/image"
-import { motion } from "framer-motion"
-import { ProjectStatus } from "@prisma/client"
-import { Project } from "../../../_types/types"
-import { useRouter } from "next/navigation"
+import { FolderOpenDotIcon, StarIcon } from "lucide-react";
+import { Badge } from "../../../_components/ui/badge";
+import { MdDeveloperBoard } from "react-icons/md";
+import { GrUpdate } from "react-icons/gr";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { ProjectStatus } from "@prisma/client";
+import { Project } from "../../../_types/types";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/app/_components/ui/card"
-import { Button } from "@/app/_components/ui/button"
+} from "@/app/_components/ui/card";
+import { Button } from "@/app/_components/ui/button";
 
 interface ProjectItemProps {
-  project: Project
+  project: Project;
 }
 
 const ProjectItem = ({ project }: ProjectItemProps) => {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
-    <Card>
-      <div className="px-4 pt-4">
+    <Card className="overflow-hidden">
+      <div>
         <Button
           title="Ver Projeto"
           variant={"ghost"}
-          className="relative aspect-square size-full overflow-hidden"
+          className="relative aspect-square size-full overflow-hidden rounded-none"
           onClick={() => {
-            router.push(`/projects/${project.id}`)
+            router.push(`/projects/${project.id}`);
           }}
         >
           <Image
@@ -118,7 +118,7 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
           variant="secondary"
           className="w-full"
           onClick={() => {
-            router.push(`/projects/${project.id}`)
+            router.push(`/projects/${project.id}`);
           }}
         >
           <FolderOpenDotIcon size={16} className="mr-2" />
@@ -126,7 +126,7 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
         </Button>
       </CardFooter>
     </Card>
-  )
-}
+  );
+};
 
-export default ProjectItem
+export default ProjectItem;
