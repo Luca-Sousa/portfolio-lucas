@@ -6,7 +6,7 @@ export interface Project {
   description: string;
   startDate: Date;
   features: string[];
-  thumbnailUrl: string | undefined;
+  thumbnailUrl: string;
   imagesUrl: string[];
   repositoryUrl: string;
   deployUrl: string;

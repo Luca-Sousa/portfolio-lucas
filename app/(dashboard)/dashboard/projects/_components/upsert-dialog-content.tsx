@@ -1,6 +1,5 @@
 "use client";
 
-import { SingleImageDropzone } from "@/app/(dashboard)/_components/single-image-dropzone";
 import { upsertProject } from "@/app/_actions/project/upsert-project";
 import {
   upsertProjectSchema,
@@ -37,7 +36,6 @@ import {
 } from "@/app/_components/ui/select";
 import { Textarea } from "@/app/_components/ui/textarea";
 import { getTechnologies } from "@/app/_data_access/get-technologies";
-import { useEdgeStore } from "@/app/_lib/edgestore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProjectStatus, Technology } from "@prisma/client";
 import { PanelLeftCloseIcon, Loader2Icon, FilePlus2 } from "lucide-react";
@@ -70,7 +68,7 @@ const UpsertProductDialogContent = ({
       startDate: new Date(),
       features: [],
       imagesUrl: [],
-      thumbnailUrl: undefined,
+      thumbnailUrl: "",
       repositoryUrl: "",
       deployUrl: "",
       status: "" as ProjectStatus,

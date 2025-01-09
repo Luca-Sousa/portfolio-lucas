@@ -15,10 +15,7 @@ export const upsertProjectSchema = z.object({
   imagesUrl: z.array(z.string().url()).min(1, {
     message: "Adicione pelo menos uma imagem válida",
   }),
-  thumbnailUrl: z
-    .string()
-    .url({ message: "URL da imagem inválida" })
-    .optional(),
+  thumbnailUrl: z.string().url({ message: "URL da imagem inválida" }),
   repositoryUrl: z.string().url({ message: "URL do repositório inválida" }),
   deployUrl: z.string().url({ message: "URL de deploy inválida" }),
   status: z.enum(["IN_PROGRESS", "IN_UPDATE", "IN_PRODUCTION"], {

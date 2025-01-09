@@ -1,6 +1,7 @@
 import { AspectRatio } from "@/app/_components/ui/aspect-ratio";
 import { Button } from "@/app/_components/ui/button";
 import {
+  Card,
   CardContent,
   CardDescription,
   CardHeader,
@@ -17,6 +18,15 @@ import RedirectBackProjectsButton from "../_components/redirect-back-projects-bu
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { GrDeploy } from "react-icons/gr";
 import { RiGitRepositoryCommitsFill } from "react-icons/ri";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/app/_components/ui/carousel";
+import CarouselContentProject from "../_components/carousel-images";
+import CarouselImagesProject from "../_components/carousel-images";
 
 interface ProjectPageProps {
   params: { id: string };
@@ -40,12 +50,21 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
           <div className="space-y-3">
             <>
               <CardTitle className="sm:text-3xl">{project.title}</CardTitle>
-              <span className="text-sm text-muted-foreground">
-                Última Atualização:{" "}
-                {format(project.updatedAt, "d 'de' MMMM 'de' yyyy", {
-                  locale: ptBR,
-                })}
-              </span>
+              <div className="flex flex-col space-y-2 lg:flex-row lg:items-center lg:justify-between">
+                <span className="text-sm text-muted-foreground">
+                  Data de Início:{" "}
+                  {format(project.startDate, "d 'de' MMMM 'de' yyyy", {
+                    locale: ptBR,
+                  })}
+                </span>
+
+                <span className="text-sm text-muted-foreground">
+                  Última Atualização:{" "}
+                  {format(project.updatedAt, "d 'de' MMMM 'de' yyyy", {
+                    locale: ptBR,
+                  })}
+                </span>
+              </div>
             </>
             <div className="h-1 w-8 rounded-3xl bg-primary sm:h-2"></div>
           </div>
@@ -53,15 +72,8 @@ const ProjectPage = async ({ params }: ProjectPageProps) => {
           <CardDescription>{project.description}</CardDescription>
         </CardHeader>
 
-        <CardContent className="space-y-5">
-          <AspectRatio ratio={16 / 9}>
-            <Image
-              src={project.imagesUrl[0]}
-              alt={project.title}
-              fill
-              className="h-full w-full rounded-md object-cover"
-            />
-          </AspectRatio>
+        <CardContent className="gap-4 2xl:flex">
+          <CarouselImagesProject project={project} />
 
           <div className="flex flex-col gap-4 lg:mx-auto lg:max-w-[600px]">
             <div className="flex flex-wrap items-center justify-center gap-3 py-3">

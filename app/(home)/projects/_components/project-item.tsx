@@ -38,7 +38,7 @@ const ProjectItem = ({ project }: ProjectItemProps) => {
         >
           <Image
             className="object-left-top"
-            src={project.imagesUrl[0]}
+            src={project.thumbnailUrl}
             alt={project.title}
             fill
           />
