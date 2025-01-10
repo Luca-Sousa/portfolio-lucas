@@ -1,10 +1,11 @@
-"use client"
+"use client";
 
-import { formatFileSize } from "@edgestore/react/utils"
-import { UploadCloudIcon, X } from "lucide-react"
-import * as React from "react"
-import { useDropzone, type DropzoneOptions } from "react-dropzone"
-import { twMerge } from "tailwind-merge"
+import { formatFileSize } from "@edgestore/react/utils";
+import { UploadCloudIcon, X } from "lucide-react";
+import Image from "next/image";
+import * as React from "react";
+import { useDropzone, type DropzoneOptions } from "react-dropzone";
+import { twMerge } from "tailwind-merge";
 
 const variants = {
   base: "relative rounded-md flex justify-center items-center flex-col cursor-pointer min-h-[150px] min-w-[200px] border border-dashed border-gray-400 dark:border-gray-300 transition-colors duration-200 ease-in-out",
@@ -15,32 +16,32 @@ const variants = {
     "bg-gray-200 border-gray-300 cursor-default pointer-events-none bg-opacity-30 dark:bg-gray-700",
   accept: "border border-blue-500 bg-blue-500 bg-opacity-10",
   reject: "border border-red-700 bg-red-700 bg-opacity-10",
-}
+};
 
 type InputProps = {
-  width: number
-  height: number
-  className?: string
-  value?: File | string
-  onChange?: (file?: File) => void | Promise<void>
-  disabled?: boolean
-  dropzoneOptions?: Omit<DropzoneOptions, "disabled">
-}
+  width: number;
+  height: number;
+  className?: string;
+  value?: File | string;
+  onChange?: (file?: File) => void | Promise<void>;
+  disabled?: boolean;
+  dropzoneOptions?: Omit<DropzoneOptions, "disabled">;
+};
 
 const ERROR_MESSAGES = {
   fileTooLarge(maxSize: number) {
-    return `The file is too large. Max size is ${formatFileSize(maxSize)}.`
+    return `The file is too large. Max size is ${formatFileSize(maxSize)}.`;
   },
   fileInvalidType() {
-    return "Invalid file type."
+    return "Invalid file type.";
   },
   tooManyFiles(maxFiles: number) {
-    return `You can only add ${maxFiles} file(s).`
+    return `You can only add ${maxFiles} file(s).`;
   },
   fileNotSupported() {
-    return "The file is not supported."
+    return "The file is not supported.";
   },
-}
+};
 
 const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
   (
@@ -50,13 +51,13 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
     const imageUrl = React.useMemo(() => {
       if (typeof value === "string") {
         // in case an url is passed in, use it to display the image
-        return value
+        return value;
       } else if (value) {
         // in case a file is passed in, create a base64 url to display the image
-        return URL.createObjectURL(value)
+        return URL.createObjectURL(value);
       }
-      return null
-    }, [value])
+      return null;
+    }, [value]);
 
     // dropzone configuration
     const {
@@ -72,13 +73,13 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
       multiple: false,
       disabled,
       onDrop: (acceptedFiles) => {
-        const file = acceptedFiles[0]
+        const file = acceptedFiles[0];
         if (file) {
-          void onChange?.(file)
+          void onChange?.(file);
         }
       },
       ...dropzoneOptions,
-    })
+    });
 
     // styling
     const dropZoneClassName = React.useMemo(
@@ -101,24 +102,24 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
         disabled,
         className,
       ],
-    )
+    );
 
     // error validation messages
     const errorMessage = React.useMemo(() => {
       if (fileRejections[0]) {
-        const { errors } = fileRejections[0]
+        const { errors } = fileRejections[0];
         if (errors[0]?.code === "file-too-large") {
-          return ERROR_MESSAGES.fileTooLarge(dropzoneOptions?.maxSize ?? 0)
+          return ERROR_MESSAGES.fileTooLarge(dropzoneOptions?.maxSize ?? 0);
         } else if (errors[0]?.code === "file-invalid-type") {
-          return ERROR_MESSAGES.fileInvalidType()
+          return ERROR_MESSAGES.fileInvalidType();
         } else if (errors[0]?.code === "too-many-files") {
-          return ERROR_MESSAGES.tooManyFiles(dropzoneOptions?.maxFiles ?? 0)
+          return ERROR_MESSAGES.tooManyFiles(dropzoneOptions?.maxFiles ?? 0);
         } else {
-          return ERROR_MESSAGES.fileNotSupported()
+          return ERROR_MESSAGES.fileNotSupported();
         }
       }
-      return undefined
-    }, [fileRejections, dropzoneOptions])
+      return undefined;
+    }, [fileRejections, dropzoneOptions]);
 
     return (
       <div>
@@ -136,11 +137,12 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
 
           {imageUrl ? (
             // Image Preview
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              className="h-full w-full rounded-md object-cover"
+            <Image
+              className="h-full w-full rounded-md border border-primary object-cover"
               src={imageUrl}
               alt={acceptedFiles[0]?.name}
+              width={width}
+              height={height}
             />
           ) : (
             // Upload Icon
@@ -180,10 +182,10 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
         {/* Error Text */}
         <div className="mt-1 text-xs text-red-500">{errorMessage}</div>
       </div>
-    )
+    );
   },
-)
-SingleImageDropzone.displayName = "SingleImageDropzone"
+);
+SingleImageDropzone.displayName = "SingleImageDropzone";
 
 const Button = React.forwardRef<
   HTMLButtonElement,
@@ -203,8 +205,8 @@ const Button = React.forwardRef<
       ref={ref}
       {...props}
     />
-  )
-})
-Button.displayName = "Button"
+  );
+});
+Button.displayName = "Button";
 
-export { SingleImageDropzone }
+export { SingleImageDropzone };

@@ -93,7 +93,7 @@ const ModalCreateNewTechnology = () => {
                 await edgestore.publicFiles.delete({ url });
                 setUrl(undefined);
               } catch (error) {
-                console.error("Erro ao deletar o arquivo:", error);
+                console.error("Erro ao deletar o arquivo: ", error);
               }
             })();
           }
