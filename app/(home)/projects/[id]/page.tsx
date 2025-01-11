@@ -1,7 +1,5 @@
-import { AspectRatio } from "@/app/_components/ui/aspect-ratio";
 import { Button } from "@/app/_components/ui/button";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
@@ -18,14 +16,6 @@ import RedirectBackProjectsButton from "../_components/redirect-back-projects-bu
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { GrDeploy } from "react-icons/gr";
 import { RiGitRepositoryCommitsFill } from "react-icons/ri";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/app/_components/ui/carousel";
-import CarouselContentProject from "../_components/carousel-images";
 import CarouselImagesProject from "../_components/carousel-images";
 
 interface ProjectPageProps {

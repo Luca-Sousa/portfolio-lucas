@@ -1,7 +1,14 @@
-import { CalendarDaysIcon, MailIcon, SmartphoneIcon } from "lucide-react"
-import { FaFacebook, FaGithub, FaLinkedin } from "react-icons/fa"
-import { IoLocationOutline } from "react-icons/io5"
-import { RiInstagramFill } from "react-icons/ri"
+import {
+  CalendarDaysIcon,
+  MailIcon,
+  SmartphoneIcon,
+  CircleHelpIcon,
+  LayoutDashboardIcon,
+  SignatureIcon,
+} from "lucide-react";
+import { FaFacebook, FaGithub, FaLinkedin } from "react-icons/fa";
+import { IoLocationOutline } from "react-icons/io5";
+import { RiInstagramFill } from "react-icons/ri";
 
 export const itemsMailTel = [
   {
@@ -14,7 +21,7 @@ export const itemsMailTel = [
     value: "+55 (88) 99454-5892",
     icon: SmartphoneIcon,
   },
-]
+];
 
 export const itemsNiverAddress = [
   {
@@ -27,7 +34,7 @@ export const itemsNiverAddress = [
     value: "Ubajara, Ceará",
     icon: IoLocationOutline,
   },
-]
+];
 
 export const itemsNetworks = [
   {
@@ -50,4 +57,53 @@ export const itemsNetworks = [
     link: "https://www.instagram.com/lk._dev/",
     icon: RiInstagramFill,
   },
-]
+];
+
+export const data = {
+  navMain: [
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: LayoutDashboardIcon,
+      isActive: true,
+    },
+    {
+      title: "Projetos",
+      url: "/dashboard/projects",
+      icon: CircleHelpIcon,
+    },
+    {
+      title: "Diário",
+      url: "/dashboard/diario",
+      icon: SignatureIcon,
+    },
+    {
+      title: "inbox",
+      url: "/dashboard/inbox",
+      icon: CircleHelpIcon,
+    },
+    {
+      title: "Kanban",
+      url: "/dashboard/kanban",
+      icon: CircleHelpIcon,
+    },
+  ],
+
+  // tasks: [
+  //   {
+  //     name: "Tarefa 01",
+  //     url: "/tasks",
+  //     icon: Frame,
+  //   },
+  //   {
+  //     name: "Tarefa 02",
+  //     url: "/tasks",
+  //     icon: PieChart,
+  //   },
+  //   {
+  //     name: "Tarefa 03",
+  //     url: "/tasks",
+  //     icon: Map,
+  //   },
+  // ],
+};

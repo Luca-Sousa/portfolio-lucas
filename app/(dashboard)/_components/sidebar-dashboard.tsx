@@ -14,7 +14,6 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/app/_components/ui/sidebar";
-import NavUser from "./nav-user";
 import SidebarDashboardButton from "./sidebar-dashboard-button";
 import {
   CalendarCheckIcon,
@@ -112,9 +111,7 @@ const SidebarDashboard = async () => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter>
-        <NavUser user={user} />
-      </SidebarFooter>
+      <SidebarFooter>{/* <NavUser user={user} /> */}</SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );
