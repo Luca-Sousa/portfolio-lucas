@@ -1,8 +1,6 @@
 "use client";
 
-import { Avatar } from "@/app/_components/ui/avatar";
 import { formatFileSize } from "@edgestore/react/utils";
-import { url } from "inspector";
 import {
   CheckCircleIcon,
   FileIcon,
@@ -11,7 +9,6 @@ import {
   UploadCloudIcon,
   XIcon,
 } from "lucide-react";
-import Image from "next/image";
 import * as React from "react";
 import { useDropzone, type DropzoneOptions } from "react-dropzone";
 import { twMerge } from "tailwind-merge";

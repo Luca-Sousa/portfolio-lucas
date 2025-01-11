@@ -9,9 +9,9 @@ export const upsertProjectSchema = z.object({
     .refine((date) => date <= new Date(), {
       message: "A data não pode ser no futuro",
     }),
-  features: z.array(z.string()).min(1, {
-    message: "Adicione pelo menos uma funcionalidade",
-  }),
+  features: z
+    .array(z.string().min(1, { message: "A feature não pode estar vazia." }))
+    .nonempty({ message: "Pelo menos uma feature deve ser preenchida." }),
   imagesUrl: z.array(z.string().url()).min(1, {
     message: "Adicione pelo menos uma imagem válida",
   }),

@@ -4,7 +4,15 @@ import { useEdgeStore } from "@/app/_lib/edgestore";
 import { useState } from "react";
 import { FileState, MultiFileDropzone } from "./MultiFileDropzone";
 
-export function MultiFileDropzoneUsage() {
+interface MultiFileDropzoneUsageProps {
+  value: string[];
+  onChange: (urls: string[]) => void;
+}
+
+export function MultiFileDropzoneUsage({
+  value,
+  onChange,
+}: MultiFileDropzoneUsageProps) {
   const [fileStates, setFileStates] = useState<FileState[]>([]);
   const { edgestore } = useEdgeStore();
 
@@ -48,7 +56,10 @@ export function MultiFileDropzoneUsage() {
                     }
                   },
                 });
+
                 console.log(res);
+                onChange([...value, res.url]);
+                console.log(value);
               } catch (err) {
                 updateFileProgress(addedFileState.key, "ERROR");
               }

@@ -215,13 +215,13 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <UpsertProductDialogContent
+            {/* <UpsertProductDialogContent
               defaultValues={{
                 id: project.id,
                 title: project.title,
                 description: project.description,
                 startDate: project.startDate,
-                features: project.features,
+                features: project.features as string[],
                 thumbnailUrl: project.thumbnailUrl,
                 imagesUrl: project.imagesUrl,
                 repositoryUrl: project.repositoryUrl,
@@ -230,7 +230,7 @@ export const projectsTableColumns: ColumnDef<Project>[] = [
                 technologies: project.technologies.map((tech) => tech.id),
               }}
               onSuccess={() => setEditDialogOpen(false)}
-            />
+            /> */}
 
             <DeleteProjectDialogContent
               productId={project.id}
