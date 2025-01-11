@@ -58,7 +58,7 @@ CREATE TABLE "Project" (
     "description" TEXT NOT NULL,
     "startDate" TIMESTAMP(3) NOT NULL,
     "features" TEXT[],
-    "thumbnailUrl" TEXT,
+    "thumbnailUrl" TEXT NOT NULL,
     "imagesUrl" TEXT[],
     "repositoryUrl" TEXT NOT NULL,
     "deployUrl" TEXT NOT NULL,
